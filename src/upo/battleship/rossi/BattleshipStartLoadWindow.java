@@ -18,7 +18,7 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 200;
 	private static final String TITLE = "UPOBattleship by Lorenzo Rossi";
-
+	private boolean oldGameExists = false; //TODO implement "checkForSavedFile()" in Game
 	//constructors
 	BattleshipStartLoadWindow(){
 		//settings
@@ -40,10 +40,13 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 		newGameButton.addActionListener(this);
 		buttonPanel.add(newGameButton);
 		
-		JButton loadGameButton = new JButton("Load game");
-		loadGameButton.addActionListener(this);
-		buttonPanel.add(loadGameButton);
-		
+		//add "loadGameButton" only if an old game file exists
+		if(oldGameExists) {
+			//TODO implement "checkForSavedFile()" in Game
+			JButton loadGameButton = new JButton("Load game");
+			loadGameButton.addActionListener(this);
+			buttonPanel.add(loadGameButton);
+		}
 		//add panel to frame
 		add(buttonPanel);
 	}
@@ -53,10 +56,10 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 		String command = e.getActionCommand();
 		switch(command) {
 			case "New game":
-				System.out.println("new game button");
+				System.out.println("new game");
 				break;
 			case "Load game":
-				System.out.println("load game button");
+					System.out.println("loading saved file");
 				break;
 			default:
 				System.out.println("BattleshipStartLoadWindow error!");

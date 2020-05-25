@@ -1,5 +1,8 @@
 package upo.battleship.rossi;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Timer;
 
 public class Game {
@@ -31,7 +34,33 @@ public class Game {
 		//TODO
 	}
 	
+	boolean savedGameExists(){
+		try {
+			FileReader savedFile = new FileReader("savedgame.txt");
+			try {
+				savedFile.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return true;
+		}
+		catch(FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	void loadGame() {
-		//TODO
+		//TODO study exceptions and I/O before programming SHIT
+		if(savedGameExists()) {
+			System.out.println("file exists!");
+		}
+		else System.out.println("file not found!");
+	}
+	
+	public static void main(String[] args) {
+		Game game = new Game();
+		game.loadGame();
 	}
 }
