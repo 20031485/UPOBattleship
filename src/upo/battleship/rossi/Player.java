@@ -1,18 +1,32 @@
 package upo.battleship.rossi;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable{
 	//attributes
-	private String name = "Player";
+	private String name;
 	private int score;
 	
 	//constructors
-	public Player() {
-		
-	}
-	
 	public Player(String playerName) {
 		this.name = playerName;
+		this.score = 0;
+	}
+	
+	public Player() {
+		this("Player");
 	}
 	
 	//methods
+	public String toString() {
+		return "Player: "+this.getName()+"\nScore: "+this.getScore()+"\n\n";
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getScore() {
+		return this.score;
+	}
 }
