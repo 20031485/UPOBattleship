@@ -9,6 +9,7 @@ Added:
  - `loadGame()` in `Game` has been made  _static_ : that was the only solution since calling `gameObject.loadGame()` after declaring `Game gameObject = null` would throw a `NullPointerException`, but it works kind of fine now. 
 
 # Useful links
- - [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/)
-
+ - [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/) because Lorenzo  _always_  forgets stuff;
+ - [Swing Timer](https://docs.oracle.com/javase/tutorial/uiswing/misc/timer.html) for game loss condition;
+ 
 `Paco and Lorenzo's repository`

@@ -56,8 +56,8 @@ public class Game implements Serializable{
 		//TODO
 	}
 	
-	boolean savedGameExists(){
-		File savedFile = new File(this.savedFileName);
+	public static boolean savedGameExists(){
+		File savedFile = new File(savedFileName);
 		if(savedFile.exists())
 			return true;
 		return false;
@@ -71,14 +71,14 @@ public class Game implements Serializable{
 		//String fileName = this.savedFileName;
 		//System.out.println(this.savedFileName);
 		try {
-			outputStream = new ObjectOutputStream(new FileOutputStream(this.savedFileName));
+			outputStream = new ObjectOutputStream(new FileOutputStream(savedFileName));
 			outputStream.writeObject(this);
 			outputStream.close();
-			System.out.println(this.savedFileName+" written!");
+			System.out.println(savedFileName+" written!");
 			this.justSaved = true;
 		} 
 		catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("IOException");
 			e.printStackTrace();
 		}
 	}
@@ -88,19 +88,25 @@ public class Game implements Serializable{
 		//TODO study exceptions and I/O before programming SHIT
 		ObjectInputStream inputStream = null;
 		Game loadedGame = null;
-		try {
-			inputStream = new ObjectInputStream(new FileInputStream(savedFileName));
-			loadedGame = (Game)inputStream.readObject();
-			inputStream.close();
-			System.out.println(savedFileName+" read!");
-		} 
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(savedGameExists()) {
+			try {
+				inputStream = new ObjectInputStream(new FileInputStream(savedFileName));
+				loadedGame = (Game)inputStream.readObject();
+				inputStream.close();
+				System.out.println(savedFileName+" read!");
+			} 
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("Saved file not found!");
+			throw new FileNotFoundException("Saved file not found! Cannot load!");
 		}
 		return loadedGame;
 	}
@@ -142,22 +148,33 @@ public class Game implements Serializable{
 	}
 
 	public static void main(String[] args) {
-		Game game = new Game();
-		Game game2 = null;
-		System.out.println("GAME DEFAULT CONSTRUCTOR:");
-		System.out.println(game.toString());
-		try {
-			//TODO fix loadGame - it doesn't load the game LOL
-			game = loadGame();
-		} catch (FileNotFoundException e) {
-			System.out.println("file not found!");
+		Game game1 = new Game(7);
+		Game game2 = new Game();
+		game1.getPlayer1().setScore(15);
+		game1.getPlayer2().setScore(23);
+		System.out.println("Game1: \n"+game1.toString());
+		System.out.println("Game2: \n"+game2.toString());
+		//System.out.println("Saving Game1...\n\n");
+		//game1.saveGame();
+		if(savedGameExists()) {
+				System.out.println("file exists\n\n");
+			try {
+				System.out.println("Loading game1 onto game2...");
+				game2 = loadGame();
+			}
+			catch(Exception e) {
+				System.out.println("Exception");
+				//e.printStackTrace();
+			}
 		}
-		game2 = game;
-		System.out.println("SAVED GAME:");
-		System.out.println(game2.toString());
-		System.out.println("GAME I'M ABOUT TO SAVE:");
-		game = new Game(8);
-		System.out.println(game.toString());
-		game.saveGame();
+		else 
+			System.out.println("Saved file does not exist!");
+		try{
+			System.out.println("Game1: \n"+game1.toString());
+			System.out.println("Game2: \n"+game2.toString());
+		}
+		catch(NullPointerException e) {
+			System.out.println("game2 = null");
+		}
 	}
 }
