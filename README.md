@@ -6,9 +6,9 @@ Added:
  - `BattleshipExitFrame`: it displays a window checking the user really wants to quit the game;
  - `BattleshipWindowDestructor` to make `BattleshipExitFrame` visible when trying to close `BattleshipStartLoadWindow`'s window;
  - `BattleshipSaveBeforeExitFrame` to be displayed when pressing "exit" during a game **[TODO: another WindowDestructor to call in that case]**.
- - attempt of `loadGame()` in `Game` class implementation. Unfortunately, the programmer still doesn't know shit about Exceptions and I/O. 
+ - `loadGame()` in `Game` has been made  _static_ : that was the only solution since calling `gameObject.loadGame()` after declaring `Game gameObject = null` would throw a `NullPointerException`, but it works kind of fine now. 
 
 # Useful links
  - [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/)
 
-`Written by Lorenzo Rossi [20031485], UPO Student`
+`Paco and Lorenzo's repository`

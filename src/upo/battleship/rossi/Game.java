@@ -21,7 +21,7 @@ public class Game implements Serializable{
 	private int gameSize;//5, 10, 15 where 5 means 5x5 and so on
 	private boolean timed;
 	private Timer timer;
-	private String savedFileName = "battleship_saved_game.dat";
+	private static final String savedFileName = "battleship_saved_game.dat";
 	//every move will set justSaved to false, but the method saveGame will set it to true
 	private boolean justSaved = false;
 
@@ -84,15 +84,15 @@ public class Game implements Serializable{
 	}
 	
 	//not launched if savedGameExists == false
-	public Game loadGame() throws FileNotFoundException {
+	public static Game loadGame() throws FileNotFoundException {
 		//TODO study exceptions and I/O before programming SHIT
 		ObjectInputStream inputStream = null;
 		Game loadedGame = null;
 		try {
-			inputStream = new ObjectInputStream(new FileInputStream(this.getSavedFileName()));
+			inputStream = new ObjectInputStream(new FileInputStream(savedFileName));
 			loadedGame = (Game)inputStream.readObject();
 			inputStream.close();
-			System.out.println(this.getSavedFileName()+" read!");
+			System.out.println(savedFileName+" read!");
 		} 
 		catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -107,10 +107,10 @@ public class Game implements Serializable{
 	
 	public String toString() {
 		return 	"Game Size: "+this.getGameSize()+
-				"\nPlayer1's name: "+getPlayer1().getName()+
-				"\nPlayer1's score: "+getPlayer1().getScore()+
-				"\nPlayer2's name: "+getPlayer2().getName()+
-				"\nPlayer2's score: "+getPlayer2().getScore()+"\n\n";
+				"\nPlayer1:\n\tname: "+getPlayer1().getName()+
+				"\n\tscore: "+getPlayer1().getScore()+
+				"\nPlayer2:\n\tname: "+getPlayer2().getName()+
+				"\n\tscore: "+getPlayer2().getScore()+"\n\n";
 	}
 	
 	public Player getPlayer1() {
@@ -141,24 +141,22 @@ public class Game implements Serializable{
 		return savedFileName;
 	}
 
-	public void setSavedFileName(String savedFileName) {
-		this.savedFileName = savedFileName;
-	}
-
 	public static void main(String[] args) {
 		Game game = new Game();
-		System.out.println("this is the current game:");
+		Game game2 = null;
+		System.out.println("GAME DEFAULT CONSTRUCTOR:");
 		System.out.println(game.toString());
 		try {
 			//TODO fix loadGame - it doesn't load the game LOL
-			game.loadGame();
+			game = loadGame();
 		} catch (FileNotFoundException e) {
 			System.out.println("file not found!");
 		}
-		System.out.println("this was the saved game:");
-		System.out.println(game.toString());
-		System.out.println("this is the new game:");
-		game = new Game(7);
+		game2 = game;
+		System.out.println("SAVED GAME:");
+		System.out.println(game2.toString());
+		System.out.println("GAME I'M ABOUT TO SAVE:");
+		game = new Game(8);
 		System.out.println(game.toString());
 		game.saveGame();
 	}
