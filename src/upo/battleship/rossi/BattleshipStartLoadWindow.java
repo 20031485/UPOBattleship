@@ -18,7 +18,7 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 200;
 	private static final String TITLE = "UPOBattleship by Lorenzo Rossi";
-	private boolean oldGameExists = false; //TODO implement "checkForSavedFile()" in Game
+	private boolean oldGameExists = true; //TODO implement "checkForSavedFile()" in Game
 	//constructors
 	BattleshipStartLoadWindow(){
 		//settings
@@ -30,6 +30,7 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 		
 		//JLabel
 		JLabel label = new JLabel("Welcome to UPOBattleship!");
+		label.setHorizontalAlignment(JLabel.CENTER);
 		add(label, BorderLayout.CENTER);
 		
 		//JPanel for JButtons
@@ -48,7 +49,7 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 			buttonPanel.add(loadGameButton);
 		}
 		//add panel to frame
-		add(buttonPanel);
+		add(buttonPanel, BorderLayout.AFTER_LAST_LINE);
 	}
 	
 	@Override
@@ -57,9 +58,11 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 		switch(command) {
 			case "New game":
 				System.out.println("new game");
+				//launch BattleshipNewGameFrame
 				break;
 			case "Load game":
-					System.out.println("loading saved file");
+				System.out.println("loading saved file");
+				//launch saved game	
 				break;
 			default:
 				System.out.println("BattleshipStartLoadWindow error!");
