@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -20,8 +22,40 @@ import javax.swing.WindowConstants;
 public class BattleshipNewGameFrame extends JFrame implements ActionListener, WindowListener{
 	//attributes
 	private static final int WIDTH = 400;
-	private static final int HEIGHT = 200;
+	private static final int HEIGHT = 250;
 	private static final String TITLE = "New Game";
+	
+	//JPanels
+	private JPanel gameModePanel;
+	private JPanel radioButtonSizePanel;
+	private JPanel buttonPanel;
+	private JPanel confResBackButtonPanel;
+	
+	//JLabels
+	private JLabel newGameLabel;
+	private JLabel gameModeLabel;
+	private JLabel gridSizeLabel;
+	
+	//JButtons
+	private JButton confirmButton;
+	private JButton resetButton;
+	private JButton backButton;
+	
+	//JRadioButtons
+	private JRadioButton p1vsp2Button;
+	private JRadioButton p1vsCPUButton;
+	private JRadioButton sizeSButton;
+	private JRadioButton sizeMButton;
+	private JRadioButton sizeLButton;
+	private JRadioButton sizeXLButton;
+	
+	//JCheckboxes
+	JCheckBox timedCheckBox;
+	
+	//ButtonGroups
+	ButtonGroup radioButtonModeGroup;
+	ButtonGroup radioButtonSizeGroup;
+	
 	//constructor
 	public BattleshipNewGameFrame() {
 		//settings
@@ -33,42 +67,61 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		setBackground(Color.DARK_GRAY);
 		
 		//label per dire che stiamo facendo
-		JLabel newGameLabel = new JLabel("CHOOSE SETTINGS");
+		newGameLabel = new JLabel("NEW GAME SETTINGS");
 		newGameLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		//bottoni per confermare e per settare il timer
-		JButton confirmButton = new JButton("CONFIRM");
-		JCheckBox timedCheckBox = new JCheckBox("TIMED");
+		confirmButton = new JButton("CONFIRM");
+		confirmButton.addActionListener(this);
+		resetButton = new JButton("RESET");
+		resetButton.addActionListener(this);
+		backButton = new JButton ("BACK");
+		backButton.addActionListener(this);
+		timedCheckBox = new JCheckBox("Timed");
 		
 		//radio buttons per scegliere la modalità di gioco
-		JLabel gameModeLabel = new JLabel("Select game mode:");
-		JRadioButton p1vsp2Button = new JRadioButton("P1vsP2");
+		gameModeLabel = new JLabel("Select game mode:");
+		radioButtonModeGroup = new ButtonGroup();
+		p1vsp2Button = new JRadioButton("P1vsP2");
 		p1vsp2Button.addActionListener(this);
-		JRadioButton p1vsCPUButton = new JRadioButton("P1vsCPU");
+		p1vsCPUButton = new JRadioButton("P1vsCPU");
+		p1vsCPUButton.setSelected(true);
 		p1vsCPUButton.addActionListener(this);
-		JPanel gameModePanel = new JPanel();
+		radioButtonModeGroup.add(p1vsp2Button);
+		radioButtonModeGroup.add(p1vsCPUButton);
+		
+		//add buttons to panel
+		gameModePanel = new JPanel();
 		gameModePanel.setLayout(new BorderLayout());
 		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
 		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
 		gameModePanel.add(p1vsCPUButton, BorderLayout.SOUTH);
 		
 		//group of radio buttons for size choice
-		JLabel gridSizeLabel = new JLabel("Select grid size:");
-		JRadioButton sizeSButton = new JRadioButton("5x5");
+		gridSizeLabel = new JLabel("Select grid size:");
+		sizeSButton = new JRadioButton("5x5");
 		sizeSButton.addActionListener(this);
-		JRadioButton sizeMButton = new JRadioButton("10x10");
+		sizeMButton = new JRadioButton("10x10");
 		sizeMButton.addActionListener(this);
-		JRadioButton sizeLButton = new JRadioButton("15x15");
+		sizeMButton.setSelected(true);
+		sizeLButton = new JRadioButton("15x15");
 		sizeLButton.addActionListener(this);
-		JRadioButton sizeXLButton = new JRadioButton("20x20");
+		sizeXLButton = new JRadioButton("20x20");
 		sizeXLButton.addActionListener(this);
 		
+		//add radio buttons to group
+		radioButtonSizeGroup = new ButtonGroup();
+		radioButtonSizeGroup.add(sizeSButton);
+		radioButtonSizeGroup.add(sizeMButton);
+		radioButtonSizeGroup.add(sizeLButton);
+		radioButtonSizeGroup.add(sizeXLButton);
+		
+		//add actionListener to buttonGroup
+		
+		
 		//JPanel for grouping size radio buttons
-		JPanel radioButtonSizePanel = new JPanel();
+		radioButtonSizePanel = new JPanel();
 		radioButtonSizePanel.setLayout(new FlowLayout());
-		
-		//TODO: solo uno selezionato alla volta
-		
 		radioButtonSizePanel.add(gridSizeLabel);
 		radioButtonSizePanel.add(sizeSButton);
 		radioButtonSizePanel.add(sizeMButton);
@@ -76,24 +129,52 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		radioButtonSizePanel.add(sizeXLButton);
 		
 		//panel for all radio buttons
-		JPanel buttonPanel = new JPanel();
+		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
-		//buttonPanel.setBackground(Color.DARK_GRAY);
 		buttonPanel.add(gameModePanel);
 		buttonPanel.add(radioButtonSizePanel);
 		buttonPanel.add(timedCheckBox);
 		
+		//panel for confirm, reset and back buttons
+		confResBackButtonPanel = new JPanel();
+		confResBackButtonPanel.setLayout(new FlowLayout());
+		confResBackButtonPanel.add(confirmButton);
+		confResBackButtonPanel.add(resetButton);
+		confResBackButtonPanel.add(backButton);
 		
 		//add everything to frame
 		add(newGameLabel, BorderLayout.BEFORE_FIRST_LINE);
 		add(buttonPanel, BorderLayout.CENTER);
-		add(confirmButton, BorderLayout.AFTER_LAST_LINE);
+		add(confResBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		String actionCommand = e.getActionCommand();
+		switch(actionCommand) {
+		case "CONFIRM":
+			System.out.println("confirm");
+			//TODO: get selections and launch Game
+			if(p1vsp2Button.isSelected())
+				System.out.println("\tP1vsP2");
+			if(p1vsCPUButton.isSelected())
+				System.out.println("\tP1vsCPU");
+			if(timedCheckBox.isSelected())
+				System.out.println("\tTimed");
+			break;
+		case "RESET":
+			System.out.println("reset");
+			//TODO reset all selections
+			break;
+		case "BACK":
+			System.out.println("back");
+			//TODO re-launch startLoadGameFrame
+			break;
+		default:
+			System.out.println("error");
+			//TODO throw exception?
+			break;
+		}
 	}
 
 	@Override
