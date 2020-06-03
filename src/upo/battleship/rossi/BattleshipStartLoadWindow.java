@@ -18,7 +18,7 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 200;
 	private static final String TITLE = "UPOBattleship by Lorenzo Rossi";
-	private boolean oldGameExists = true; //TODO implement "checkForSavedFile()" in Game
+	private boolean oldGameExists = false; //TODO implement "checkForSavedFile()" in Game
 	//constructors
 	BattleshipStartLoadWindow(){
 		//settings

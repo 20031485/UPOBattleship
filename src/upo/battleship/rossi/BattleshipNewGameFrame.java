@@ -25,6 +25,8 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 	private static final int HEIGHT = 250;
 	private static final String TITLE = "New Game";
 	
+	private BattleshipModel battleshipModel;
+	
 	//JPanels
 	private JPanel gameModePanel;
 	private JPanel radioButtonSizePanel;
@@ -35,6 +37,7 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 	private JLabel newGameLabel;
 	private JLabel gameModeLabel;
 	private JLabel gridSizeLabel;
+	private JLabel difficultyLabel;
 	
 	//JButtons
 	private JButton confirmButton;
@@ -44,6 +47,8 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 	//JRadioButtons
 	private JRadioButton p1vsp2Button;
 	private JRadioButton p1vsCPUButton;
+	private JRadioButton easyModeButton;
+	private JRadioButton hardModeButton;
 	private JRadioButton sizeSButton;
 	private JRadioButton sizeMButton;
 	private JRadioButton sizeLButton;
@@ -55,9 +60,12 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 	//ButtonGroups
 	ButtonGroup radioButtonModeGroup;
 	ButtonGroup radioButtonSizeGroup;
+	ButtonGroup difficultyButtonGroup;
 	
 	//constructor
-	public BattleshipNewGameFrame() {
+	public BattleshipNewGameFrame(/*BattleshipModel battleshipModel*/) {
+		//this.battleshipModel = battleshipModel;
+		
 		//settings
 		setSize(WIDTH, HEIGHT);
 		setTitle(TITLE);
@@ -90,12 +98,26 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		radioButtonModeGroup.add(p1vsp2Button);
 		radioButtonModeGroup.add(p1vsCPUButton);
 		
+		//choose vsCPU difficulty
+		difficultyLabel = new JLabel("Difficulty: ");
+		difficultyButtonGroup = new ButtonGroup();
+		easyModeButton = new JRadioButton("easy cheesy");
+		easyModeButton.addActionListener(this);
+		hardModeButton = new JRadioButton("hard as hell");
+		hardModeButton.addActionListener(this);
+		difficultyButtonGroup.add(easyModeButton);
+		difficultyButtonGroup.add(hardModeButton);
+		
+		
 		//add buttons to panel
 		gameModePanel = new JPanel();
 		gameModePanel.setLayout(new BorderLayout());
 		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
 		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
 		gameModePanel.add(p1vsCPUButton, BorderLayout.SOUTH);
+		//TODO fix positions
+		gameModePanel.add(easyModeButton, BorderLayout.WEST);
+		gameModePanel.add(hardModeButton, BorderLayout.WEST);
 		
 		//group of radio buttons for size choice
 		gridSizeLabel = new JLabel("Select grid size:");
@@ -155,10 +177,21 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		case "CONFIRM":
 			System.out.println("confirm");
 			//TODO: get selections and launch Game
-			if(p1vsp2Button.isSelected())
+			if(p1vsp2Button.isSelected()) {
 				System.out.println("\tP1vsP2");
-			if(p1vsCPUButton.isSelected())
+				BattleshipModel.savedGameExists();
+			}
+			if(p1vsCPUButton.isSelected()) {
 				System.out.println("\tP1vsCPU");
+			}
+			if(sizeSButton.isSelected())
+				System.out.println("\t5x5");
+			if(sizeMButton.isSelected())
+				System.out.println("\t10x10");
+			if(sizeLButton.isSelected())
+				System.out.println("\t15x15");
+			if(sizeXLButton.isSelected())
+				System.out.println("\t20x20");
 			if(timedCheckBox.isSelected())
 				System.out.println("\tTimed");
 			break;
@@ -169,6 +202,14 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		case "BACK":
 			System.out.println("back");
 			//TODO re-launch startLoadGameFrame
+			break;
+		case "P1vsP2":
+				easyModeButton.disable();
+				hardModeButton.disable();
+			break;
+		case "P1vsCPU":
+			easyModeButton.enable();
+			hardModeButton.enable();
 			break;
 		default:
 			System.out.println("error");
