@@ -31,7 +31,9 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 	private JPanel gameModePanel;
 	private JPanel radioButtonSizePanel;
 	private JPanel buttonPanel;
-	private JPanel confResBackButtonPanel;
+	private JPanel confirmResetBackButtonPanel;
+	private JPanel difficultyPanel;
+	private JPanel chooseGameModePanel;
 	
 	//JLabels
 	private JLabel newGameLabel;
@@ -72,102 +74,113 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		addWindowListener(this);
 		setLayout(new BorderLayout());
-		setBackground(Color.DARK_GRAY);
+		//setBackground(Color.DARK_GRAY);
 		
-		//label per dire che stiamo facendo
+		//tutte le label
 		newGameLabel = new JLabel("NEW GAME SETTINGS");
 		newGameLabel.setHorizontalAlignment(JLabel.CENTER);
+		difficultyLabel = new JLabel("Difficulty: ");
+		gameModeLabel = new JLabel("Select game mode:");
+		gridSizeLabel = new JLabel("Select grid size:");
 		
-		//bottoni per confermare e per settare il timer
+		//tutti i bottoni
 		confirmButton = new JButton("CONFIRM");
 		confirmButton.addActionListener(this);
+		
 		resetButton = new JButton("RESET");
 		resetButton.addActionListener(this);
+		
 		backButton = new JButton ("BACK");
 		backButton.addActionListener(this);
-		timedCheckBox = new JCheckBox("Timed");
 		
-		//radio buttons per scegliere la modalità di gioco
-		gameModeLabel = new JLabel("Select game mode:");
-		radioButtonModeGroup = new ButtonGroup();
 		p1vsp2Button = new JRadioButton("P1vsP2");
 		p1vsp2Button.addActionListener(this);
+		
 		p1vsCPUButton = new JRadioButton("P1vsCPU");
 		p1vsCPUButton.setSelected(true);
 		p1vsCPUButton.addActionListener(this);
+		
+		easyModeButton = new JRadioButton("easy cheesy");
+		easyModeButton.setSelected(true);
+		
+		hardModeButton = new JRadioButton("hard as hell");
+		
+		sizeSButton = new JRadioButton("5x5");
+		
+		sizeMButton = new JRadioButton("10x10");
+		
+		sizeMButton.setSelected(true);
+		
+		sizeLButton = new JRadioButton("15x15");
+		
+		sizeXLButton = new JRadioButton("20x20");
+		
+		timedCheckBox = new JCheckBox("Timed");
+		timedCheckBox.setSelected(false);
+		
+		//tutti i buttonGroup		
+		radioButtonModeGroup = new ButtonGroup();
 		radioButtonModeGroup.add(p1vsp2Button);
 		radioButtonModeGroup.add(p1vsCPUButton);
 		
-		//choose vsCPU difficulty
-		difficultyLabel = new JLabel("Difficulty: ");
 		difficultyButtonGroup = new ButtonGroup();
-		easyModeButton = new JRadioButton("easy cheesy");
-		easyModeButton.addActionListener(this);
-		hardModeButton = new JRadioButton("hard as hell");
-		hardModeButton.addActionListener(this);
 		difficultyButtonGroup.add(easyModeButton);
 		difficultyButtonGroup.add(hardModeButton);
 		
-		
-		//add buttons to panel
-		gameModePanel = new JPanel();
-		gameModePanel.setLayout(new BorderLayout());
-		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
-		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
-		gameModePanel.add(p1vsCPUButton, BorderLayout.SOUTH);
-		//TODO fix positions
-		gameModePanel.add(easyModeButton, BorderLayout.WEST);
-		gameModePanel.add(hardModeButton, BorderLayout.WEST);
-		
-		//group of radio buttons for size choice
-		gridSizeLabel = new JLabel("Select grid size:");
-		sizeSButton = new JRadioButton("5x5");
-		sizeSButton.addActionListener(this);
-		sizeMButton = new JRadioButton("10x10");
-		sizeMButton.addActionListener(this);
-		sizeMButton.setSelected(true);
-		sizeLButton = new JRadioButton("15x15");
-		sizeLButton.addActionListener(this);
-		sizeXLButton = new JRadioButton("20x20");
-		sizeXLButton.addActionListener(this);
-		
-		//add radio buttons to group
 		radioButtonSizeGroup = new ButtonGroup();
 		radioButtonSizeGroup.add(sizeSButton);
 		radioButtonSizeGroup.add(sizeMButton);
 		radioButtonSizeGroup.add(sizeLButton);
 		radioButtonSizeGroup.add(sizeXLButton);
 		
-		//add actionListener to buttonGroup
+		//tutti i pannelli
+		difficultyPanel = new JPanel();
+		difficultyPanel.setLayout(new BorderLayout());
 		
+		gameModePanel = new JPanel();
+		gameModePanel.setLayout(new BorderLayout());
+			
+		confirmResetBackButtonPanel = new JPanel();
+		confirmResetBackButtonPanel.setLayout(new FlowLayout());
 		
-		//JPanel for grouping size radio buttons
 		radioButtonSizePanel = new JPanel();
 		radioButtonSizePanel.setLayout(new FlowLayout());
+		
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout());
+		
+		chooseGameModePanel = new JPanel();
+		chooseGameModePanel.setLayout(new FlowLayout());
+	
+		//add everything to frame
+		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
+		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
+		gameModePanel.add(p1vsCPUButton, BorderLayout.SOUTH);
+		
+		difficultyPanel.add(difficultyLabel, BorderLayout.NORTH);
+		difficultyPanel.add(easyModeButton, BorderLayout.CENTER);
+		difficultyPanel.add(hardModeButton, BorderLayout.SOUTH);
+		
+		chooseGameModePanel.add(gameModePanel);
+		chooseGameModePanel.add(difficultyPanel);
+		
 		radioButtonSizePanel.add(gridSizeLabel);
 		radioButtonSizePanel.add(sizeSButton);
 		radioButtonSizePanel.add(sizeMButton);
 		radioButtonSizePanel.add(sizeLButton);
 		radioButtonSizePanel.add(sizeXLButton);
 		
-		//panel for all radio buttons
-		buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout());
-		buttonPanel.add(gameModePanel);
+		buttonPanel.add(chooseGameModePanel);
 		buttonPanel.add(radioButtonSizePanel);
 		buttonPanel.add(timedCheckBox);
 		
-		//panel for confirm, reset and back buttons
-		confResBackButtonPanel = new JPanel();
-		confResBackButtonPanel.setLayout(new FlowLayout());
-		confResBackButtonPanel.add(confirmButton);
-		confResBackButtonPanel.add(resetButton);
-		confResBackButtonPanel.add(backButton);
+		confirmResetBackButtonPanel.add(confirmButton);
+		confirmResetBackButtonPanel.add(resetButton);
+		confirmResetBackButtonPanel.add(backButton);
 		
-		//add everything to frame
 		add(newGameLabel, BorderLayout.BEFORE_FIRST_LINE);
 		add(buttonPanel, BorderLayout.CENTER);
-		add(confResBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
+		add(confirmResetBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
 	}
 	
 	@Override
@@ -183,6 +196,10 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 			}
 			if(p1vsCPUButton.isSelected()) {
 				System.out.println("\tP1vsCPU");
+				if(easyModeButton.isSelected())
+					System.out.println("\t\teasy cheesy");
+				if(hardModeButton.isSelected())
+					System.out.println("\t\thard as hell");
 			}
 			if(sizeSButton.isSelected())
 				System.out.println("\t5x5");
@@ -204,12 +221,10 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 			//TODO re-launch startLoadGameFrame
 			break;
 		case "P1vsP2":
-				easyModeButton.disable();
-				hardModeButton.disable();
+			difficultyPanel.setVisible(false);;
 			break;
 		case "P1vsCPU":
-			easyModeButton.enable();
-			hardModeButton.enable();
+			difficultyPanel.setVisible(true);
 			break;
 		default:
 			System.out.println("error");
