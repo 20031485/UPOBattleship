@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -19,20 +21,21 @@ import javax.swing.JRadioButton;
 import javax.swing.WindowConstants;
 
 
-public class BattleshipNewGameFrame extends JFrame implements ActionListener, WindowListener{
+public class BattleshipNewGameFrame extends JFrame implements Observer, WindowListener{
 	//attributes
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 250;
 	private static final String TITLE = "New Game";
 	
 	private BattleshipModel battleshipModel;
+	private BattleshipController battleshipController;
 	
 	//JPanels
 	private JPanel gameModePanel;
 	private JPanel radioButtonSizePanel;
 	private JPanel buttonPanel;
 	private JPanel confirmResetBackButtonPanel;
-	private JPanel difficultyPanel;
+	protected JPanel difficultyPanel;
 	private JPanel chooseGameModePanel;
 	
 	//JLabels
@@ -42,19 +45,19 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 	private JLabel difficultyLabel;
 	
 	//JButtons
-	private JButton confirmButton;
-	private JButton resetButton;
-	private JButton backButton;
+	protected JButton confirmButton;
+	protected JButton resetButton;
+	protected JButton backButton;
 	
 	//JRadioButtons
-	private JRadioButton p1vsp2Button;
-	private JRadioButton p1vsCPUButton;
-	private JRadioButton easyModeButton;
-	private JRadioButton hardModeButton;
-	private JRadioButton sizeSButton;
-	private JRadioButton sizeMButton;
-	private JRadioButton sizeLButton;
-	private JRadioButton sizeXLButton;
+	protected JRadioButton p1vsp2Button;
+	protected JRadioButton p1vsCPUButton;
+	protected JRadioButton easyModeButton;
+	protected JRadioButton hardModeButton;
+	protected JRadioButton sizeSButton;
+	protected JRadioButton sizeMButton;
+	protected JRadioButton sizeLButton;
+	protected JRadioButton sizeXLButton;
 	
 	//JCheckboxes
 	JCheckBox timedCheckBox;
@@ -65,9 +68,9 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 	ButtonGroup difficultyButtonGroup;
 	
 	//constructor
-	public BattleshipNewGameFrame(/*BattleshipModel battleshipModel*/) {
-		//this.battleshipModel = battleshipModel;
-		
+	public BattleshipNewGameFrame(BattleshipModel battleshipModel) {
+		this.battleshipModel = battleshipModel;
+		this.battleshipController = new BattleshipController(battleshipModel, this);
 		//settings
 		setSize(WIDTH, HEIGHT);
 		setTitle(TITLE);
@@ -85,20 +88,20 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		
 		//tutti i bottoni
 		confirmButton = new JButton("CONFIRM");
-		confirmButton.addActionListener(this);
+		confirmButton.addActionListener(battleshipController);
 		
 		resetButton = new JButton("RESET");
-		resetButton.addActionListener(this);
+		resetButton.addActionListener(battleshipController);
 		
 		backButton = new JButton ("BACK");
-		backButton.addActionListener(this);
+		backButton.addActionListener(battleshipController);
 		
 		p1vsp2Button = new JRadioButton("P1vsP2");
-		p1vsp2Button.addActionListener(this);
+		p1vsp2Button.addActionListener(battleshipController);
 		
 		p1vsCPUButton = new JRadioButton("P1vsCPU");
 		p1vsCPUButton.setSelected(true);
-		p1vsCPUButton.addActionListener(this);
+		p1vsCPUButton.addActionListener(battleshipController);
 		
 		easyModeButton = new JRadioButton("easy cheesy");
 		easyModeButton.setSelected(true);
@@ -181,57 +184,10 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		add(newGameLabel, BorderLayout.BEFORE_FIRST_LINE);
 		add(buttonPanel, BorderLayout.CENTER);
 		add(confirmResetBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
+		this.setVisible(true);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String actionCommand = e.getActionCommand();
-		switch(actionCommand) {
-		case "CONFIRM":
-			System.out.println("confirm");
-			//TODO: get selections and launch Game
-			if(p1vsp2Button.isSelected()) {
-				System.out.println("\tP1vsP2");
-				BattleshipModel.savedGameExists();
-			}
-			if(p1vsCPUButton.isSelected()) {
-				System.out.println("\tP1vsCPU");
-				if(easyModeButton.isSelected())
-					System.out.println("\t\teasy cheesy");
-				if(hardModeButton.isSelected())
-					System.out.println("\t\thard as hell");
-			}
-			if(sizeSButton.isSelected())
-				System.out.println("\t5x5");
-			if(sizeMButton.isSelected())
-				System.out.println("\t10x10");
-			if(sizeLButton.isSelected())
-				System.out.println("\t15x15");
-			if(sizeXLButton.isSelected())
-				System.out.println("\t20x20");
-			if(timedCheckBox.isSelected())
-				System.out.println("\tTimed");
-			break;
-		case "RESET":
-			System.out.println("reset");
-			//TODO reset all selections
-			break;
-		case "BACK":
-			System.out.println("back");
-			//TODO re-launch startLoadGameFrame
-			break;
-		case "P1vsP2":
-			difficultyPanel.setVisible(false);;
-			break;
-		case "P1vsCPU":
-			difficultyPanel.setVisible(true);
-			break;
-		default:
-			System.out.println("error");
-			//TODO throw exception?
-			break;
-		}
-	}
+	
 
 	@Override
 	public void windowOpened(WindowEvent e) {
@@ -274,9 +230,17 @@ public class BattleshipNewGameFrame extends JFrame implements ActionListener, Wi
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		BattleshipNewGameFrame gui = new BattleshipNewGameFrame();
 		gui.setVisible(true);
-	}
+	}*/
 }

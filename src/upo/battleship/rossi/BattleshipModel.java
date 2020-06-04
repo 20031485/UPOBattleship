@@ -4,18 +4,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
+//import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
+import java.util.Observable;
+//import java.util.Scanner;
 import java.util.Timer;
 
 //BattleshipModel
-public class BattleshipModel implements Serializable{
+public class BattleshipModel extends Observable implements Serializable{
 	//attributes
 	private Player player1 = null;
 	private Player player2 = null;
