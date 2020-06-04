@@ -24,9 +24,7 @@ class BattleshipModelTest {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		System.out.println(bm.toString());
-		System.out.println(bm2.toString());
-		assert(bm.equals(bm2));//returns false but it should return true!
+		assertEquals(bm, bm2);
 	}
 
 }

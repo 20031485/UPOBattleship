@@ -183,4 +183,15 @@ public class BattleshipModel implements Serializable{
 			System.out.println("game2 = null");
 		}
 	}
+	
+	//used for debugging purposes
+	public boolean equals(Object o) {
+		if(o instanceof BattleshipModel) {
+			if(((BattleshipModel) o).getPlayer1().equals(this.getPlayer1())
+					&& ((BattleshipModel) o).getPlayer2().equals(this.getPlayer2())
+					&& ((BattleshipModel) o).getGameSize() == (this.getGameSize())
+				) return true;
+		}
+		return false;
+	}
 }
