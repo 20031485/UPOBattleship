@@ -8,9 +8,9 @@ import java.awt.event.WindowListener;
 public class BattleshipController implements ActionListener, WindowListener{
 	//attributes
 	private BattleshipModel battleshipModel;
-	private BattleshipNewGameFrame battleshipNewGameFrame;
+	private BattleshipNewGameView battleshipNewGameFrame;
 	//constructor
-	public BattleshipController(BattleshipModel battleshipModel, BattleshipNewGameFrame battleshipNewGameFrame) {
+	public BattleshipController(BattleshipModel battleshipModel, BattleshipNewGameView battleshipNewGameFrame) {
 		this.battleshipModel = battleshipModel;
 		this.battleshipNewGameFrame = battleshipNewGameFrame;
 	}
@@ -45,12 +45,10 @@ public class BattleshipController implements ActionListener, WindowListener{
 			if(battleshipNewGameFrame.timedCheckBox.isSelected())
 				System.out.println("\tTimed");
 			break;
-		case "RESET":
-			System.out.println("reset");
-			//TODO reset all selections
-			break;
 		case "BACK":
 			System.out.println("back");
+			//the next comment is just for testing purposes
+			//battleshipNewGameFrame.setSize(300, 300);
 			//TODO re-launch startLoadGameFrame
 			break;
 		case "P1vsP2":

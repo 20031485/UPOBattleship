@@ -2,6 +2,7 @@ package upo.battleship.rossi;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,32 +22,31 @@ import javax.swing.JRadioButton;
 import javax.swing.WindowConstants;
 
 
-public class BattleshipNewGameFrame extends JFrame implements Observer, WindowListener{
+public class BattleshipNewGameView extends JPanel implements Observer, WindowListener{
+	
 	//attributes
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 250;
-	private static final String TITLE = "New Game";
+	private static final String TITLE = "New Game Settings";
 	
-	private BattleshipModel battleshipModel;
+	//controller
 	private BattleshipController battleshipController;
 	
 	//JPanels
 	private JPanel gameModePanel;
 	private JPanel radioButtonSizePanel;
 	private JPanel buttonPanel;
-	private JPanel confirmResetBackButtonPanel;
+	private JPanel confirmBackButtonPanel;
 	protected JPanel difficultyPanel;
 	private JPanel chooseGameModePanel;
 	
 	//JLabels
-	private JLabel newGameLabel;
 	private JLabel gameModeLabel;
 	private JLabel gridSizeLabel;
 	private JLabel difficultyLabel;
 	
 	//JButtons
 	protected JButton confirmButton;
-	protected JButton resetButton;
 	protected JButton backButton;
 	
 	//JRadioButtons
@@ -68,30 +68,25 @@ public class BattleshipNewGameFrame extends JFrame implements Observer, WindowLi
 	ButtonGroup difficultyButtonGroup;
 	
 	//constructor
-	public BattleshipNewGameFrame(BattleshipModel battleshipModel) {
-		this.battleshipModel = battleshipModel;
+	public BattleshipNewGameView(BattleshipModel battleshipModel) {
 		this.battleshipController = new BattleshipController(battleshipModel, this);
 		//settings
 		setSize(WIDTH, HEIGHT);
-		setTitle(TITLE);
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		addWindowListener(this);
+		//setTitle(TITLE);
+		//setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		//addWindowListener(new BattleshipWindowDestructor());
+		//addWindowListener(this);
 		setLayout(new BorderLayout());
-		//setBackground(Color.DARK_GRAY);
+		//setLocationRelativeTo(null);
 		
 		//tutte le label
-		newGameLabel = new JLabel("NEW GAME SETTINGS");
-		newGameLabel.setHorizontalAlignment(JLabel.CENTER);
-		difficultyLabel = new JLabel("Difficulty: ");
-		gameModeLabel = new JLabel("Select game mode:");
-		gridSizeLabel = new JLabel("Select grid size:");
+		gameModeLabel = new JLabel("GAME MODE");
+		difficultyLabel = new JLabel("DIFFICULTY");
+		gridSizeLabel = new JLabel("GRID SIZE:");
 		
 		//tutti i bottoni
 		confirmButton = new JButton("CONFIRM");
 		confirmButton.addActionListener(battleshipController);
-		
-		resetButton = new JButton("RESET");
-		resetButton.addActionListener(battleshipController);
 		
 		backButton = new JButton ("BACK");
 		backButton.addActionListener(battleshipController);
@@ -143,8 +138,8 @@ public class BattleshipNewGameFrame extends JFrame implements Observer, WindowLi
 		gameModePanel = new JPanel();
 		gameModePanel.setLayout(new BorderLayout());
 			
-		confirmResetBackButtonPanel = new JPanel();
-		confirmResetBackButtonPanel.setLayout(new FlowLayout());
+		confirmBackButtonPanel = new JPanel();
+		confirmBackButtonPanel.setLayout(new FlowLayout());
 		
 		radioButtonSizePanel = new JPanel();
 		radioButtonSizePanel.setLayout(new FlowLayout());
@@ -153,19 +148,20 @@ public class BattleshipNewGameFrame extends JFrame implements Observer, WindowLi
 		buttonPanel.setLayout(new FlowLayout());
 		
 		chooseGameModePanel = new JPanel();
-		chooseGameModePanel.setLayout(new FlowLayout());
+		chooseGameModePanel.setLayout(new BorderLayout());
 	
 		//add everything to frame
 		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
 		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
 		gameModePanel.add(p1vsCPUButton, BorderLayout.SOUTH);
-		
+		//gameModePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		difficultyPanel.add(difficultyLabel, BorderLayout.NORTH);
 		difficultyPanel.add(easyModeButton, BorderLayout.CENTER);
 		difficultyPanel.add(hardModeButton, BorderLayout.SOUTH);
 		
-		chooseGameModePanel.add(gameModePanel);
-		chooseGameModePanel.add(difficultyPanel);
+		chooseGameModePanel.add(gameModePanel, BorderLayout.WEST);
+		chooseGameModePanel.add(difficultyPanel, BorderLayout.EAST);
+		//chooseGameModePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		radioButtonSizePanel.add(gridSizeLabel);
 		radioButtonSizePanel.add(sizeSButton);
@@ -177,13 +173,11 @@ public class BattleshipNewGameFrame extends JFrame implements Observer, WindowLi
 		buttonPanel.add(radioButtonSizePanel);
 		buttonPanel.add(timedCheckBox);
 		
-		confirmResetBackButtonPanel.add(confirmButton);
-		confirmResetBackButtonPanel.add(resetButton);
-		confirmResetBackButtonPanel.add(backButton);
+		confirmBackButtonPanel.add(confirmButton);
+		confirmBackButtonPanel.add(backButton);
 		
-		add(newGameLabel, BorderLayout.BEFORE_FIRST_LINE);
 		add(buttonPanel, BorderLayout.CENTER);
-		add(confirmResetBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
+		add(confirmBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
 		this.setVisible(true);
 	}
 	
@@ -238,9 +232,4 @@ public class BattleshipNewGameFrame extends JFrame implements Observer, WindowLi
 		// TODO Auto-generated method stub
 		
 	}
-	
-	/*public static void main(String[] args) {
-		BattleshipNewGameFrame gui = new BattleshipNewGameFrame();
-		gui.setVisible(true);
-	}*/
 }

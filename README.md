@@ -1,12 +1,8 @@
 # UPOBattleship - Programming Paradigms Java project
 Java project for the Programming Paradigms course at University of Eastern Piedmont, Vercelli (IT).
 
-Added:
- - `BattleshipStartLoadWindow`is the start screen: it allows the user to choose whether to start a new game or load an unfinished one;
- - `BattleshipExitFrame`: it displays a window checking the user really wants to quit the game;
- - `BattleshipWindowDestructor` to make `BattleshipExitFrame` visible when trying to close `BattleshipStartLoadWindow`'s window;
- - `BattleshipSaveBeforeExitFrame` to be displayed when pressing "exit" during a game **[TODO: another WindowDestructor to call in that case]**.
- - `loadGame()` in `Game` has been made  _static_ : that was the only solution since calling `gameObject.loadGame()` after declaring `Game gameObject = null` would throw a `NullPointerException`, but it works kind of fine now. 
+# Latest additions
+I have tried to implement the MVC paradigm, decoupling views from models mostly. It appears we can have just one size-shifting frame and a bunch of panels to be switched inside of it. Let us say the user presses **NEW GAME**: then the panel he/she is viewing will be set invisible (or disposed?) and the frame dimensions will be stretched to host the `BattleshipNewGameFrame` and all of its buttons. Then, when the user clicks on **CONFIRM**, he/she will see the frame stretch to its new dimensions to load the new panel, which will be the one Paco is implementing (ship positioning panel whatsoever). We will see about what is remaining!
 
 # Useful links
  - [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/) because Lorenzo  _always_  forgets stuff;

@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,18 +15,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
+public class BattleshipStartLoadView extends JFrame implements Observer, ActionListener{
 	//attributes
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 200;
 	private static final String TITLE = "UPOBattleship by Lorenzo Rossi";
-	private boolean oldGameExists = false; //TODO implement "checkForSavedFile()" in Game
+	
 	//constructors
-	BattleshipStartLoadWindow(){
+	BattleshipStartLoadView(){
 		//settings
 		setSize(WIDTH, HEIGHT);
 		setTitle(TITLE);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		setLocationRelativeTo(null);
 		addWindowListener(new BattleshipWindowDestructor());
 		setLayout(new BorderLayout());
 		
@@ -42,8 +45,7 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 		buttonPanel.add(newGameButton);
 		
 		//add "loadGameButton" only if an old game file exists
-		if(oldGameExists) {
-			//TODO implement "checkForSavedFile()" in Game
+		if(BattleshipModel.savedGameExists()) {
 			JButton loadGameButton = new JButton("Load game");
 			loadGameButton.addActionListener(this);
 			buttonPanel.add(loadGameButton);
@@ -58,20 +60,27 @@ public class BattleshipStartLoadWindow extends JFrame implements ActionListener{
 		switch(command) {
 			case "New game":
 				System.out.println("new game");
-				//launch BattleshipNewGameFrame
+				//launch BattleshipNewGameView
 				break;
 			case "Load game":
 				System.out.println("loading saved file");
 				//launch saved game	
 				break;
 			default:
+				//hopefully never displayed LOL
 				System.out.println("BattleshipStartLoadWindow error!");
 		}
 	}
 	
 	//main
 	public static void main(String[] args) {
-		BattleshipStartLoadWindow gui = new BattleshipStartLoadWindow();
+		BattleshipStartLoadView gui = new BattleshipStartLoadView();
 		gui.setVisible(true);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

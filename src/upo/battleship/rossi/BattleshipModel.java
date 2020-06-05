@@ -28,28 +28,6 @@ public class BattleshipModel extends Observable implements Serializable{
 	private boolean justSaved = false;
 
 	//constructors
-	public BattleshipModel(int gameSize) {
-		this.player1 = new Player();
-		this.player2 = new Player();
-		this.gameSize = gameSize;
-		this.timed = false;
-		
-		if(timed) {
-			//TODO set timer
-		}
-	}
-	
-	public BattleshipModel(Player player1, Player player2, int gameSize, boolean timed) {
-		this.player1 = player1;
-		this.player2 = player2;
-		this.gameSize = gameSize;
-		this.timed = timed;
-		if(timed) {
-			//TODO set timer
-		}
-	}
-	
-	//default constructor
 	public BattleshipModel() {
 		this.player1 = new Player();
 		this.player2 = new Player();
@@ -60,7 +38,16 @@ public class BattleshipModel extends Observable implements Serializable{
 			//TODO come lo implementiamo? da thread o dalla gui?
 		}
 	}
-	
+	public BattleshipModel(int gameSize) {
+		this.player1 = new Player();
+		this.player2 = new Player();
+		this.gameSize = gameSize;
+		this.timed = false;
+		
+		if(timed) {
+			//TODO come lo implementiamo? da thread o dalla gui?
+		}
+	}
 	
 	
 	//methods
@@ -117,6 +104,8 @@ public class BattleshipModel extends Observable implements Serializable{
 		}
 		return loadedGame;
 	}
+	
+	
 	
 	public String toString() {
 		return 	"Game Size: "+ getGameSize() +

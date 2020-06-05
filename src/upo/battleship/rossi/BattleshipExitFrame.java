@@ -22,11 +22,13 @@ public class BattleshipExitFrame extends JFrame implements ActionListener{
 	//constructor
 	public BattleshipExitFrame() {
 		setSize(width, height);
-		getContentPane().setBackground(Color.WHITE);
+		setLocationRelativeTo(null);
+		//getContentPane().setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
 		JLabel label = new JLabel("Are you sure?");
+		label.setHorizontalAlignment(JLabel.CENTER);
 		add(label, BorderLayout.CENTER);
 		
 		JPanel buttonPanel = new JPanel();
