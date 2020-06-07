@@ -4,55 +4,37 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Observable;
+import java.util.Observer;
 
-public class BattleshipStartLoadController implements ActionListener, WindowListener{
+import javax.swing.JButton;
 
+public class BattleshipStartLoadController implements ActionListener{
+	//attributes
+	private BattleshipModel model;
+	
+	//constructor
+	public BattleshipStartLoadController(BattleshipModel model) {
+		this.model = model;
+	}
+	
+	//methods
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		JButton source = (JButton)e.getSource();
+		String command = source.getText();
+		switch(command) {
+			case "New game":
+				System.out.println("new game");
+				model.setState(BattleshipState.NEWGAME);
+				break;
+			case "Load game":
+				System.out.println("loading saved file");
+				model.setState(BattleshipState.RESUME);
+				break;
+			default:
+				//hopefully never displayed LOL
+				System.out.println("BattleshipStartLoadWindow error!");
+		}
 	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

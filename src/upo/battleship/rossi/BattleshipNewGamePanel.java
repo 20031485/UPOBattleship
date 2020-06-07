@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -22,16 +25,19 @@ import javax.swing.JRadioButton;
 import javax.swing.WindowConstants;
 
 
-public class BattleshipNewGameView extends JPanel implements Observer, WindowListener{
+public class BattleshipNewGamePanel extends JPanel implements PropertyChangeListener{
 	
 	//attributes
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 250;
-	private static final String TITLE = "New Game Settings";
+	private static final String TITLE = "NEW GAME SETTINGS";
+
+	//model
+	private BattleshipModel model;
 	
-	//controller
-	private BattleshipController battleshipController;
-	
+	//own controller
+	private BattleshipNewGameController newGameController;
+		
 	//JPanels
 	private JPanel gameModePanel;
 	private JPanel radioButtonSizePanel;
@@ -60,43 +66,41 @@ public class BattleshipNewGameView extends JPanel implements Observer, WindowLis
 	protected JRadioButton sizeXLButton;
 	
 	//JCheckboxes
-	JCheckBox timedCheckBox;
+	protected JCheckBox timedCheckBox;
 	
 	//ButtonGroups
-	ButtonGroup radioButtonModeGroup;
-	ButtonGroup radioButtonSizeGroup;
-	ButtonGroup difficultyButtonGroup;
+	private ButtonGroup radioButtonModeGroup;
+	private ButtonGroup radioButtonSizeGroup;
+	private ButtonGroup difficultyButtonGroup;
 	
 	//constructor
-	public BattleshipNewGameView(BattleshipModel battleshipModel) {
-		this.battleshipController = new BattleshipController(battleshipModel, this);
-		//settings
-		setSize(WIDTH, HEIGHT);
-		//setTitle(TITLE);
-		//setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		//addWindowListener(new BattleshipWindowDestructor());
-		//addWindowListener(this);
-		setLayout(new BorderLayout());
-		//setLocationRelativeTo(null);
+	public BattleshipNewGamePanel(BattleshipModel model, BattleshipNewGameController controller) {
+		this.model = model;
+		this.newGameController = new BattleshipNewGameController(model, this);
+		this.model.addPropertyChangeListener(this);
 		
-		//tutte le label
+		//settings
+		this.setSize(WIDTH, HEIGHT);
+		this.setLayout(new BorderLayout());
+		
+		//all labels
 		gameModeLabel = new JLabel("GAME MODE");
 		difficultyLabel = new JLabel("DIFFICULTY");
 		gridSizeLabel = new JLabel("GRID SIZE:");
 		
-		//tutti i bottoni
+		//all buttons
 		confirmButton = new JButton("CONFIRM");
-		confirmButton.addActionListener(battleshipController);
+		confirmButton.addActionListener(newGameController);
 		
 		backButton = new JButton ("BACK");
-		backButton.addActionListener(battleshipController);
+		backButton.addActionListener(newGameController);
 		
 		p1vsp2Button = new JRadioButton("P1vsP2");
-		p1vsp2Button.addActionListener(battleshipController);
+		p1vsp2Button.addActionListener(newGameController);
 		
 		p1vsCPUButton = new JRadioButton("P1vsCPU");
 		p1vsCPUButton.setSelected(true);
-		p1vsCPUButton.addActionListener(battleshipController);
+		p1vsCPUButton.addActionListener(newGameController);
 		
 		easyModeButton = new JRadioButton("easy cheesy");
 		easyModeButton.setSelected(true);
@@ -116,7 +120,7 @@ public class BattleshipNewGameView extends JPanel implements Observer, WindowLis
 		timedCheckBox = new JCheckBox("Timed");
 		timedCheckBox.setSelected(false);
 		
-		//tutti i buttonGroup		
+		//all buttonGroups		
 		radioButtonModeGroup = new ButtonGroup();
 		radioButtonModeGroup.add(p1vsp2Button);
 		radioButtonModeGroup.add(p1vsCPUButton);
@@ -131,7 +135,7 @@ public class BattleshipNewGameView extends JPanel implements Observer, WindowLis
 		radioButtonSizeGroup.add(sizeLButton);
 		radioButtonSizeGroup.add(sizeXLButton);
 		
-		//tutti i pannelli
+		//all panels
 		difficultyPanel = new JPanel();
 		difficultyPanel.setLayout(new BorderLayout());
 		
@@ -150,19 +154,17 @@ public class BattleshipNewGameView extends JPanel implements Observer, WindowLis
 		chooseGameModePanel = new JPanel();
 		chooseGameModePanel.setLayout(new BorderLayout());
 	
-		//add everything to frame
 		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
 		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
 		gameModePanel.add(p1vsCPUButton, BorderLayout.SOUTH);
-		//gameModePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 		difficultyPanel.add(difficultyLabel, BorderLayout.NORTH);
 		difficultyPanel.add(easyModeButton, BorderLayout.CENTER);
 		difficultyPanel.add(hardModeButton, BorderLayout.SOUTH);
 		
 		chooseGameModePanel.add(gameModePanel, BorderLayout.WEST);
 		chooseGameModePanel.add(difficultyPanel, BorderLayout.EAST);
-		//chooseGameModePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
+				
 		radioButtonSizePanel.add(gridSizeLabel);
 		radioButtonSizePanel.add(sizeSButton);
 		radioButtonSizePanel.add(sizeMButton);
@@ -175,61 +177,27 @@ public class BattleshipNewGameView extends JPanel implements Observer, WindowLis
 		
 		confirmBackButtonPanel.add(confirmButton);
 		confirmBackButtonPanel.add(backButton);
-		
-		add(buttonPanel, BorderLayout.CENTER);
-		add(confirmBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
-		this.setVisible(true);
+
+		//NewGamePanel
+		this.add(buttonPanel, BorderLayout.CENTER);
+		this.add(confirmBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
 	}
 	
-	
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
+	//methods
+	public static String getTitle() {
+		return TITLE;
 	}
 
 	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+	public void propertyChange(PropertyChangeEvent evt) {
+		String propertyName = evt.getPropertyName();
+		if(propertyName.equals("setState")) {
+			if(model.getState() == BattleshipState.NEWGAME) {
+				this.setVisible(true);
+			}
+			else
+				this.setVisible(false);
+		}
 		
 	}
 }

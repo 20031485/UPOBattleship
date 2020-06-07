@@ -1,5 +1,7 @@
 package upo.battleship.rossi;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,13 +17,17 @@ import java.util.Observable;
 //import java.util.Scanner;
 import java.util.Timer;
 
+//TODO notifyObservers() e setChange()
+
 //BattleshipModel
-public class BattleshipModel extends Observable implements Serializable{
+public class BattleshipModel implements Serializable{
 	//attributes
 	private Player player1 = null;
 	private Player player2 = null;
 	private int gameSize;//5, 10, 15 where 5 means 5x5 and so on
+	private BattleshipState state = BattleshipState.WELCOME;
 	private boolean timed;
+	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	//private Timer timer;
 	private static final String savedFileName = "battleship_saved_game.dat";
 	//every move will set justSaved to false, but the method saveGame will set it to true
@@ -29,6 +35,7 @@ public class BattleshipModel extends Observable implements Serializable{
 
 	//constructors
 	public BattleshipModel() {
+		System.out.println("model created");
 		this.player1 = new Player();
 		this.player2 = new Player();
 		this.gameSize = 10;
@@ -49,22 +56,42 @@ public class BattleshipModel extends Observable implements Serializable{
 		}
 	}
 	
+	public BattleshipModel(Player player1, Player player2, int gameSize, boolean timed) {
+		this.player1 = player1;
+		this.player2 = player2;
+		this.gameSize = gameSize;
+		this.timed = timed;
+		
+		if(timed) {
+			//TODO come lo implementiamo? da thread o dalla gui?
+		}
+	}
+	
 	
 	//methods
+	public BattleshipState getState() {
+		System.out.println("getState: " + this.state);
+		return this.state;
+	}
+	
+	public void setState(BattleshipState newState) {
+		BattleshipState oldState = this.getState();
+		this.state = newState;
+		this.propertyChangeSupport.firePropertyChange("setState", oldState, newState);
+		System.out.println("setState: " + state);
+	}
+	
 	public static boolean savedGameExists(){
 		File savedFile = new File(savedFileName);
-		if(savedFile.exists())
+		if(savedFile.exists()) {
 			return true;
+		}
 		return false;
 	}
 	
 	void saveGame() {
 		ObjectOutputStream outputStream = null;
-		//SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
-		//Date date = new Date();
-		//String fileName = "battleship_"+dateFormat.format(date)+".dat";
-		//String fileName = this.savedFileName;
-		//System.out.println(this.savedFileName);
+		
 		try {
 			outputStream = new ObjectOutputStream(new FileOutputStream(savedFileName));
 			outputStream.writeObject(this);
@@ -76,6 +103,13 @@ public class BattleshipModel extends Observable implements Serializable{
 			System.out.println("IOException");
 			e.printStackTrace();
 		}
+	}
+	
+	public void newGame(Player player1, Player player2, int gameSize, boolean timed) {
+		setPlayer1(player1);
+		setPlayer2(player2);
+		setGameSize(gameSize);
+		setTimed(timed);
 	}
 	
 	//not launched if savedGameExists == false
@@ -100,19 +134,9 @@ public class BattleshipModel extends Observable implements Serializable{
 		}
 		else {
 			System.out.println("Saved file not found!");
-			throw new FileNotFoundException("Saved file not found! Cannot load!");
+			throw new FileNotFoundException("Saved file not found! Loading failed!");
 		}
 		return loadedGame;
-	}
-	
-	
-	
-	public String toString() {
-		return 	"Game Size: "+ getGameSize() +
-				"\nPlayer1:\n\tname: " + getPlayer1().getName() +
-				"\n\tscore: "+ getPlayer1().getScore() +
-				"\nPlayer2:\n\tname: " + getPlayer2().getName() +
-				"\n\tscore: " + getPlayer2().getScore() + "\n\n";
 	}
 	
 	public Player getPlayer1() {
@@ -138,42 +162,15 @@ public class BattleshipModel extends Observable implements Serializable{
 	public void setGameSize(int gameSize) {
 		this.gameSize = gameSize;
 	}
+	
+	public void setTimed(boolean timed) {
+		this.timed = timed;
+	}
 
 	public String getSavedFileName() {
 		return savedFileName;
 	}
 
-	public static void main(String[] args) {
-		BattleshipModel game1 = new BattleshipModel(7);
-		BattleshipModel game2 = new BattleshipModel();
-		game1.getPlayer1().setScore(15);
-		game1.getPlayer2().setScore(23);
-		System.out.println("Game1: \n"+game1.toString());
-		System.out.println("Game2: \n"+game2.toString());
-		//System.out.println("Saving Game1...\n\n");
-		game1.saveGame();
-		if(savedGameExists()) {
-				System.out.println("file exists\n\n");
-			try {
-				System.out.println("Loading game1 onto game2...");
-				game2 = loadGame();
-			}
-			catch(Exception e) {
-				System.out.println("Exception");
-				//e.printStackTrace();
-			}
-		}
-		else 
-			System.out.println("Saved file does not exist!");
-		try{
-			System.out.println("Game1: \n"+game1.toString());
-			System.out.println("Game2: \n"+game2.toString());
-		}
-		catch(NullPointerException e) {
-			System.out.println("game2 = null");
-		}
-	}
-	
 	//used for debugging purposes
 	public boolean equals(Object o) {
 		if(o instanceof BattleshipModel) {
@@ -183,5 +180,21 @@ public class BattleshipModel extends Observable implements Serializable{
 				) return true;
 		}
 		return false;
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+	
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+	
+	public String toString() {
+		return 	"Game Size: "+ getGameSize() +
+				"\nPlayer1:\n\tname: " + getPlayer1().getName() +
+				"\n\tscore: "+ getPlayer1().getScore() +
+				"\nPlayer2:\n\tname: " + getPlayer2().getName() +
+				"\n\tscore: " + getPlayer2().getScore() + "\n\n";
 	}
 }
