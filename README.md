@@ -3,7 +3,7 @@ Java project for the Programming Paradigms course at University of Eastern Piedm
 
 # Latest additions
 **HORY SHET IT (KINDA) WORKS!**
-Throught strenuous trials and errors, we have finally reached a good point: the MVC model works so far. It successfully displays "Load game" only if a saved file exists, and the view goes up to the "New Game Settings" panel, i.e. the second one. 
+Through strenuous trials and errors, we have finally reached a good point: the MVC model works so far. It successfully displays "Load game" only if a saved file exists, and the view goes up to the "New Game Settings" panel, i.e. the second one. 
 
 # TODO
 - Check for _essential features_ in the project document: we might be missing something important!
