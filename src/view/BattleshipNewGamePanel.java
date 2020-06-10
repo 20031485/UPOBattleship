@@ -1,31 +1,22 @@
-package upo.battleship.rossi;
+package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.WindowConstants;
+import controller.BattleshipNewGameController;
+import model.BattleshipModel;
+import utils.BattleshipState;
 
 
 public class BattleshipNewGamePanel extends JPanel implements PropertyChangeListener{
+	private static final long serialVersionUID = 1L;
 	
 	//attributes
 	private static final int WIDTH = 400;
@@ -43,7 +34,8 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 	private JPanel radioButtonSizePanel;
 	private JPanel buttonPanel;
 	private JPanel confirmBackButtonPanel;
-	protected JPanel difficultyPanel;
+	public JPanel difficultyPanel;
+	public JPanel timedPanel;
 	private JPanel chooseGameModePanel;
 	
 	//JLabels
@@ -56,22 +48,26 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 	protected JButton backButton;
 	
 	//JRadioButtons
-	protected JRadioButton p1vsp2Button;
-	protected JRadioButton p1vsCPUButton;
-	protected JRadioButton easyModeButton;
-	protected JRadioButton hardModeButton;
-	protected JRadioButton sizeSButton;
-	protected JRadioButton sizeMButton;
-	protected JRadioButton sizeLButton;
-	protected JRadioButton sizeXLButton;
+	public JRadioButton p1vsp2Button;
+	public JRadioButton p1vsCPUButton;
+	public JRadioButton easyModeButton;
+	public JRadioButton hardModeButton;
+	public JRadioButton sizeSButton;
+	public JRadioButton sizeMButton;
+	public JRadioButton sizeLButton;
+	public JRadioButton sizeXLButton;
+	public JRadioButton timed5minsButton;
+	public JRadioButton timed10minsButton;
+	public JRadioButton timed15minsButton;
 	
 	//JCheckboxes
-	protected JCheckBox timedCheckBox;
+	public JCheckBox timedCheckBox;
 	
 	//ButtonGroups
 	private ButtonGroup radioButtonModeGroup;
 	private ButtonGroup radioButtonSizeGroup;
 	private ButtonGroup difficultyButtonGroup;
+	private ButtonGroup timedButtonGroup;
 	
 	//constructor
 	public BattleshipNewGamePanel(BattleshipModel model, BattleshipNewGameController controller) {
@@ -95,7 +91,7 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 		backButton = new JButton ("BACK");
 		backButton.addActionListener(newGameController);
 		
-		p1vsp2Button = new JRadioButton("P1vsP2");
+		p1vsp2Button = new JRadioButton("P1vsP2 (unavailable)");
 		p1vsp2Button.addActionListener(newGameController);
 		
 		p1vsCPUButton = new JRadioButton("P1vsCPU");
@@ -108,14 +104,15 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 		hardModeButton = new JRadioButton("hard as hell");
 		
 		sizeSButton = new JRadioButton("5x5");
-		
 		sizeMButton = new JRadioButton("10x10");
-		
 		sizeMButton.setSelected(true);
-		
 		sizeLButton = new JRadioButton("15x15");
-		
 		sizeXLButton = new JRadioButton("20x20");
+		
+		timed5minsButton = new JRadioButton("5mins");
+		timed5minsButton.setSelected(true);
+		timed10minsButton = new JRadioButton("10mins");
+		timed15minsButton = new JRadioButton("15mins");
 		
 		timedCheckBox = new JCheckBox("Timed");
 		timedCheckBox.setSelected(false);
@@ -135,6 +132,12 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 		radioButtonSizeGroup.add(sizeLButton);
 		radioButtonSizeGroup.add(sizeXLButton);
 		
+		timedButtonGroup = new ButtonGroup();
+		timedButtonGroup.add(timed5minsButton);
+		timedButtonGroup.add(timed10minsButton);
+		timedButtonGroup.add(timed15minsButton);
+		
+		
 		//all panels
 		difficultyPanel = new JPanel();
 		difficultyPanel.setLayout(new BorderLayout());
@@ -153,6 +156,9 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 		
 		chooseGameModePanel = new JPanel();
 		chooseGameModePanel.setLayout(new BorderLayout());
+		
+		timedPanel = new JPanel();
+		timedPanel.setLayout(new FlowLayout());
 	
 		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
 		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
@@ -173,7 +179,13 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 		
 		buttonPanel.add(chooseGameModePanel);
 		buttonPanel.add(radioButtonSizePanel);
+		
+		
+		timedPanel.add(timed5minsButton);
+		timedPanel.add(timed10minsButton);
+		timedPanel.add(timed15minsButton);
 		buttonPanel.add(timedCheckBox);
+		buttonPanel.add(timedPanel);
 		
 		confirmBackButtonPanel.add(confirmButton);
 		confirmBackButtonPanel.add(backButton);
@@ -198,6 +210,5 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 			else
 				this.setVisible(false);
 		}
-		
 	}
 }

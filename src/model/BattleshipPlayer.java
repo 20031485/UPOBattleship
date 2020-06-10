@@ -1,8 +1,8 @@
-package upo.battleship.rossi;
+package model;
 
 import java.io.Serializable;
 
-public class Player implements Serializable{
+public class BattleshipPlayer implements Serializable{
 	//attributes
 	private String name;
 	private int score;
@@ -10,12 +10,12 @@ public class Player implements Serializable{
 	private boolean[][] hitsGrid;
 	
 	//constructors
-	public Player(String playerName) {
+	public BattleshipPlayer(String playerName) {
 		this.name = playerName;
 		this.score = 0;
 	}
 	
-	public Player() {
+	public BattleshipPlayer() {
 		this("Player");
 	}
 	
@@ -90,9 +90,9 @@ public class Player implements Serializable{
 	}
 	
 	public boolean equals(Object o) {
-		if(o instanceof Player) {
-			if(((Player) o).getName().equals(this.getName())
-				&& ((Player) o).getScore() == this.getScore()
+		if(o instanceof BattleshipPlayer) {
+			if(((BattleshipPlayer) o).getName().equals(this.getName())
+				&& ((BattleshipPlayer) o).getScore() == this.getScore()
 				/*&& ((Player)o).getShipsGrid().equals(this.getShipsGrid())
 				&& ((Player)o).getHitsGrid().equals(this.getHitsGrid())*/)
 			return true;

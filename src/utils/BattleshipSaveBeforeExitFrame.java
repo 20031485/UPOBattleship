@@ -1,4 +1,4 @@
-package upo.battleship.rossi;
+package utils;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

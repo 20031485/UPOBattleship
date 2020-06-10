@@ -1,4 +1,4 @@
-package upo.battleship.rossi;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -12,6 +12,10 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import controller.BattleshipController;
+import model.BattleshipModel;
+import utils.BattleshipWindowDestructor;
+
 public class BattleshipView extends JFrame implements PropertyChangeListener{
 	//attributes
 	private static final String TITLE = "UPOBattleship";
@@ -22,10 +26,8 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 	//all panels to be shown
 	private BattleshipStartLoadPanel startLoadPanel;
 	private BattleshipNewGamePanel newGamePanel;
-	
-	//TODO
-	//private BattleshipSetNamePanel setNamePanel;
-	//private BattleshipSetShipsPanel setShipsPanel;
+	private BattleshipSetShipsPanel setShipsPanel;
+	private BattleshipBattlePanel battlePanel;
 	
 	//constructor
 	public BattleshipView(BattleshipModel model) {
@@ -61,19 +63,20 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 					break;
 				
 				case BATTLE:
+					setTitle(battlePanel.getTitle());
+					setSize(battlePanel.getWidth(), battlePanel.getHeight());
 					break;
-				
+			
 				case NEWGAME:
 					setTitle(newGamePanel.getTitle());
 					setSize(newGamePanel.getWidth(), newGamePanel.getHeight());
 					break;
 				
-				case RESUME:
+				case SETSHIPS:
+					setTitle(setShipsPanel.getTitle());
+					setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
 					break;
-				
-				case SETNAMES:
-					break;
-				
+					
 				default:
 					break;
 			}

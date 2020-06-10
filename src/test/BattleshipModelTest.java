@@ -1,4 +1,4 @@
-package upo.battleship.rossi;
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -6,12 +6,15 @@ import java.io.FileNotFoundException;
 
 import org.junit.jupiter.api.Test;
 
+import model.BattleshipModel;
+import model.BattleshipPlayer;
+
 class BattleshipModelTest {
 
 	@Test
 	void test() {
-		Player p1 = new Player("P1");
-		Player p2 = new Player("P2");
+		BattleshipPlayer p1 = new BattleshipPlayer("P1");
+		BattleshipPlayer p2 = new BattleshipPlayer("P2");
 		BattleshipModel bm = new BattleshipModel(p1, p2, 15, false);
 		assert(bm != null);
 		p1.setScore(25);

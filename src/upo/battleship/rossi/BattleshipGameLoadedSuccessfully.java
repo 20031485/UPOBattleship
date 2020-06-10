@@ -12,6 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+
+//NOT ESSENTIAL
+
+
 public class BattleshipGameLoadedSuccessfully extends JFrame implements ActionListener{
 	//fields
 	private static final int width = 200;

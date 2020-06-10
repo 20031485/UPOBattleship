@@ -1,4 +1,4 @@
-package upo.battleship.rossi;
+package model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -17,13 +17,15 @@ import java.util.Observable;
 //import java.util.Scanner;
 import java.util.Timer;
 
+import utils.BattleshipState;
+
 //TODO notifyObservers() e setChange()
 
 //BattleshipModel
 public class BattleshipModel implements Serializable{
 	//attributes
-	private Player player1 = null;
-	private Player player2 = null;
+	private BattleshipPlayer player1 = null;
+	private BattleshipPlayer player2 = null;
 	private int gameSize;//5, 10, 15 where 5 means 5x5 and so on
 	private BattleshipState state = BattleshipState.WELCOME;
 	private boolean timed;
@@ -36,8 +38,8 @@ public class BattleshipModel implements Serializable{
 	//constructors
 	public BattleshipModel() {
 		System.out.println("model created");
-		this.player1 = new Player();
-		this.player2 = new Player();
+		this.player1 = new BattleshipPlayer();
+		this.player2 = new BattleshipPlayer();
 		this.gameSize = 10;
 		this.timed = false;
 		
@@ -46,8 +48,8 @@ public class BattleshipModel implements Serializable{
 		}
 	}
 	public BattleshipModel(int gameSize) {
-		this.player1 = new Player();
-		this.player2 = new Player();
+		this.player1 = new BattleshipPlayer();
+		this.player2 = new BattleshipPlayer();
 		this.gameSize = gameSize;
 		this.timed = false;
 		
@@ -56,7 +58,7 @@ public class BattleshipModel implements Serializable{
 		}
 	}
 	
-	public BattleshipModel(Player player1, Player player2, int gameSize, boolean timed) {
+	public BattleshipModel(BattleshipPlayer player1, BattleshipPlayer player2, int gameSize, boolean timed) {
 		this.player1 = player1;
 		this.player2 = player2;
 		this.gameSize = gameSize;
@@ -89,7 +91,7 @@ public class BattleshipModel implements Serializable{
 		return false;
 	}
 	
-	void saveGame() {
+	public void saveGame() {
 		ObjectOutputStream outputStream = null;
 		
 		try {
@@ -105,7 +107,7 @@ public class BattleshipModel implements Serializable{
 		}
 	}
 	
-	public void newGame(Player player1, Player player2, int gameSize, boolean timed) {
+	public void newGame(BattleshipPlayer player1, BattleshipPlayer player2, int gameSize, boolean timed) {
 		setPlayer1(player1);
 		setPlayer2(player2);
 		setGameSize(gameSize);
@@ -139,19 +141,19 @@ public class BattleshipModel implements Serializable{
 		return loadedGame;
 	}
 	
-	public Player getPlayer1() {
+	public BattleshipPlayer getPlayer1() {
 		return player1;
 	}
 
-	public void setPlayer1(Player player1) {
+	public void setPlayer1(BattleshipPlayer player1) {
 		this.player1 = player1;
 	}
 
-	public Player getPlayer2() {
+	public BattleshipPlayer getPlayer2() {
 		return player2;
 	}
 
-	public void setPlayer2(Player player2) {
+	public void setPlayer2(BattleshipPlayer player2) {
 		this.player2 = player2;
 	}
 

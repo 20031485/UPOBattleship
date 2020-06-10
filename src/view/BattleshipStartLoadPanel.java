@@ -1,26 +1,20 @@
-package upo.battleship.rossi;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import controller.BattleshipStartLoadController;
+import model.BattleshipModel;
+import utils.BattleshipState;
 
 //THIS IS A VIEW
 
 public class BattleshipStartLoadPanel extends JPanel implements PropertyChangeListener{
+	private static final long serialVersionUID = 1L;
 	//attributes
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 100;

@@ -1,4 +1,4 @@
-package upo.battleship.rossi;
+package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +8,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JButton;
+
+import model.BattleshipModel;
+import utils.BattleshipState;
 
 public class BattleshipStartLoadController implements ActionListener{
 	//attributes
@@ -29,8 +32,8 @@ public class BattleshipStartLoadController implements ActionListener{
 				model.setState(BattleshipState.NEWGAME);
 				break;
 			case "Load game":
-				System.out.println("loading saved file");
-				model.setState(BattleshipState.RESUME);
+				System.out.println("loading saved file... ready to battle?");
+				model.setState(BattleshipState.BATTLE);
 				break;
 			default:
 				//hopefully never displayed LOL
