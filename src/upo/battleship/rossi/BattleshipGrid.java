@@ -13,8 +13,8 @@ import javax.swing.JTextField;
 import model.BattleshipModel;
 
 public class BattleshipGrid extends JFrame{	
-	private static final String[] LETTERS = { " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-	private static final String[] NUMBERS = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26" };
+	private static final String[] COLUMNS = { " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"};
+	private static final String[] ROWS = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
 	
 	//dobbiamo mantenere due matrici per ogni griglia:
 	/*griglia sinistra:
@@ -64,19 +64,19 @@ public class BattleshipGrid extends JFrame{
 	    
 	    //impostazioni leftTable
 	    leftTable = new JPanel();		
-		leftTable.setSize(WIDTH/2, HEIGHT);
-		leftTable.setLayout(new GridLayout(LETTERS.length, NUMBERS.length));
-		leftButtonGrid = new JButton[LETTERS.length][NUMBERS.length];
+		leftTable.setSize(300, 300);
+		leftTable.setLayout(new GridLayout(COLUMNS.length, ROWS.length));
+		leftButtonGrid = new JButton[COLUMNS.length][ROWS.length];
 		
-		for (int i = 0; i< LETTERS.length; i++){
-			for (int j= 0; j < NUMBERS.length; j++){
+		for (int i = 0; i< COLUMNS.length; i++){
+			for (int j= 0; j < ROWS.length; j++){
 				if(i != 0 && j != 0){
 					leftButtonGrid[i][j] = new JButton();
 					leftTable.add(leftButtonGrid[i][j]);
 				}
 				if (j == 0){
 					if (i != 0){
-						JTextField t = new JTextField(NUMBERS[i]);
+						JTextField t = new JTextField(ROWS[i]);
 						t.setEditable(false);
 						t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
 						leftTable.add(t);
@@ -88,7 +88,7 @@ public class BattleshipGrid extends JFrame{
 					}
 				}
 				else if (i == 0){
-					JTextField t = new JTextField(LETTERS[j]);
+					JTextField t = new JTextField(COLUMNS[j]);
 					t.setEditable(false);
 					t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
 					leftTable.add(t);
@@ -97,19 +97,19 @@ public class BattleshipGrid extends JFrame{
 		}
 		
 		//impostazioni rightTable
-		rightTable = new JPanel();
+	/*	rightTable = new JPanel();
 		rightTable.setSize(WIDTH/2, HEIGHT);
-		rightTable.setLayout(new GridLayout(LETTERS.length, NUMBERS.length));
-		rightButtonGrid = new JButton[LETTERS.length][NUMBERS.length];
-		for(int i = 0; i< LETTERS.length; i++) {
-			for(int j= 0; j < NUMBERS.length; j++) {
+		rightTable.setLayout(new GridLayout(COLUMNS.length, ROWS.length));
+		rightButtonGrid = new JButton[COLUMNS.length][ROWS.length];
+		for(int i = 0; i< COLUMNS.length; i++) {
+			for(int j= 0; j < ROWS.length; j++) {
 				if(i != 0 && j != 0){
 					rightButtonGrid[i][j] = new JButton();
 					rightTable.add(rightButtonGrid[i][j]);
 				}
 				if (j == 0){
 					if (i != 0){
-						JTextField t = new JTextField(NUMBERS[i]);
+						JTextField t = new JTextField(ROWS[i]);
 						t.setEditable(false);
 						t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
 						rightTable.add(t);
@@ -121,17 +121,17 @@ public class BattleshipGrid extends JFrame{
 					}
 				}
 				else if (i == 0){
-					JTextField t = new JTextField(LETTERS[j]);
+					JTextField t = new JTextField(COLUMNS[j]);
 					t.setEditable(false);
 					t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
 					rightTable.add(t);
 				}	
 			}
-		}
+		}*/
 		
 		//aggiungi le due griglie al pannello
 		bothGridsPanel.add(leftTable);
-		bothGridsPanel.add(rightTable);
+		//bothGridsPanel.add(rightTable);
 		
 		//posiziona il pannello con le griglie al centro del frame
 		add(bothGridsPanel, BorderLayout.CENTER);

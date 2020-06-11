@@ -1,10 +1,12 @@
-package upo.battleship.rossi;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,31 +14,33 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-
-//NOT ESSENTIAL
-
-
-public class BattleshipGameLoadedSuccessfully extends JFrame implements ActionListener{
+public class ExitFrame extends JFrame implements ActionListener{
 	//fields
 	private static final int width = 200;
 	private static final int height = 100;
 	
 	//constructor
-	public BattleshipGameLoadedSuccessfully() {
+	public ExitFrame() {
 		setSize(width, height);
-		getContentPane().setBackground(Color.WHITE);
+		setLocationRelativeTo(null);
+		//getContentPane().setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
-		JLabel label = new JLabel("Game loaded successfully!");
+		JLabel label = new JLabel("Are you sure?");
+		label.setHorizontalAlignment(JLabel.CENTER);
 		add(label, BorderLayout.CENTER);
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		
-		JButton okButton = new JButton("OK");
-		okButton.addActionListener(this);
-		buttonPanel.add(okButton);
+		JButton yesButton = new JButton("YES");
+		yesButton.addActionListener(this);
+		buttonPanel.add(yesButton);
+		
+		JButton noButton = new JButton("NO");
+		noButton.addActionListener(this);
+		buttonPanel.add(noButton);
 		
 		add(buttonPanel, BorderLayout.SOUTH);
 	}
@@ -46,20 +50,23 @@ public class BattleshipGameLoadedSuccessfully extends JFrame implements ActionLi
 		//catches the command
 		String command = e.getActionCommand();
 		//interprets the command
-		if(command.equals("OK")) {
+		if(command.equals("YES")) {
 			//terminates program
-			this.dispose();
-			//TODO launches loaded game
+			System.exit(0);
+		}
+		else if(command.equals("NO")) {
+			//closes just the current exit window
+			dispose();
 		}
 		else {
-			//hopefully this will never be displayed
+			//this will never be displayed
 			System.out.println("ERROR CLOSING WINDOW");
 		}
 	}
 	
+	//main
 	public static void main(String[] args) {
-		BattleshipGameLoadedSuccessfully gui = new BattleshipGameLoadedSuccessfully();
+		ExitFrame gui = new ExitFrame();
 		gui.setVisible(true);
 	}
-
 }

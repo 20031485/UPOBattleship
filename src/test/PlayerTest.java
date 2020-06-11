@@ -4,37 +4,37 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import model.BattleshipPlayer;
+import model.Player;
 
 class PlayerTest {
 
 	@Test
 	void test() {
-		BattleshipPlayer battleshipPlayer = new BattleshipPlayer("Gianni");
+		Player player = new Player("Gianni");
 		
-		assert(battleshipPlayer != null);
+		assert(player != null);
 		
-		battleshipPlayer.setScore(345);
+		player.setScore(345);
 		
-		assert(battleshipPlayer.getName().equals("Gianni"));
-		assert(battleshipPlayer.getScore() == 345);
+		assert(player.getName().equals("Gianni"));
+		assert(player.getScore() == 345);
 		
-		battleshipPlayer.resetGrids(10);
+		player.resetGrids(10);
 		
-		assert(battleshipPlayer.isDefeated() == true);
+		assert(player.isDefeated() == true);
 		
-		battleshipPlayer.setShip();
+		player.setShip();
 		
-		assert(battleshipPlayer.isDefeated() != true);
+		assert(player.isDefeated() != true);
 		
-		BattleshipPlayer player2 = new BattleshipPlayer();
+		Player player2 = new Player();
 		player2.setName("Gianni");
 		player2.setScore(345);
 		
-		assertEquals(battleshipPlayer, player2);
+		assertEquals(player, player2);
 		
-		BattleshipPlayer player3 = new BattleshipPlayer();
+		Player player3 = new Player();
 		
-		assertNotEquals(battleshipPlayer, player3);
+		assertNotEquals(player, player3);
 	}
 }

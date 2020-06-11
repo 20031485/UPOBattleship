@@ -17,23 +17,23 @@ public class BattleshipController{
 	private BattleshipModel model;
 	
 	//sub-controllers
-	private BattleshipStartLoadController startLoadController;
-	private BattleshipNewGameController newGameController;
+	private StartLoadController startLoadController;
+	private NewGameController newGameController;
 
 	//constructor
 	public BattleshipController(BattleshipModel model) {
 		this.model = model;
-		this.startLoadController = new BattleshipStartLoadController(model);
+		this.startLoadController = new StartLoadController(model);
 		//this.newGameController = new BattleshipNewGameController(model);
 		//this.setNameController = new BattleshipSetNameController(model);
 		//this.setShipsController = new BattleshipSetShipsController(model);
 	}
 	
-	public BattleshipStartLoadController getStartLoadController() {
+	public StartLoadController getStartLoadController() {
 		return this.startLoadController;
 	}
 	
-	public BattleshipNewGameController getNewGameController() {
+	public NewGameController getNewGameController() {
 		return this.newGameController;
 	}
 }

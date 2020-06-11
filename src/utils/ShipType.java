@@ -1,6 +1,6 @@
 package utils;
 
-public enum BattleshipShipType {
+public enum ShipType {
 		SOTTOMARINO,
 		INCROCIATORE,
 		CACCIATORPERDINIERE,

@@ -7,20 +7,20 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import controller.BattleshipStartLoadController;
+import controller.StartLoadController;
 import model.BattleshipModel;
 import utils.BattleshipState;
 
 //THIS IS A VIEW
 
-public class BattleshipStartLoadPanel extends JPanel implements PropertyChangeListener{
+public class StartLoadPanel extends JPanel implements PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
 	//attributes
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 100;
 	private static final String TITLE = "NEW/LOAD GAME";
 	private BattleshipModel model;
-	private BattleshipStartLoadController controller;
+	private StartLoadController controller;
 	private JLabel label;
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
@@ -29,7 +29,7 @@ public class BattleshipStartLoadPanel extends JPanel implements PropertyChangeLi
 	protected JButton loadGameButton;
 	
 	//constructors
-	BattleshipStartLoadPanel(BattleshipModel model, BattleshipStartLoadController controller){
+	StartLoadPanel(BattleshipModel model, StartLoadController controller){
 		this.model = model;
 		this.controller = controller;
 		this.model.addPropertyChangeListener(this); //view listens to model

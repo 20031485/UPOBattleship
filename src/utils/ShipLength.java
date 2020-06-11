@@ -6,7 +6,7 @@ package utils;
  *
  */
 
-public final class BattleshipShipLength {
+public final class ShipLength {
 	public static final int INCROCIATORELENGTH = 2;
 	public static final int CACCIATORPEDINIERELENGTH = 2;
 	public static final int SOTTOMARINOLENGTH = 3;

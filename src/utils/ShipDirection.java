@@ -1,6 +1,6 @@
 package utils;
 
-public enum BattleshipShipDirection {
+public enum ShipDirection {
 	VERTICAL,
 	HORIZONTAL;
 }

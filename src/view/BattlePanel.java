@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import model.BattleshipModel;
 import utils.BattleshipState;
 
-public class BattleshipBattlePanel extends JPanel implements Observer, PropertyChangeListener{
+public class BattlePanel extends JPanel implements Observer, PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
 
 	//attributes
@@ -16,7 +16,7 @@ public class BattleshipBattlePanel extends JPanel implements Observer, PropertyC
 	private static final String TITLE = "BATTLE!";
 
 	//constructor
-	public BattleshipBattlePanel(BattleshipModel model/*, BattleshipSetShipsController controller*/) {
+	public BattlePanel(BattleshipModel model/*, BattleshipSetShipsController controller*/) {
 		this.model = model;
 	}
 	

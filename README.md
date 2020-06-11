@@ -5,11 +5,12 @@ Java project for the Programming Paradigms course at University of Eastern Piedm
 Trying to merge Paco's code into Lorenzo's + package hierarchy established.
 
 # TODO
- - Implement `Timer` from javax.swing for a basic countdown if the "Timed" box is checked;
- - Merge Paco's code with Lorenzo's to create `BattleshipSetShipsPanel` and to implement `BattleshipPlayer`'s methods for setting each ship;
- - As soon as Paco's finished implementing the player's methods for shooting a ship, we are basically done;
- - Check if some `Exception`s can be launched - add them if so;
- - JavaDOC.
+ - [ ] Implement `Timer` from javax.swing for a basic countdown if the "Timed" box is checked;
+ - [ ] Implement `Ship` class and its methods for positioning  _[probably already done LOL]_ ;
+ - [ ] Implement `Player` class and its methods for positioning (delegation call to `Ship`'s methods);
+ - [ ] Implement `PlayerTest` and `ShipTest`;
+ - [ ] Check if some `Exception`s can be launched - add them if so;
+ - [ ] JavaDOC.
 
 # Useful links
  - [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/) because Lorenzo  _always_  forgets stuff;

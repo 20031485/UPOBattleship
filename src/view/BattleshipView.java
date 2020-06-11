@@ -14,7 +14,6 @@ import javax.swing.WindowConstants;
 
 import controller.BattleshipController;
 import model.BattleshipModel;
-import utils.BattleshipWindowDestructor;
 
 public class BattleshipView extends JFrame implements PropertyChangeListener{
 	//attributes
@@ -24,10 +23,10 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 	private JLayeredPane layers;
 	
 	//all panels to be shown
-	private BattleshipStartLoadPanel startLoadPanel;
-	private BattleshipNewGamePanel newGamePanel;
-	private BattleshipSetShipsPanel setShipsPanel;
-	private BattleshipBattlePanel battlePanel;
+	private StartLoadPanel startLoadPanel;
+	private NewGamePanel newGamePanel;
+	private SetShipsPanel setShipsPanel;
+	private BattlePanel battlePanel;
 	
 	//constructor
 	public BattleshipView(BattleshipModel model) {
@@ -37,13 +36,13 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 		
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
-		addWindowListener(new BattleshipWindowDestructor());
+		addWindowListener(new WindowDestructor());
 		setLayout(new BorderLayout());
 		
-		startLoadPanel = new BattleshipStartLoadPanel(model, controller.getStartLoadController());
+		startLoadPanel = new StartLoadPanel(model, controller.getStartLoadController());
 		add(startLoadPanel);
 		startLoadPanel.setVisible(true);
-		newGamePanel = new BattleshipNewGamePanel(model, controller.getNewGameController());
+		newGamePanel = new NewGamePanel(model, controller.getNewGameController());
 		add(newGamePanel);
 		newGamePanel.setVisible(false);
 		setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());

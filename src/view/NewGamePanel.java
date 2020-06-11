@@ -10,12 +10,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import controller.BattleshipNewGameController;
+import controller.NewGameController;
 import model.BattleshipModel;
 import utils.BattleshipState;
 
 
-public class BattleshipNewGamePanel extends JPanel implements PropertyChangeListener{
+public class NewGamePanel extends JPanel implements PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
 	
 	//attributes
@@ -27,7 +27,7 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 	private BattleshipModel model;
 	
 	//own controller
-	private BattleshipNewGameController newGameController;
+	private NewGameController newGameController;
 		
 	//JPanels
 	private JPanel gameModePanel;
@@ -70,9 +70,9 @@ public class BattleshipNewGamePanel extends JPanel implements PropertyChangeList
 	private ButtonGroup timedButtonGroup;
 	
 	//constructor
-	public BattleshipNewGamePanel(BattleshipModel model, BattleshipNewGameController controller) {
+	public NewGamePanel(BattleshipModel model, NewGameController controller) {
 		this.model = model;
-		this.newGameController = new BattleshipNewGameController(model, this);
+		this.newGameController = new NewGameController(model, this);
 		this.model.addPropertyChangeListener(this);
 		
 		//settings

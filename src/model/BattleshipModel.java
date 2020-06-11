@@ -24,8 +24,8 @@ import utils.BattleshipState;
 //BattleshipModel
 public class BattleshipModel implements Serializable{
 	//attributes
-	private BattleshipPlayer player1 = null;
-	private BattleshipPlayer player2 = null;
+	private Player player1 = null;
+	private Player player2 = null;
 	private int gameSize;//5, 10, 15 where 5 means 5x5 and so on
 	private BattleshipState state = BattleshipState.WELCOME;
 	private boolean timed;
@@ -38,8 +38,8 @@ public class BattleshipModel implements Serializable{
 	//constructors
 	public BattleshipModel() {
 		System.out.println("model created");
-		this.player1 = new BattleshipPlayer();
-		this.player2 = new BattleshipPlayer();
+		this.player1 = new Player();
+		this.player2 = new Player();
 		this.gameSize = 10;
 		this.timed = false;
 		
@@ -48,8 +48,8 @@ public class BattleshipModel implements Serializable{
 		}
 	}
 	public BattleshipModel(int gameSize) {
-		this.player1 = new BattleshipPlayer();
-		this.player2 = new BattleshipPlayer();
+		this.player1 = new Player();
+		this.player2 = new Player();
 		this.gameSize = gameSize;
 		this.timed = false;
 		
@@ -58,7 +58,7 @@ public class BattleshipModel implements Serializable{
 		}
 	}
 	
-	public BattleshipModel(BattleshipPlayer player1, BattleshipPlayer player2, int gameSize, boolean timed) {
+	public BattleshipModel(Player player1, Player player2, int gameSize, boolean timed) {
 		this.player1 = player1;
 		this.player2 = player2;
 		this.gameSize = gameSize;
@@ -107,7 +107,7 @@ public class BattleshipModel implements Serializable{
 		}
 	}
 	
-	public void newGame(BattleshipPlayer player1, BattleshipPlayer player2, int gameSize, boolean timed) {
+	public void newGame(Player player1, Player player2, int gameSize, boolean timed) {
 		setPlayer1(player1);
 		setPlayer2(player2);
 		setGameSize(gameSize);
@@ -141,19 +141,19 @@ public class BattleshipModel implements Serializable{
 		return loadedGame;
 	}
 	
-	public BattleshipPlayer getPlayer1() {
+	public Player getPlayer1() {
 		return player1;
 	}
 
-	public void setPlayer1(BattleshipPlayer player1) {
+	public void setPlayer1(Player player1) {
 		this.player1 = player1;
 	}
 
-	public BattleshipPlayer getPlayer2() {
+	public Player getPlayer2() {
 		return player2;
 	}
 
-	public void setPlayer2(BattleshipPlayer player2) {
+	public void setPlayer2(Player player2) {
 		this.player2 = player2;
 	}
 

@@ -12,12 +12,12 @@ import javax.swing.JButton;
 import model.BattleshipModel;
 import utils.BattleshipState;
 
-public class BattleshipStartLoadController implements ActionListener{
+public class StartLoadController implements ActionListener{
 	//attributes
 	private BattleshipModel model;
 	
 	//constructor
-	public BattleshipStartLoadController(BattleshipModel model) {
+	public StartLoadController(BattleshipModel model) {
 		this.model = model;
 	}
 	

@@ -1,9 +1,12 @@
 package upo.battleship.rossi;
 
-import utils.BattleshipShipDirection;
-import utils.BattleshipShipType;
+import utils.ShipDirection;
+import utils.ShipType;
 
-public class BattleshipShip{
+public class PacoShip{
+	//attributes
+	private boolean[] health;
+	
 	//vertical coordinates
 	private int vertStart, vertEnd;
 	//horizontal coordinates
@@ -17,9 +20,9 @@ public class BattleshipShip{
 	//ship name
 	private String nomeNave;
 	//ship type (enum)
-	private BattleshipShipType tipo;
+	private ShipType tipo;
 	//ship direction
-	private Direzione dir = Direzione.VERTICALE;;
+	private ShipDirection dir = ShipDirection.VERTICAL;;
 	//is the ship placed in the grid?
 	private boolean isPlaced = false;
 	//is the ship sunk?
@@ -79,7 +82,7 @@ public class BattleshipShip{
     * @param hStart  coordinato x della posizione d'inizio della nave
     */
    
-	public Nave(BattleshipShipType s, Direzione d, int vStart, int hStart) {
+	public Nave(ShipType s, Direzione d, int vStart, int hStart) {
 		tipo = s;
 		dir = d;
 		switch(tipo){
@@ -216,12 +219,12 @@ public class BattleshipShip{
 	   return nomeNave;
 	}
 
-   public final BattleshipShipType getTipo() {
+   public final ShipType getTipo() {
 		return tipo;
    }
 
 	
-   public final BattleshipShipDirection getShipDirection() {
+   public final ShipDirection getShipDirection() {
 	   return dir;
    }
  

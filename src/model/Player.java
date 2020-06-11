@@ -1,34 +1,39 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class BattleshipPlayer implements Serializable{
+import utils.ShipDirection;
+
+public class Player implements Serializable{
 	//attributes
 	private String name;
 	private int score;
 	private boolean[][] shipsGrid;
 	private boolean[][] hitsGrid;
 	
+	private List<Ship> shipList;
+	
 	//constructors
-	public BattleshipPlayer(String playerName) {
+	public Player(String playerName) {
 		this.name = playerName;
 		this.score = 0;
 	}
 	
-	public BattleshipPlayer() {
+	public Player() {
 		this("Player");
 	}
 	
 	//methods
 	public String toString() {
 		String toString = "Player: "+this.getName()+"\nScore: "+this.getScore()+"\nShips:\n";
-		for(int i=0; i<shipsGrid.length; ++i) {
-			for(int j=0; j<shipsGrid.length; ++j) toString += shipsGrid[i][j]+"\t";
+		for(int i=0; i < shipsGrid.length; ++i) {
+			for(int j=0; j < shipsGrid.length; ++j) toString += shipsGrid[i][j]+"\t";
 			toString += "\n";
 		}
 		toString += "Hits:\n";
-		for(int i=0; i<hitsGrid.length; ++i) {
-			for(int j=0; j<hitsGrid.length; ++j) toString += hitsGrid[i][j]+"\t";
+		for(int i=0; i < hitsGrid.length; ++i) {
+			for(int j=0; j < hitsGrid.length; ++j) toString += hitsGrid[i][j]+"\t";
 			toString += "\n";
 		}
 		toString += "Is defeated: "+isDefeated()+"\n";
@@ -74,7 +79,15 @@ public class BattleshipPlayer implements Serializable{
 		shipsGrid[i][j] = true;
 	}
 	
-	public void setShip() {
+	public void setShip(int x, int y, ShipDirection direction) {
+		//TODO
+		//chiama la setShip di una Ship presente in this.shipList, 
+		//mette a false le caselle corrispondenti nella shipsGrid e
+		//toglie la nave dalla lista
+		
+		
+		//1) prendo la prima nave della shipList
+		//2) la posiziono dalla casella (x, y)
 		shipsGrid[7][4] = false;
 		shipsGrid[7][5] = false;
 		shipsGrid[7][6] = false;
@@ -90,9 +103,9 @@ public class BattleshipPlayer implements Serializable{
 	}
 	
 	public boolean equals(Object o) {
-		if(o instanceof BattleshipPlayer) {
-			if(((BattleshipPlayer) o).getName().equals(this.getName())
-				&& ((BattleshipPlayer) o).getScore() == this.getScore()
+		if(o instanceof Player) {
+			if(((Player) o).getName().equals(this.getName())
+				&& ((Player) o).getScore() == this.getScore()
 				/*&& ((Player)o).getShipsGrid().equals(this.getShipsGrid())
 				&& ((Player)o).getHitsGrid().equals(this.getHitsGrid())*/)
 			return true;
