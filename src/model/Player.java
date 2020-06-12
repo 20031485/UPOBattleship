@@ -1,9 +1,12 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import utils.ShipDirection;
+import utils.ShipLength;
+import utils.ShipType;
 
 public class Player implements Serializable{
 	//attributes
@@ -15,7 +18,9 @@ public class Player implements Serializable{
 	private boolean[][] hitsGrid;
 	private int gameSize;
 	
-	private List<Ship> shipList;
+	private ArrayList<Ship> shipList;
+	private ArrayList<Ship> placedShips;
+	private ArrayList<Ship> deadShips;
 	
 	//constructors
 	public Player(String playerName) {
@@ -27,9 +32,72 @@ public class Player implements Serializable{
 		this("Player");
 		this.gameSize = gameSize;
 		this.resetGrids(gameSize);
+		this.initShips(gameSize);
+		this.shipList = new ArrayList<Ship>();
+		this.placedShips = new ArrayList<Ship>();
+		this.deadShips = new ArrayList<Ship>();
 	}
 	
 	//methods
+	public void initShips(int gameSize) {
+		Ship ship = null;
+		switch(gameSize) {
+		case 10:
+			ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+			shipList.add(ship);
+			break;
+			
+		case 15:
+			ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+			shipList.add(ship);
+			break;
+			
+		case 20:
+			ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+			shipList.add(ship);
+			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+			shipList.add(ship);
+			break;
+		}
+		//System.out.println(shipList.toString());
+	}
+	
 	public String toString() {
 		String toString = "Player: "+this.getName()+"\nScore: "+this.getScore()+"\nShips:\n";
 		for(int i=0; i < shipsGrid.length; ++i) {
@@ -79,22 +147,26 @@ public class Player implements Serializable{
 			}
 	}
 	
-	public void isHit(int i, int j) {
+	//TODO rifare 'sto schifo
+	public void isBombed(int i, int j) {
 		shipsGrid[i][j] = true;
 	}
 	
-	public void setShip(int x, int y, ShipDirection direction) {
-		//TODO
-		//chiama la setShip di una Ship presente in this.shipList, 
-		//mette a false le caselle corrispondenti nella shipsGrid e
-		//toglie la nave dalla lista
-		
-		
-		//1) prendo la prima nave della shipList
-		//2) la posiziono dalla casella (x, y)
-		shipsGrid[7][4] = false;
-		shipsGrid[7][5] = false;
-		shipsGrid[7][6] = false;
+	public void setShip(int shipIndex, int row, int col, ShipDirection direction) {
+		//se ho posizionato la nave, la rimuovo dalla lista
+		try{
+			if(this.shipList.get(shipIndex).setShip(row, col, direction, this.shipsGrid)) {
+				//tolgo una nave dalla lista delle navi disponibili e la aggiungo alla lista delle navi piazzate
+				this.placedShips.add(this.shipList.get(shipIndex));
+				this.shipList.remove(shipIndex);
+			}
+				
+			else
+				System.err.println("No room for this ship!");
+		}
+		catch(IndexOutOfBoundsException e) {
+			System.err.println("No more ships for this player!");
+		}
 	}
 	
 	public boolean isDefeated() {
@@ -115,5 +187,18 @@ public class Player implements Serializable{
 			return true;
 		}
 		return false;
+	}
+	
+	public static void main(String[] args) {
+		Player p = new Player(10);
+		p.setShip(0, 0, 0, ShipDirection.HORIZONTAL);//2
+		//System.out.println(p.toString());
+		p.setShip(0, 2, 0, ShipDirection.VERTICAL);//4
+		//System.out.println(p.toString());
+		p.setShip(0, 0, 4, ShipDirection.VERTICAL);//2
+		p.setShip(0, 3, 3, ShipDirection.HORIZONTAL);//5
+		p.setShip(0, 5, 3, ShipDirection.VERTICAL);//3
+		p.setShip(0, 5, 3, ShipDirection.VERTICAL);//3
+		System.out.println(p.toString());
 	}
 }

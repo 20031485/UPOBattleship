@@ -30,9 +30,8 @@ public class Ship {
 	}
 	
 	//methods
-	//TODO make it void, so that it modifies both shipsGrid and absolutePosition
-	public boolean[][] setShip(int x, int y, ShipDirection direction, boolean[][] shipsGrid) {
-		
+	public boolean setShip(int x, int y, ShipDirection direction, boolean[][] shipsGrid) {
+		boolean result = true;
 		//controllo sulle coordinate
 		if(x >= 0 && x < gameSize && y >= 0 && y < gameSize) {
 			switch(direction) {
@@ -45,11 +44,15 @@ public class Ship {
 								absolutePosition[x+i][y] = false;
 							}
 						}
-						else
+						else {
 							System.err.println("This ship is touching/overlapping to another ship!");
+							result = false;
+						}
 					}
-					else
+					else {
 						System.err.println("Not enough vertical space for this ship!");
+						result = false;
+					}
 					break;
 					
 				case HORIZONTAL:
@@ -61,19 +64,26 @@ public class Ship {
 								absolutePosition[x][y+i] = false;
 							}
 						}
+						else {
+							System.err.println("This ship is touching/overlapping to another ship!");
+							result = false;
+						}
 					}
-					else
+					else {
 						System.err.println("Not enough vertical space for this ship!\n");
+						result = false;
+					}
 					break;
 					
 				default:
 					System.err.println("ERROR@Ship::setShip()");
+					result = false;
 					break;
 			}
 		}
 		//metodo per modificare shipsGrid
 		this.setShipOnShipsGrid(shipsGrid);
-		return absolutePosition;
+		return result;
 	}
 	
 	//controlla che ci sia almeno una casella vuota intorno alla futura posizione della nave
@@ -168,6 +178,23 @@ public class Ship {
 		for(int i = 0; i < gameSize; ++i)
 			for(int j = 0; j < gameSize; ++j)
 				result = result && absolutePosition[i][j];
+		return result;
+	}
+	
+	public boolean isHit(int row, int col) {
+		boolean result = true;
+		if(!absolutePosition[row][col]) {
+			absolutePosition[row][col] = true;
+			result = true;
+			if(isSunk())
+				System.out.println("Hit and sunk!");
+			else
+				System.out.println("Hit!");
+		}
+		else { 
+			System.out.println("Missed!");
+			result = false;
+		}
 		return result;
 	}
 	

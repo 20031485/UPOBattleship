@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import model.Player;
+import utils.ShipDirection;
 
 class PlayerTest {
 
@@ -23,17 +24,17 @@ class PlayerTest {
 		
 		assert(player.isDefeated() == true);
 		
-		player.setShip();
+		player.setShip(0, 0, 0, ShipDirection.VERTICAL);
 		
 		assert(player.isDefeated() != true);
 		
-		Player player2 = new Player();
+		Player player2 = new Player(10);
 		player2.setName("Gianni");
 		player2.setScore(345);
 		
 		assertEquals(player, player2);
 		
-		Player player3 = new Player();
+		Player player3 = new Player(10);
 		
 		assertNotEquals(player, player3);
 	}
