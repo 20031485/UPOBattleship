@@ -11,6 +11,7 @@ public class Player implements Serializable{
 	private int score;
 	private boolean[][] shipsGrid;
 	private boolean[][] hitsGrid;
+	private int gameSize;
 	
 	private List<Ship> shipList;
 	
@@ -20,8 +21,10 @@ public class Player implements Serializable{
 		this.score = 0;
 	}
 	
-	public Player() {
+	public Player(int gameSize) {
 		this("Player");
+		this.gameSize = gameSize;
+		this.resetGrids(gameSize);
 	}
 	
 	//methods
@@ -64,7 +67,6 @@ public class Player implements Serializable{
 		return this.hitsGrid;
 	}
 	
-	//meglio dividere?
 	public void resetGrids(int gridSize) {
 		shipsGrid = new boolean[gridSize][gridSize];
 		hitsGrid = new boolean[gridSize][gridSize];
