@@ -170,7 +170,7 @@ public class Ship {
 	public static void main(String[] args) {
 		Player p = new Player(10);
 		Ship s = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, 10);
-		s.setShip(9, 4, ShipDirection.VERTICAL, p.getShipsGrid());
+		s.setShip(9, 6, ShipDirection.HORIZONTAL, p.getShipsGrid());
 		System.out.println("ship's absolute position: \n" + s.toString());
 		System.out.println("player's grids: \n"+p.toString());
 	}
