@@ -9,7 +9,9 @@ public class Player implements Serializable{
 	//attributes
 	private String name;
 	private int score;
+	//matrice in cui ogni giocatore può posizionare le proprie navi
 	private boolean[][] shipsGrid;
+	//matrice in cui vengono salvati i colpi dell'avversario
 	private boolean[][] hitsGrid;
 	private int gameSize;
 	

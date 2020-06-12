@@ -19,14 +19,16 @@ public class BattleshipController{
 	//sub-controllers
 	private StartLoadController startLoadController;
 	private NewGameController newGameController;
+	private SetShipsController setShipsController;
+	//private BattleController battleController;
 
 	//constructor
 	public BattleshipController(BattleshipModel model) {
 		this.model = model;
 		this.startLoadController = new StartLoadController(model);
-		//this.newGameController = new BattleshipNewGameController(model);
-		//this.setNameController = new BattleshipSetNameController(model);
-		//this.setShipsController = new BattleshipSetShipsController(model);
+		//this.newGameController = new NewGameController(model);
+		//this.setShipsController = new SetShipsController(model);
+		//this.battleController = new BattleController();
 	}
 	
 	public StartLoadController getStartLoadController() {

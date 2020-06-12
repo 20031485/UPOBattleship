@@ -8,8 +8,12 @@ public class Ship {
 	//attributes
 	private ShipType shipType;
 	private int length;
+	
+	//matrice che identifica la posizione assoluta di una nave 
+	//sulla matrice delle navi di un giocatore
 	private boolean[][] absolutePosition;
 	private ShipDirection shipDirection;
+	//dimensione della griglia di gioco --> serve per absolutePosition
 	private int gameSize;
 	
 	//constructor
@@ -21,14 +25,15 @@ public class Ship {
 		//initialize absoluteposition to grid of true
 		for(int i = 0; i < gameSize; ++i)
 			for(int j = 0; j < gameSize; ++j)
+				//ogni casella viene messa a true
 				this.absolutePosition[i][j] = true;
 	}
 	
 	//methods
 	//TODO make it void, so that it modifies both shipsGrid and absolutePosition
 	public boolean[][] setShip(int x, int y, ShipDirection direction, boolean[][] shipsGrid) {
+		
 		//controllo sulle coordinate
-		//TODO controllo che non ci sia niente sotto! --> reso a livello grafico
 		if(x >= 0 && x < gameSize && y >= 0 && y < gameSize) {
 			switch(direction) {
 				case VERTICAL:
@@ -44,12 +49,12 @@ public class Ship {
 							System.err.println("This ship is touching/overlapping to another ship!");
 					}
 					else
-						System.err.println("Not enough horizontal space for this ship!");
+						System.err.println("Not enough vertical space for this ship!");
 					break;
 					
 				case HORIZONTAL:
 					//controllo che la nave da posizionare non sia troppo vicina al bordo
-					if(y + length - 1< gameSize) {
+					if(y + length - 1 < gameSize) {
 						//controllo che intorno alla nave ci sia una casella di spazio
 						if(this.enoughSpace(x, y, direction, shipsGrid)) {
 							for(int i = 0; i < this.length; ++i) {
@@ -66,6 +71,8 @@ public class Ship {
 					break;
 			}
 		}
+		//metodo per modificare shipsGrid
+		this.setShipOnShipsGrid(shipsGrid);
 		return absolutePosition;
 	}
 	
@@ -73,7 +80,7 @@ public class Ship {
 	boolean enoughSpace(int x, int y, ShipDirection direction, boolean[][] shipsGrid) {
 		boolean enoughSpace = true;
 		switch(direction) {
-			case VERTICAL:	
+			case HORIZONTAL:	
 				if(x == 0 && y == 0) {
 					for(int i = x; (i <= x + 1) && (i < gameSize); ++i) {
 						for(int j = y; (j <= y + length) && (j < gameSize); ++j) {
@@ -104,7 +111,7 @@ public class Ship {
 				}
 				break;
 				
-			case HORIZONTAL:
+			case VERTICAL:
 				if(x == 0 && y == 0) {
 					for(int i = x; (i <= x + length) && (i < gameSize); ++i) {
 						for(int j = y; (j <= y + 1) && (j < gameSize); ++j) {
@@ -142,6 +149,14 @@ public class Ship {
 		return enoughSpace;
 	}
 	
+	public void setShipOnShipsGrid(boolean[][] shipsGrid) {
+		for(int i = 0; i < gameSize; ++i) {
+			for(int j = 0; j < gameSize; ++j) {
+				shipsGrid[i][j] = shipsGrid[i][j] && absolutePosition[i][j];
+			}
+		}
+	}
+	
 	public void deleteShip() {
 		for(int i = 0; i < gameSize; ++i)
 			for(int j = 0; j < gameSize; ++j)
@@ -170,8 +185,15 @@ public class Ship {
 	public static void main(String[] args) {
 		Player p = new Player(10);
 		Ship s = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, 10);
-		s.setShip(9, 6, ShipDirection.HORIZONTAL, p.getShipsGrid());
+		Ship t = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, 10);
+		Ship u = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, 10);
+		System.out.println("player's grids before setShip: \n"+p.toString());
+		s.setShip(4, 3, ShipDirection.HORIZONTAL, p.getShipsGrid());
+		t.setShip(0, 0, ShipDirection.VERTICAL, p.getShipsGrid());
+		u.setShip(4, 2, ShipDirection.VERTICAL, p.getShipsGrid());
 		System.out.println("ship's absolute position: \n" + s.toString());
-		System.out.println("player's grids: \n"+p.toString());
+		System.out.println("ship's absolute position: \n" + t.toString());
+		System.out.println("ship's absolute position: \n" + u.toString());
+		System.out.println("player's grids after setShip: \n"+p.toString());
 	}
 }
