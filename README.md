@@ -5,8 +5,15 @@ Java project for the Programming Paradigms course at University of Eastern Piedm
 Trying to merge Paco's code into Lorenzo's + package hierarchy established.
 
 # TODO
- - [ ] Implement `Ship` class and its methods for positioning --> **CHECK FOR INDEX ERRORS**;
- - [ ] Implement `Player` class and its methods for positioning (delegation call to `Ship`'s methods);
+ - [x] Implement `Ship` class and its methods for positioning;
+ - [x] Implement `Player` class and its methods for positioning ships (delegation calls to `Ship`'s methods);
+ - [ ] Implement `Player`'s methods for shooting[ ]/getting shot[x] at certain coordinates;
+ - [ ] Join `Player` and `Ship` into `BattleshipModel` and implement remaining methods (i.e. P1bombsP2(), turn() etc);
+ - [ ] Implement `Computer extends Player` and its methods by using `Player`'s methods;
+ - [ ] Implement `SetShipsPanel`;
+ - [ ] Implement `SetShipsController`;
+ - [ ] Implement `BattlePanel`;
+ - [ ] Implement `BattleController`;
  - [ ] Implement `PlayerTest` and `ShipTest`;
  - [ ] Check if some `Exception`s can be launched - add them if so;
  - [ ] Implement `Timer` from javax.swing for a basic countdown if the "Timed" box is checked;

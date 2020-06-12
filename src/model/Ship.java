@@ -192,7 +192,7 @@ public class Ship {
 				System.out.println("Hit!");
 		}
 		else { 
-			System.out.println("Missed!");
+			//System.out.println("Missed!");
 			result = false;
 		}
 		return result;

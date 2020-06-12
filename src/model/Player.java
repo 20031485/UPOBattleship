@@ -2,8 +2,6 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-
 import utils.ShipDirection;
 import utils.ShipLength;
 import utils.ShipType;
@@ -33,13 +31,13 @@ public class Player implements Serializable{
 		this.gameSize = gameSize;
 		this.resetGrids(gameSize);
 		this.initShips(gameSize);
-		this.shipList = new ArrayList<Ship>();
-		this.placedShips = new ArrayList<Ship>();
-		this.deadShips = new ArrayList<Ship>();
 	}
 	
 	//methods
 	public void initShips(int gameSize) {
+		this.shipList = new ArrayList<Ship>();
+		this.placedShips = new ArrayList<Ship>();
+		this.deadShips = new ArrayList<Ship>();
 		Ship ship = null;
 		switch(gameSize) {
 		case 10:
@@ -95,7 +93,6 @@ public class Player implements Serializable{
 			shipList.add(ship);
 			break;
 		}
-		//System.out.println(shipList.toString());
 	}
 	
 	public String toString() {
@@ -147,9 +144,17 @@ public class Player implements Serializable{
 			}
 	}
 	
-	//TODO rifare 'sto schifo
-	public void isBombed(int i, int j) {
-		shipsGrid[i][j] = true;
+	public void isHit(int row, int col) {
+		shipsGrid[row][col] = true;
+		for(int i = 0; i < placedShips.size(); ++i) {
+			Ship ship = this.placedShips.get(i);
+			if(ship.isHit(row, col)) {
+				if(ship.isSunk()) {
+					deadShips.add(placedShips.get(i));
+					placedShips.remove(i);
+				}
+			}
+		}
 	}
 	
 	public void setShip(int shipIndex, int row, int col, ShipDirection direction) {
@@ -198,7 +203,10 @@ public class Player implements Serializable{
 		p.setShip(0, 0, 4, ShipDirection.VERTICAL);//2
 		p.setShip(0, 3, 3, ShipDirection.HORIZONTAL);//5
 		p.setShip(0, 5, 3, ShipDirection.VERTICAL);//3
-		p.setShip(0, 5, 3, ShipDirection.VERTICAL);//3
+		System.out.println(p.toString());
+		p.isHit(0, 0);
+		System.out.println(p.toString());
+		p.isHit(0, 1);
 		System.out.println(p.toString());
 	}
 }
