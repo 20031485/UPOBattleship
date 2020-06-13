@@ -167,7 +167,7 @@ public class Ship {
 		}
 	}
 	
-	public void deleteShip() {
+	public void removeShip() {
 		for(int i = 0; i < gameSize; ++i)
 			for(int j = 0; j < gameSize; ++j)
 				absolutePosition[i][j] = true;

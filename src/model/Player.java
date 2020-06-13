@@ -8,13 +8,14 @@ import utils.ShipType;
 
 public class Player implements Serializable{
 	//attributes
-	private String name;
+	protected String name;
+	//il punteggio probabilmente è inutile
 	private int score;
 	//matrice in cui ogni giocatore può posizionare le proprie navi
-	private boolean[][] shipsGrid;
+	protected boolean[][] shipsGrid;
 	//matrice in cui vengono salvati i colpi dell'avversario
-	private boolean[][] hitsGrid;
-	private int gameSize;
+	protected boolean[][] hitsGrid;
+	protected int gameSize;	
 	
 	private ArrayList<Ship> shipList;
 	private ArrayList<Ship> placedShips;
@@ -27,13 +28,16 @@ public class Player implements Serializable{
 	}
 	
 	public Player(int gameSize) {
-		this("Player");
+		this.name = "Player";
 		this.gameSize = gameSize;
-		this.resetGrids(gameSize);
+		this.initGrids(gameSize);
 		this.initShips(gameSize);
 	}
 	
+	
 	//methods
+	
+	//inizializza le liste di navi e le navi su shipList
 	public void initShips(int gameSize) {
 		this.shipList = new ArrayList<Ship>();
 		this.placedShips = new ArrayList<Ship>();
@@ -96,7 +100,7 @@ public class Player implements Serializable{
 	}
 	
 	public String toString() {
-		String toString = "Player: "+this.getName()+"\nScore: "+this.getScore()+"\nShips:\n";
+		String toString = "Name: "+this.getName()+"\nScore: "+this.getScore()+"\nShips:\n";
 		for(int i=0; i < shipsGrid.length; ++i) {
 			for(int j=0; j < shipsGrid.length; ++j) toString += shipsGrid[i][j]+"\t";
 			toString += "\n";
@@ -134,7 +138,8 @@ public class Player implements Serializable{
 		return this.hitsGrid;
 	}
 	
-	public void resetGrids(int gridSize) {
+	//inizializza le griglie di gioco con la dimensione giusta e le riempie di true
+	public void initGrids(int gridSize) {
 		shipsGrid = new boolean[gridSize][gridSize];
 		hitsGrid = new boolean[gridSize][gridSize];
 		for(int i=0; i<gridSize; ++i)
@@ -144,6 +149,7 @@ public class Player implements Serializable{
 			}
 	}
 	
+	//funzione da chiamare quando viene ricevuto un colpo
 	public void isHit(int row, int col) {
 		shipsGrid[row][col] = true;
 		for(int i = 0; i < placedShips.size(); ++i) {
@@ -157,6 +163,16 @@ public class Player implements Serializable{
 		}
 	}
 	
+	//metodo da chiamare quando il giocatore vuole colpire
+	//restituisce un array di due coordinate [row, col] da passare al modello per colpire l'avversario
+	public int[] hits(int row, int col){
+		int[] coordinates = new int[2];
+		coordinates[0] = row;
+		coordinates[1] = col;
+		return coordinates;
+	}
+	
+	//metodo per posizionare una nave
 	public void setShip(int shipIndex, int row, int col, ShipDirection direction) {
 		//se ho posizionato la nave, la rimuovo dalla lista
 		try{
@@ -165,7 +181,6 @@ public class Player implements Serializable{
 				this.placedShips.add(this.shipList.get(shipIndex));
 				this.shipList.remove(shipIndex);
 			}
-				
 			else
 				System.err.println("No room for this ship!");
 		}
@@ -174,6 +189,28 @@ public class Player implements Serializable{
 		}
 	}
 	
+	//rimuove tutte le navi da placedShips e le mette in shipList (serve nel SetShipsPanel)
+	public void clearShips() {
+		for(int i = 0; i < placedShips.size(); ++i) {
+			//aggiungo una nave che c'è sulla griglia alla lista delle navi disponibili
+			shipList.add(placedShips.get(i));
+			//resetto la sua absolutePosition (campo di Ship)
+			placedShips.get(i).removeShip();
+			//rimuovo la nave dalla lista delle navi posizionate
+			placedShips.remove(i);
+		}
+		resetShipsGrid();
+	}
+	
+	//svuoto la shipsGrid (tutte le celle a true)
+	public void resetShipsGrid() {
+		for(int i = 0; i < shipsGrid.length; ++i)
+			for(int j = 0; j < shipsGrid.length; ++j)
+				shipsGrid[i][j] = true;
+	}
+	
+	//controlla se ci sono ancora (pezzi di) navi sulla griglia del giocatore
+	//se non ce ne sono, il giocatore ha perso
 	public boolean isDefeated() {
 		boolean result = true;
 		for(int i=0; i<shipsGrid.length; ++i) {
@@ -183,6 +220,7 @@ public class Player implements Serializable{
 		return result;
 	}
 	
+	//serve per i test
 	public boolean equals(Object o) {
 		if(o instanceof Player) {
 			if(((Player) o).getName().equals(this.getName())
@@ -194,6 +232,7 @@ public class Player implements Serializable{
 		return false;
 	}
 	
+	//serve per fare un primo test
 	public static void main(String[] args) {
 		Player p = new Player(10);
 		p.setShip(0, 0, 0, ShipDirection.HORIZONTAL);//2
