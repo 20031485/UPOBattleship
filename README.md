@@ -7,10 +7,13 @@ Trying to merge Paco's code into Lorenzo's + package hierarchy established.
 # TODO
  - [x] Implement `Ship` class and its methods for positioning;
  - [x] Implement `Player` class and its methods for positioning ships (delegation calls to `Ship`'s methods);
- - [ ] Implement `Player`'s methods for shooting[ ]/getting shot[x] at certain coordinates;
+ - [x] Implement `Player`'s methods for shooting [x] /getting shot [x] at certain coordinates;
+ - [x] Implement `Computer extends Player` and its methods by using `Player`'s methods;
+ - [x] Implement stupid `Computer`;
+ - [ ] Implement smart `Computer` aiming methods;
+ - [ ] **Implement system to tell model or computer if the last hit was successful**;
  - [ ] Join `Player` and `Ship` into `BattleshipModel` and implement remaining methods (i.e. P1bombsP2(), turn() etc);
- - [ ] Implement `Computer extends Player` and its methods by using `Player`'s methods;
- - [ ] Implement `SetShipsPanel`;
+ - [x] Implement `SetShipsPanel`;
  - [ ] Implement `SetShipsController`;
  - [ ] Implement `BattlePanel`;
  - [ ] Implement `BattleController`;

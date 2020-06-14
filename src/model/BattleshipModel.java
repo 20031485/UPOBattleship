@@ -18,6 +18,7 @@ import java.util.Observable;
 import java.util.Timer;
 
 import utils.BattleshipState;
+import utils.PlayerState;
 
 //TODO notifyObservers() e setChange()
 
@@ -28,6 +29,7 @@ public class BattleshipModel implements Serializable{
 	private Player player2 = null;
 	private int gameSize;//5, 10, 15 where 5 means 5x5 and so on
 	private BattleshipState state = BattleshipState.WELCOME;
+	public static PlayerState playerState;
 	private boolean timed;
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	//private Timer timer;
@@ -38,20 +40,20 @@ public class BattleshipModel implements Serializable{
 	//constructors
 	public BattleshipModel() {
 		System.out.println("model created");
-		this.player1 = new Player();
-		this.player2 = new Player();
 		this.gameSize = 10;
 		this.timed = false;
+		this.player1 = new Player(gameSize);
+		this.player2 = new Player(gameSize);
 		
 		if(timed) {
 			//TODO come lo implementiamo? da thread o dalla gui?
 		}
 	}
 	public BattleshipModel(int gameSize) {
-		this.player1 = new Player();
-		this.player2 = new Player();
 		this.gameSize = gameSize;
 		this.timed = false;
+		this.player1 = new Player(gameSize);
+		this.player2 = new Player(gameSize);
 		
 		if(timed) {
 			//TODO come lo implementiamo? da thread o dalla gui?

@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import utils.PlayerState;
 import utils.ShipDirection;
 import utils.ShipLength;
 import utils.ShipType;
@@ -16,6 +18,7 @@ public class Player implements Serializable{
 	//matrice in cui vengono salvati i colpi dell'avversario
 	protected boolean[][] hitsGrid;
 	protected int gameSize;	
+	//protected PlayerState state;
 	
 	private ArrayList<Ship> shipList;
 	private ArrayList<Ship> placedShips;
@@ -102,12 +105,22 @@ public class Player implements Serializable{
 	public String toString() {
 		String toString = "Name: "+this.getName()+"\nScore: "+this.getScore()+"\nShips:\n";
 		for(int i=0; i < shipsGrid.length; ++i) {
-			for(int j=0; j < shipsGrid.length; ++j) toString += shipsGrid[i][j]+"\t";
+			for(int j=0; j < shipsGrid.length; ++j) {
+				if(!shipsGrid[i][j])
+					toString += "[X]";
+				else
+					toString += "[ ]";
+			}
 			toString += "\n";
 		}
 		toString += "Hits:\n";
 		for(int i=0; i < hitsGrid.length; ++i) {
-			for(int j=0; j < hitsGrid.length; ++j) toString += hitsGrid[i][j]+"\t";
+			for(int j=0; j < hitsGrid.length; ++j) {
+				if(!hitsGrid[i][j])
+					toString += "[X]";
+				else
+					toString += "[ ]";
+			}
 			toString += "\n";
 		}
 		toString += "Is defeated: "+isDefeated()+"\n";
@@ -155,11 +168,15 @@ public class Player implements Serializable{
 		for(int i = 0; i < placedShips.size(); ++i) {
 			Ship ship = this.placedShips.get(i);
 			if(ship.isHit(row, col)) {
+				BattleshipModel.playerState = PlayerState.HIT;
 				if(ship.isSunk()) {
 					deadShips.add(placedShips.get(i));
 					placedShips.remove(i);
+					BattleshipModel.playerState = PlayerState.HITANDSUNK;
 				}
 			}
+			else
+				BattleshipModel.playerState = PlayerState.WATER;
 		}
 	}
 	
