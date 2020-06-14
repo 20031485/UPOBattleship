@@ -12,7 +12,7 @@ Trying to merge Paco's code into Lorenzo's + package hierarchy established.
  - [x] Implement stupid `Computer`;
  - [x] Implement smart `Computer` aiming methods  _(kind of...)_ ;
  - [x] **Implement system to tell model or computer if the last hit was successful**;
- - [ ] Join `Player` and `Ship` into `BattleshipModel` and implement remaining methods (i.e. P1bombsP2(), turn() etc);
+ - [x] Join `Player` and `Ship` into `BattleshipModel` and implement remaining methods (i.e. P1bombsP2(), turn() etc);
  - [x] Implement `SetShipsPanel`;
  - [ ] Implement `SetShipsController`;
  - [ ] Implement `BattlePanel`;

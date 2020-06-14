@@ -205,7 +205,23 @@ public class BattleshipModel implements Serializable{
 				"\n\tscore: " + getComputer().getScore() + "\n\n";
 	}
 	
+	public void turns() {
+		Scanner s = new Scanner(System.in);
+		while(!player.isDefeated() || !computer.isDefeated()) {
+			System.out.print("Insert row: ");
+			int row = s.nextInt();
+			s.nextLine();
+			System.out.print("Insert col: ");
+			int col = s.nextInt();
+			s.nextLine();
+			hitAndGetHit(row, col);
+			System.out.println(player.toString());
+			System.out.println(computer.toString());
+		}
+	}
+	
 	//giocatore colpisce com e viene colpito da com
+	//da lanciare DOPO il posizionamento delle navi
 	public void hitAndGetHit(int row, int col) {
 		int[] coordinates = new int[2];
 		coordinates = player.hits(row, col);
@@ -225,6 +241,7 @@ public class BattleshipModel implements Serializable{
 			System.out.print("Insert col: ");
 			int col = s.nextInt();
 			s.nextLine();
+			System.out.print("Insert dir [0 = horizontal, 1 = vertical]: ");
 			int dir = s.nextInt();
 			s.nextLine();
 			ShipDirection direction = null;
@@ -255,17 +272,14 @@ public class BattleshipModel implements Serializable{
 		bm.computerSetsShips();
 		System.out.println(bm.getPlayer().toString());
 		System.out.println(bm.getComputer().toString());
-		Scanner s = new Scanner(System.in);
-		while(!bm.getPlayer().isDefeated() || !bm.getComputer().isDefeated()) {
-			System.out.print("Insert row: ");
-			int row = s.nextInt();
-			s.nextLine();
-			System.out.print("Insert col: ");
-			int col = s.nextInt();
-			s.nextLine();
-			bm.hitAndGetHit(row, col);
-			System.out.println(bm.getPlayer().toString());
-			System.out.println(bm.getComputer().toString());
-		}
+		bm.turns();
+		
+		
+		/*FUNZIONAMENTO
+		 * 1) imposto parametri partita (difficulty, gameSize, timed);
+		 * 2) giocatore posiziona le navi;
+		 * 3) computer posiziona le navi;
+		 * 4) gioco finchè uno dei due non perde;
+		 * */
 	}
 }

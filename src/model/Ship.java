@@ -49,12 +49,12 @@ public class Ship {
 							}
 						}
 						else {
-							System.err.println("This ship is touching/overlapping to another ship!");
+							//System.err.println("This ship is touching/overlapping to another ship!");
 							result = false;
 						}
 					}
 					else {
-						System.err.println("Not enough vertical space for this ship!");
+						//System.err.println("Not enough vertical space for this ship!");
 						result = false;
 					}
 					break;
@@ -69,12 +69,12 @@ public class Ship {
 							}
 						}
 						else {
-							System.err.println("This ship is touching/overlapping to another ship!");
+							//System.err.println("This ship is touching/overlapping to another ship!");
 							result = false;
 						}
 					}
 					else {
-						System.err.println("Not enough vertical space for this ship!\n");
+						//System.err.println("Not enough vertical space for this ship!\n");
 						result = false;
 					}
 					break;
