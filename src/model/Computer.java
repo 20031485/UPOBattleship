@@ -34,13 +34,17 @@ public class Computer extends Player{
 	//inizializza la lista di coordinate che il computer sceglierà a caso
 	public void initCoordinatesList() {
 		coordinatesList = new ArrayList<>();
-		System.out.println("initCoordinatesList");
+		int num = 0;
+		//System.out.println("initCoordinatesList");
 		for(int i = 0; i < gameSize; ++i) {
 			for(int j = 0; j < gameSize; ++j) {
 				Coordinates coordinates = new Coordinates(i, j);
 				coordinatesList.add(coordinates);
+				//System.out.print("[" + coordinates.getRow() + ", "+ coordinates.getColumn() + "] ");
+				num++;
 			}
 		}
+		//System.out.println("#coords: " + num);
 	}
 
 	//TODO
@@ -204,7 +208,7 @@ public class Computer extends Player{
 	
 	//computer controlla se ha colpito all'ultimo colpo e valorizza 
 	public void didComputerHit() {
-		System.out.print("\t>>did Computer Hit? ");
+		//System.out.print("\t>>did Computer Hit? ");
 		//guardo quali sono i nextHits
 		/*System.out.print("\t>>nextHits: ");
 		for(int i = 0; i < nextHits.size(); ++i) {
@@ -213,61 +217,72 @@ public class Computer extends Player{
 		System.out.println();
 		//se il gioco dice che il giocatore è in stato HIT (quindi se è stato colpito all'ultimo tiro)
 		if(BattleshipModel.playerState == PlayerState.HIT) {
-			System.out.println("\t\t>>yes!");
+			//System.out.println("\t\t>>yes!");
 			//se ho colpito due caselle sulla stessa riga e o alla colonna prima o alla colonna dopo
 			if(lastHit.getRow() == twoHitsAgo.getRow() &&
 				(lastHit.getColumn() == twoHitsAgo.getColumn() - 1 || lastHit.getColumn() == twoHitsAgo.getColumn() + 1)) {
-				System.out.print("\t\t>>same row: ");
+				//System.out.print("\t\t>>same row: ");
 				//pulisco nextHits
 				clearNextHits();
 				//metto in nextHits le caselle sulla stessa linea di
 				linearCheck(lastHit, ShipDirection.HORIZONTAL);
-				System.out.print("\t\t>>nextHits: ");
+				/*System.out.print("\t\t>>nextHits: ");
 				for(int i = 0; i < nextHits.size(); ++i) {
 					System.out.print("[" + nextHits.get(i).getRow() + ", " + nextHits.get(i).getColumn() + "]" );
-				}
+				}*/
 			}
 			//se ho colpito due caselle sulla stessa colonna e o alla riga sopra o a quella sotto
 			else if(lastHit.getColumn() == twoHitsAgo.getColumn() &&
 					(lastHit.getRow() == twoHitsAgo.getRow() - 1 || lastHit.getRow() == twoHitsAgo.getRow() + 1)) {
-				System.out.print("\t\t>>same column: ");
+				//System.out.print("\t\t>>same column: ");
 				//pulisco nextHits
 				clearNextHits();
 				//metto in nextHits le caselle sulla stessa colonna
 				linearCheck(lastHit, ShipDirection.VERTICAL);
-				System.out.print("\t\t>>nextHits: ");
+				/*System.out.print("\t\t>>nextHits: ");
 				for(int i = 0; i < nextHits.size(); ++i) {
 					System.out.print("[" + nextHits.get(i).getRow() + ", " + nextHits.get(i).getColumn() + "]" );
-				}
+				}*/
 			}
 			else {
 				//pulisco nextHits
-				clearNextHits();
+				//clearNextHits();
 				//metto in nextHits le 4 celle che stanno intorno all'ultima cella colpita
 				crossCheck(lastHit.getRow(), lastHit.getColumn());
-				System.out.print("\t>>nextHits: ");
+				/*System.out.print("\t>>nextHits: ");
 				for(int i = 0; i < nextHits.size(); ++i) {
 					System.out.print("[" + nextHits.get(i).getRow() + ", " + nextHits.get(i).getColumn() + "]" );
 				}
+				*/
 			}
 		}
 		else if(BattleshipModel.playerState == PlayerState.WATER){
-			System.out.println(">>MISSED!");
+			//System.out.println(">>MISSED!");
 		}
 		else if(BattleshipModel.playerState == PlayerState.HITANDSUNK){
-			System.out.println(">>HITANDSUNK!");
+			//System.out.println(">>HITANDSUNK!");
 			clearNextHits();
+		}
+	}
+	
+	//posizionamento di tutte le navi in modo randomico
+	public void computerSetShips() {
+		Random rand = new Random();
+		while(!shipList.isEmpty()) {
+			int row = rand.nextInt(shipsGrid.length);
+			int col = rand.nextInt(shipsGrid.length);
+			int dir = rand.nextInt(2);
+			if(dir == 0)
+				setShip(0, row, col, ShipDirection.HORIZONTAL);
+			else if(dir == 1)
+				setShip(0, row, col, ShipDirection.VERTICAL);
 		}
 	}
 	
 	//un piccolo test per vedere se funziona
 	public static void main(String[] args) {
 		Computer c = new Computer(10, ComputerType.SMART);
-		c.setShip(0, 0, 0, ShipDirection.HORIZONTAL);//2
-		c.setShip(0, 2, 0, ShipDirection.VERTICAL);//4
-		c.setShip(0, 0, 4, ShipDirection.VERTICAL);//2
-		c.setShip(0, 3, 3, ShipDirection.HORIZONTAL);//5
-		c.setShip(0, 5, 3, ShipDirection.VERTICAL);//3
+		c.computerSetShips();
 		System.out.println(c.toString());
 		
 		Player p = new Player(10);

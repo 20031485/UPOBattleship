@@ -20,7 +20,7 @@ public class Player implements Serializable{
 	protected int gameSize;	
 	//protected PlayerState state;
 	
-	private ArrayList<Ship> shipList;
+	protected ArrayList<Ship> shipList;
 	private ArrayList<Ship> placedShips;
 	private ArrayList<Ship> deadShips;
 	
@@ -164,6 +164,7 @@ public class Player implements Serializable{
 	
 	//funzione da chiamare quando viene ricevuto un colpo
 	public void isHit(int row, int col) {
+		hitsGrid[row][col] = false;
 		shipsGrid[row][col] = true;
 		for(int i = 0; i < placedShips.size(); ++i) {
 			Ship ship = this.placedShips.get(i);

@@ -9,6 +9,10 @@ public class Ship {
 	private ShipType shipType;
 	private int length;
 	
+	public int getLength() {
+		return length;
+	}
+
 	//matrice che identifica la posizione assoluta di una nave 
 	//sulla matrice delle navi di un giocatore
 	private boolean[][] absolutePosition;
