@@ -1,26 +1,20 @@
 # UPOBattleship - Programming Paradigms Java project
 Java project for the Programming Paradigms course at University of Eastern Piedmont, Vercelli (IT).
 
-# Latest additions
-Trying to merge Paco's code into Lorenzo's + package hierarchy established.
+# Latest additions/fixes
+ - **FIXED:** bug in `Computer`'s `crossCheck()` aiming method;
+ - Semi-functioning terminal version (launch BattleshipModel.main() for a trial);
 
 # TODO
- - [x] Implement `Ship` class and its methods for positioning;
- - [x] Implement `Player` class and its methods for positioning ships (delegation calls to `Ship`'s methods);
- - [x] Implement `Player`'s methods for shooting [x] /getting shot [x] at certain coordinates;
- - [x] Implement `Computer extends Player` and its methods by using `Player`'s methods;
- - [x] Implement stupid `Computer`;
- - [x] Implement smart `Computer` aiming methods  _(kind of...)_ ;
- - [x] **Implement system to tell model or computer if the last hit was successful**;
- - [x] Join `Player` and `Ship` into `BattleshipModel` and implement remaining methods (i.e. P1bombsP2(), turn() etc);
- - [x] Implement `SetShipsPanel`;
+ - [ ] Implement smart `Computer` aiming methods: `crossCheck()` works, but `linearCheck()` needs fixing;
+ - [ ] Implement system to tell model or computer if the last two hits were successful;
  - [ ] Implement `SetShipsController`;
  - [ ] Implement `BattlePanel`;
  - [ ] Implement `BattleController`;
  - [ ] Implement `PlayerTest` and `ShipTest`;
  - [ ] Check if some `Exception`s can be launched - add them if so;
  - [ ] Implement `Timer` from javax.swing for a basic countdown if the "Timed" box is checked;
- - [ ] JavaDOC.
+ - [ ] Write JavaDOC.
 
 # Useful links
  - [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/) because Lorenzo  _always_  forgets stuff;

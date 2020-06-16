@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 import utils.PlayerState;
 import utils.ShipDirection;
@@ -20,7 +21,7 @@ public class Player implements Serializable{
 	protected int gameSize;	
 	//protected PlayerState state;
 	
-	protected ArrayList<Ship> shipList;
+	private ArrayList<Ship> shipList;
 	private ArrayList<Ship> placedShips;
 	private ArrayList<Ship> deadShips;
 	
@@ -47,58 +48,69 @@ public class Player implements Serializable{
 		this.deadShips = new ArrayList<Ship>();
 		Ship ship = null;
 		switch(gameSize) {
-		case 10:
-			ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
-			shipList.add(ship);
-			break;
-			
-		case 15:
-			ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
-			shipList.add(ship);
-			break;
-			
-		case 20:
-			ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
-			shipList.add(ship);
-			ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
-			shipList.add(ship);
-			break;
+			case 5:
+				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				shipList.add(ship);
+				break;
+				
+			case 10:
+				ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				shipList.add(ship);
+				break;
+				
+			case 15:
+				ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				shipList.add(ship);
+				break;
+				
+			case 20:
+				ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				shipList.add(ship);
+				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				shipList.add(ship);
+				break;
 		}
 	}
 	
@@ -151,6 +163,9 @@ public class Player implements Serializable{
 		return this.hitsGrid;
 	}
 	
+	public ArrayList<Ship> getShipList(){
+		return this.shipList;
+	}
 	//inizializza le griglie di gioco con la dimensione giusta e le riempie di true
 	public void initGrids(int gridSize) {
 		shipsGrid = new boolean[gridSize][gridSize];
@@ -199,11 +214,26 @@ public class Player implements Serializable{
 				this.placedShips.add(this.shipList.get(shipIndex));
 				this.shipList.remove(shipIndex);
 			}
-			else
-				System.err.println("No room for this ship!");
+			//else
+				//System.err.println("No room for this ship!");
 		}
 		catch(IndexOutOfBoundsException e) {
 			System.err.println("No more ships for this player!");
+		}
+	}
+	
+	//sets ALL ships randomly
+	//MVC VERSION - press "random set"
+	public void randomSetShips() {
+		Random rand = new Random();
+		while(!this.shipList.isEmpty()) {
+			int row = rand.nextInt(this.gameSize);
+			int col = rand.nextInt(this.gameSize);
+			int dir = rand.nextInt(2);
+			if(dir == 0)
+				setShip(0, row, col, ShipDirection.HORIZONTAL);
+			else
+				setShip(0, row, col, ShipDirection.VERTICAL);
 		}
 	}
 	

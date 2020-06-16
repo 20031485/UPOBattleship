@@ -17,8 +17,9 @@ public class Computer extends Player{
 	private ArrayList<Coordinates> coordinatesList;// [i=0[0,0], i=1[0,1], [0,2]...i.]
 	//lista delle coordinate 
 	private ArrayList<Coordinates> nextHits;
-	private Coordinates lastHit;
-	private Coordinates twoHitsAgo;
+	private Coordinates lastHit;//remember last hit
+	private Coordinates twoHitsAgo;//remember two hits ago
+	private PlayerState lastPlayerState;//remember if last hit was successful or not
 	private int shotsNumber;
 	
 	//constructor
@@ -76,7 +77,7 @@ public class Computer extends Player{
 				break;
 		}
 		//ritorna array bidimensionale con le coordinate estratte
-		//return hits(coordinates[0], coordinates[1]);
+		System.out.println("Computer hits: (" + coordinates[0] + ", " + coordinates[1] + ")");
 		return coordinates;
 	}
 	
@@ -109,12 +110,12 @@ public class Computer extends Player{
 			//registro qual è stato l'ultimo colpo prima di questo
 			if(shotsNumber >= 2) {
 				twoHitsAgo = new Coordinates(lastHit.getRow(), lastHit.getColumn());
-				System.out.println("twoHitsAgo: "+twoHitsAgo.getRow()+", "+twoHitsAgo.getColumn());
+				//System.out.println("twoHitsAgo: "+twoHitsAgo.getRow()+", "+twoHitsAgo.getColumn());
 			}
 			//registro qual è stato questo colpo
 			if(shotsNumber >= 1) {
 				lastHit = new Coordinates(coordinates[0], coordinates[1]);
-				System.out.println("lastHit: "+lastHit.getRow()+", "+lastHit.getColumn());
+				//System.out.println("lastHit: "+lastHit.getRow()+", "+lastHit.getColumn());
 			}
 			this.shotsNumber++;
 		}
@@ -131,12 +132,12 @@ public class Computer extends Player{
 			//registro qual è stato il colpo prima di questo
 			if(shotsNumber >= 2) {
 				twoHitsAgo = new Coordinates(lastHit.getRow(), lastHit.getColumn());
-				System.out.println("twoHitsAgo: "+twoHitsAgo.getRow()+", "+twoHitsAgo.getColumn());
+				//System.out.println("twoHitsAgo: "+twoHitsAgo.getRow()+", "+twoHitsAgo.getColumn());
 			}
 			//registro qual è stato l'ultimo colpo
 			if(shotsNumber >= 1) {
 				lastHit = new Coordinates(coordinates[0], coordinates[1]);
-				System.out.println("lastHit: "+lastHit.getRow()+", "+lastHit.getColumn());
+				//System.out.println("lastHit: "+lastHit.getRow()+", "+lastHit.getColumn());
 			}
 			this.shotsNumber++;
 		}
@@ -154,7 +155,10 @@ public class Computer extends Player{
 				(coordinatesList.get(i).getRow() == row + 1 && coordinatesList.get(i).getColumn() == col) ||
 				(coordinatesList.get(i).getRow() == row && coordinatesList.get(i).getColumn() == col - 1) ||
 				(coordinatesList.get(i).getRow() == row && coordinatesList.get(i).getColumn() == col + 1)) {
+				//metto la coordinata scelta in nextHits
 				nextHits.add(coordinatesList.get(i));
+				//rimuovo la coordinata scelta da coordinatesList
+				coordinatesList.remove(i);
 				//System.out.print("[" + coordinatesList.get(i).getRow() + ", " + coordinatesList.get(i).getColumn() + "] ");
 			}
 		}
@@ -173,7 +177,10 @@ public class Computer extends Player{
 					//cerco nella colonna prima e nella colonna dopo e, se esiste, la aggiungo
 					if(	(coordinatesList.get(i).getColumn() == coordinates.getColumn() - 1) ||
 							(coordinatesList.get(i).getColumn() == coordinates.getColumn() + 1)) {
+						//aggiunge la coordinata cercata a nextHits
 						nextHits.add(coordinatesList.get(i));
+						//rimuove tale coordinata da coordinatesList
+						coordinatesList.remove(i);
 						System.out.print("[" + coordinatesList.get(i).getRow() + ", " + coordinatesList.get(i).getColumn() + "] ");
 					}
 				}	
@@ -188,7 +195,10 @@ public class Computer extends Player{
 					//cerco nella riga prima e nella riga dopo e, se esiste, la aggiungo
 					if(	(coordinatesList.get(i).getRow() == coordinates.getRow() - 1) ||
 							(coordinatesList.get(i).getRow() == coordinates.getRow() + 1)) {
+						//aggiunge la coordinata cercata a nextHits
 						nextHits.add(coordinatesList.get(i));
+						//rimuove tale coordinata da coordinatesList
+						coordinatesList.remove(i);
 						System.out.print("[" + coordinatesList.get(i).getRow() + ", " + coordinatesList.get(i).getColumn() + "] ");
 					}
 				}	
@@ -205,6 +215,9 @@ public class Computer extends Player{
 	public void clearNextHits() {
 		int i = 0;
 		while(i < nextHits.size()) {
+			//rimette le coordinate di nextHits inutilizzate in coordinatesList
+			coordinatesList.add(nextHits.get(i));
+			//rimuove quelle coordinate da nextHits
 			nextHits.remove(i);
 		}
 	}
@@ -269,9 +282,9 @@ public class Computer extends Player{
 	}
 	
 	//posizionamento di tutte le navi in modo randomico
-	public void computerSetShips() {
+	/*public void computerSetShips() {
 		Random rand = new Random();
-		while(!shipList.isEmpty()) {
+		while(!this.getShipList().isEmpty()) {
 			int row = rand.nextInt(shipsGrid.length);
 			int col = rand.nextInt(shipsGrid.length);
 			int dir = rand.nextInt(2);
@@ -280,26 +293,27 @@ public class Computer extends Player{
 			else if(dir == 1)
 				setShip(0, row, col, ShipDirection.VERTICAL);
 		}
-	}
+	}*/
 	
 	//un piccolo test per vedere se funziona
 	public static void main(String[] args) {
-		Computer c = new Computer(10, ComputerType.SMART);
-		c.computerSetShips();
+		int gameSize = 10;
+		Computer c = new Computer(gameSize, ComputerType.SMART);
+		c.randomSetShips();
 		System.out.println(c.toString());
 		
-		Player p = new Player(10);
-		p.setShip(0, 0, 0, ShipDirection.HORIZONTAL);//2
-		p.setShip(0, 2, 0, ShipDirection.VERTICAL);//4
-		p.setShip(0, 0, 4, ShipDirection.VERTICAL);//2
-		p.setShip(0, 3, 3, ShipDirection.HORIZONTAL);//5
-		p.setShip(0, 5, 3, ShipDirection.VERTICAL);//3new Player(10);
+		Player p = new Player(gameSize);
+		p.randomSetShips();
 		System.out.println(p.toString());
 		int moves = 0;
 		//meccanismo per colpire il giocatore
 		int[] hit = new int[2];
-		for(int i = 0; i < 10; ++i) {
-			for(int j = 0; j < 10; ++j) {
+		for(int i = 0; i < gameSize; ++i) {
+			for(int j = 0; j < gameSize; ++j) {
+				System.out.println("Coordinates remaining: "+c.coordinatesList.size());
+				for(int k = 0; k < c.coordinatesList.size(); ++k)
+					System.out.print("[" + c.coordinatesList.get(k).getRow() + ", " + c.coordinatesList.get(k).getColumn() + "]");
+				System.out.println();
 				hit = c.computerHits();
 				p.isHit(hit[0], hit[1]);
 				moves++;

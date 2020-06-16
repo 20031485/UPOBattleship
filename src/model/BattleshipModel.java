@@ -23,8 +23,6 @@ import utils.ComputerType;
 import utils.PlayerState;
 import utils.ShipDirection;
 
-//TODO notifyObservers() e setChange()
-
 //BattleshipModel
 public class BattleshipModel implements Serializable{
 	//attributes
@@ -32,16 +30,17 @@ public class BattleshipModel implements Serializable{
 	private Computer computer = null;
 	private int gameSize;//5, 10, 15 where 5 means 5x5 and so on
 	private BattleshipState state = BattleshipState.WELCOME;
-	public static PlayerState playerState;
-	private boolean timed;
+	public static PlayerState playerState;//needed by Computer, to check if Player was hit or not
+	private boolean timed;//creates timer if true
+	//notify BattleshipView for every state BattleshipModel enters
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-	//private Timer timer;
+	//name of the saved file slot
 	private static final String savedFileName = "battleship_saved_game.dat";
 	//every move will set justSaved to false, but the method saveGame will set it to true
 	private boolean justSaved = false;
 
 	//constructors
-	public BattleshipModel() {
+	/*public BattleshipModel() {
 		System.out.println("model created");
 		this.gameSize = 10;
 		this.timed = false;
@@ -51,7 +50,16 @@ public class BattleshipModel implements Serializable{
 		if(timed) {
 			//TODO come lo implementiamo? da thread o dalla gui?
 		}
+	}*/
+	
+	//default constructor for when you start the game - parameters are initialized later
+	public BattleshipModel() {
+		this.gameSize = 0;
+		this.timed = false;
+		this.player = null;
+		this.computer = null;
 	}
+	
 	public BattleshipModel(int gameSize) {
 		this.gameSize = gameSize;
 		this.timed = false;
@@ -59,10 +67,11 @@ public class BattleshipModel implements Serializable{
 		this.computer = new Computer(gameSize, ComputerType.STUPID);
 		
 		if(timed) {
-			//TODO come lo implementiamo? da thread o dalla gui?
+			//TODO implement timer
 		}
 	}
 	
+	//ComputerType is initialized from Computer's constructor (passed as new Computer(...))
 	public BattleshipModel(Player player, Computer computer, int gameSize, boolean timed) {
 		this.player = player;
 		this.computer = computer;
@@ -70,24 +79,30 @@ public class BattleshipModel implements Serializable{
 		this.timed = timed;
 		
 		if(timed) {
-			//TODO come lo implementiamo? da thread o dalla gui?
+			//TODO implement timer
 		}
 	}
 	
 	
 	//methods
+	
+	//MVC VERSION
 	public BattleshipState getState() {
 		System.out.println("getState: " + this.state);
 		return this.state;
 	}
 	
+	//MVC VERSION
 	public void setState(BattleshipState newState) {
 		BattleshipState oldState = this.getState();
 		this.state = newState;
 		this.propertyChangeSupport.firePropertyChange("setState", oldState, newState);
 		System.out.println("setState: " + state);
+		//state changed --> you can press "save" again
+		this.justSaved = false;
 	}
 	
+	//MVC VERSION
 	public static boolean savedGameExists(){
 		File savedFile = new File(savedFileName);
 		if(savedFile.exists()) {
@@ -96,6 +111,7 @@ public class BattleshipModel implements Serializable{
 		return false;
 	}
 	
+	//MVC VERSION
 	public void saveGame() {
 		ObjectOutputStream outputStream = null;
 		
@@ -104,6 +120,7 @@ public class BattleshipModel implements Serializable{
 			outputStream.writeObject(this);
 			outputStream.close();
 			System.out.println(savedFileName+" written!");
+			//you just pressed "save", so don't show (or disable) "save" button
 			this.justSaved = true;
 		} 
 		catch (IOException e) {
@@ -112,14 +129,18 @@ public class BattleshipModel implements Serializable{
 		}
 	}
 	
+	//MVC VERSION
 	public void newGame(Player player, Computer computer, int gameSize, boolean timed) {
 		setPlayer(player);
 		setComputer(computer);
 		setGameSize(gameSize);
 		setTimed(timed);
+		//game created, so you might want to save it immediately
+		this.justSaved = false;
 	}
 	
 	//not launched if savedGameExists == false
+	//MVC VERSION
 	public static BattleshipModel loadGame() throws FileNotFoundException {
 		ObjectInputStream inputStream = null;
 		BattleshipModel loadedGame = null;
@@ -130,22 +151,20 @@ public class BattleshipModel implements Serializable{
 				inputStream.close();
 				System.out.println(savedFileName+" read!");
 			} 
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+			catch (IOException | ClassNotFoundException e) {
+				// TODO something more intelligent?
 				e.printStackTrace();
 			}
 		}
 		else {
-			System.out.println("Saved file not found!");
+			System.err.println("Saved file not found!");
+			//catch in controller and generate JDialog to communicate with user
 			throw new FileNotFoundException("Saved file not found! Loading failed!");
 		}
 		return loadedGame;
 	}
 	
+	//some getters and setters
 	public Player getPlayer() {
 		return player;
 	}
@@ -179,6 +198,7 @@ public class BattleshipModel implements Serializable{
 	}
 
 	//used for debugging purposes
+	//TEST
 	public boolean equals(Object o) {
 		if(o instanceof BattleshipModel) {
 			if(((BattleshipModel) o).getPlayer().equals(this.getPlayer())
@@ -197,6 +217,7 @@ public class BattleshipModel implements Serializable{
 		propertyChangeSupport.removePropertyChangeListener(listener);
 	}
 	
+	//utility
 	public String toString() {
 		return 	"Game Size: "+ getGameSize() +
 				"\nPlayer1:\n\tname: " + getPlayer().getName() +
@@ -205,23 +226,27 @@ public class BattleshipModel implements Serializable{
 				"\n\tscore: " + getComputer().getScore() + "\n\n";
 	}
 	
+	//TERMINAL VERSION
+	//try{} suggested by compiler...
 	public void turns() {
-		Scanner s = new Scanner(System.in);
-		while(!player.isDefeated() || !computer.isDefeated()) {
-			System.out.print("Insert row: ");
-			int row = s.nextInt();
-			s.nextLine();
-			System.out.print("Insert col: ");
-			int col = s.nextInt();
-			s.nextLine();
-			hitAndGetHit(row, col);
-			System.out.println(player.toString());
-			System.out.println(computer.toString());
+		try (Scanner s = new Scanner(System.in)) {
+			while(!player.isDefeated() || !computer.isDefeated()) {
+				System.out.print("Insert row: ");
+				int row = s.nextInt();
+				s.nextLine();
+				System.out.print("Insert col: ");
+				int col = s.nextInt();
+				s.nextLine();
+				hitAndGetHit(row, col);
+				System.out.println(player.toString());
+				System.out.println(computer.toString());
+			}
 		}
 	}
 	
-	//giocatore colpisce com e viene colpito da com
+	//player colpisce computer e viene colpito da computer
 	//da lanciare DOPO il posizionamento delle navi
+	//MVC VERSION
 	public void hitAndGetHit(int row, int col) {
 		int[] coordinates = new int[2];
 		coordinates = player.hits(row, col);
@@ -230,33 +255,49 @@ public class BattleshipModel implements Serializable{
 		player.isHit(coordinates[0], coordinates[1]);
 	}
 	
-	//il giocatore posiziona le sue navi
+	//il giocatore posiziona le sue navi - terminal version
+	//TERMINAL VERSION
 	public void playerSetsShips() {
-		Scanner s = new Scanner(System.in);
-		while(!this.getPlayer().shipList.isEmpty()) {
-			System.out.println("Next ship's dimension: " + player.shipList.get(0).getLength());
-			System.out.print("Insert row: ");
-			int row = s.nextInt();
-			s.nextLine();
-			System.out.print("Insert col: ");
-			int col = s.nextInt();
-			s.nextLine();
-			System.out.print("Insert dir [0 = horizontal, 1 = vertical]: ");
-			int dir = s.nextInt();
-			s.nextLine();
-			ShipDirection direction = null;
-			if(dir == 0)
-				direction = ShipDirection.HORIZONTAL;
-			else
-				direction = ShipDirection.VERTICAL;
-			player.setShip(0, row, col, direction);
-			System.out.println(player.toString());
+		try (Scanner s = new Scanner(System.in)) {
+			while(!this.getPlayer().getShipList().isEmpty()) {
+				System.out.println("Next ship's dimension: " + player.getShipList().get(0).getLength());
+				System.out.print("Insert row: ");
+				int row = s.nextInt();
+				s.nextLine();
+				System.out.print("Insert col: ");
+				int col = s.nextInt();
+				s.nextLine();
+				System.out.print("Insert dir [0 = horizontal, 1 = vertical]: ");
+				int dir = s.nextInt();
+				s.nextLine();
+				ShipDirection direction = null;
+				if(dir == 0)
+					direction = ShipDirection.HORIZONTAL;
+				else
+					direction = ShipDirection.VERTICAL;
+				player.setShip(0, row, col, direction);
+				System.out.println(player.toString());
+			}
 		}
 	}
 	
-	//il computer posiziona le sue navi randomicamente
+	//player sets ONE ship, the one at the index shipIndex in the view's comboBox
+	//controller launches this, loaded with parameters from the view
+	//MVC VERSION
+	public void playerSetsShip(int shipIndex, int row, int col, ShipDirection direction) {
+		//places the ship at the shipIndex-th index in shipList
+		player.setShip(shipIndex, row, col, direction);
+	}
+	
+	//MVC VERSION - perhaps useful
+	public void playerRandomSetShips() {
+		player.randomSetShips();
+	}
+	
+	//computer sets ALL his ships randomly
+	//MVC VERSION
 	public void computerSetsShips() {
-		computer.computerSetShips();
+		computer.randomSetShips();
 	}
 	
 	/*
