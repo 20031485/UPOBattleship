@@ -19,7 +19,7 @@ public class Player implements Serializable{
 	//matrice in cui vengono salvati i colpi dell'avversario
 	protected boolean[][] hitsGrid;
 	protected int gameSize;	
-	//protected PlayerState state;
+	protected PlayerState state = PlayerState.WATER;
 	
 	private ArrayList<Ship> shipList;
 	private ArrayList<Ship> placedShips;
@@ -166,6 +166,14 @@ public class Player implements Serializable{
 	public ArrayList<Ship> getShipList(){
 		return this.shipList;
 	}
+	
+	public void setState(PlayerState state) {
+		this.state = state;
+	}
+	
+	public PlayerState getState() {
+		return this.state;
+	}
 	//inizializza le griglie di gioco con la dimensione giusta e le riempie di true
 	public void initGrids(int gridSize) {
 		shipsGrid = new boolean[gridSize][gridSize];
@@ -181,19 +189,19 @@ public class Player implements Serializable{
 	public void isHit(int row, int col) {
 		hitsGrid[row][col] = false;
 		shipsGrid[row][col] = true;
+		PlayerState newState = PlayerState.WATER;
 		for(int i = 0; i < placedShips.size(); ++i) {
 			Ship ship = this.placedShips.get(i);
 			if(ship.isHit(row, col)) {
-				BattleshipModel.playerState = PlayerState.HIT;
+				newState = PlayerState.HIT;
 				if(ship.isSunk()) {
 					deadShips.add(placedShips.get(i));
 					placedShips.remove(i);
-					BattleshipModel.playerState = PlayerState.HITANDSUNK;
+					newState = PlayerState.HITANDSUNK;
 				}
 			}
-			else
-				BattleshipModel.playerState = PlayerState.WATER;
 		}
+		setState(newState);
 	}
 	
 	//metodo da chiamare quando il giocatore vuole colpire

@@ -189,14 +189,14 @@ public class Ship {
 		boolean result = true;
 		if(!absolutePosition[row][col]) {
 			absolutePosition[row][col] = true;
-			result = true;
 			if(isSunk())
-				System.out.println("Hit and sunk!");
+				System.out.println("\t>>Hit and sunk!");
 			else
-				System.out.println("Hit!");
+				System.out.println("\t>>Hit!");
+			result = true;
 		}
 		else { 
-			//System.out.println("Missed!");
+			//System.out.println("\t>>Missed!");
 			result = false;
 		}
 		return result;

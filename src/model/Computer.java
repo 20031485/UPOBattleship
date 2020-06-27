@@ -18,9 +18,7 @@ public class Computer extends Player{
 	//lista delle coordinate 
 	private ArrayList<Coordinates> nextHits;
 	private Coordinates lastHit;//remember last hit
-	private Coordinates twoHitsAgo;//remember two hits ago
-	private PlayerState lastPlayerState;//remember if last hit was successful or not
-	private int shotsNumber;
+	private Coordinates lastSuccessfulHit;//remember last successful hit
 	
 	//constructor
 	public Computer(int gameSize, ComputerType difficulty) {
@@ -29,46 +27,45 @@ public class Computer extends Player{
 		this.difficulty = difficulty;
 		initCoordinatesList();
 		nextHits = new ArrayList<>();
-		this.lastHit = new Coordinates(-1, -1);
-		this.twoHitsAgo = new Coordinates(-1, -1);
-		this.shotsNumber = 0;
+		this.lastHit = null;
+		this.lastSuccessfulHit = null;
 	}
 
 	//inizializza la lista di coordinate che il computer sceglierà a caso
 	public void initCoordinatesList() {
 		coordinatesList = new ArrayList<>();
-		//int num = 0;
-		//System.out.println("initCoordinatesList");
 		for(int i = 0; i < gameSize; ++i) {
 			for(int j = 0; j < gameSize; ++j) {
 				Coordinates coordinates = new Coordinates(i, j);
 				coordinatesList.add(coordinates);
-				//System.out.print("[" + coordinates.getRow() + ", "+ coordinates.getColumn() + "] ");
-				//num++;
 			}
 		}
-		//System.out.println("#coords: " + num);
 	}
 
+	//debug-utility
+	public void printNextHits() {
+		System.out.print("\nnextHits: ");
+		for(int i = 0; i < nextHits.size(); ++i) {
+			System.out.print("["+nextHits.get(i).getRow()+","+nextHits.get(i).getColumn()+"] ");
+		}
+		System.out.println("\n");
+	}
+	
 	//restituisce le coordinate che il computer sceglie di colpire
-	public int[] computerHits() {
+	public int[] computerHits(PlayerState state) {
+		System.out.print("\nCOMPUTERHITS -> ");
 		//istanzio array di coordinate
 		int[] coordinates = new int[2];
 		switch(this.difficulty) {
 			//estrae casualmente due coordinate
 			case STUPID:
 				coordinates = randomHit();
-				//twoHitsAgo = new Coordinates(lastHit.getRow(), lastHit.getColumn());
-				//lastHit = new Coordinates(coordinates[0], coordinates[1]);
 				break;
 				
 			//estrae intelligentemente due coordinate
 			case SMART:
-				coordinates = smartHit();
-				if(shotsNumber >= 2)
-					twoHitsAgo = new Coordinates(lastHit.getRow(), lastHit.getColumn());
-				if(shotsNumber >= 1)
-					lastHit = new Coordinates(coordinates[0], coordinates[1]);
+				coordinates = smartHit(state);
+				lastHit = new Coordinates(coordinates[0], coordinates[1]);
 				break;
 				
 			//non dovrebbe mai andare qui
@@ -92,122 +89,143 @@ public class Computer extends Player{
 		coordinates[0] = coordinatesList.get(randomIndex).getRow();
 		coordinates[1] = coordinatesList.get(randomIndex).getColumn();
 		
+		//assegno l'ultimo colpo a lastHits
+		lastHit = new Coordinates(coordinates[0], coordinates[1]);
+		
+		//annullo l'ultimo colpo andato a segno
+		lastSuccessfulHit = null;
+		
 		//rimuove quelle coordinate
 		coordinatesList.remove(randomIndex);
 		return coordinates;
 	}
 	
 	//colpo intelligente
-	public int[] smartHit() {
+	public int[] smartHit(PlayerState state) {
 		//istanzio array di due coordinate
 		int[] coordinates = new int[2];
+		
 		//controllo se il computer aveva colpito allo scorso tiro
-		didComputerHit();
+		didComputerHit(state);
+		
+		//stampo quello che ho in nextHits
+		//printNextHits();
+		
 		//se non ci sono elementi in nextHits
 		if(nextHits.size() == 0) {
 			//estraggo casualmente una coppia di coordinate e le assegno alle coordinate colpite
 			coordinates = randomHit();
-			//registro qual è stato l'ultimo colpo prima di questo
-			if(shotsNumber >= 2) {
-				twoHitsAgo = new Coordinates(lastHit.getRow(), lastHit.getColumn());
-				//System.out.println("twoHitsAgo: "+twoHitsAgo.getRow()+", "+twoHitsAgo.getColumn());
-			}
-			//registro qual è stato questo colpo
-			if(shotsNumber >= 1) {
-				lastHit = new Coordinates(coordinates[0], coordinates[1]);
-				//System.out.println("lastHit: "+lastHit.getRow()+", "+lastHit.getColumn());
-			}
-			this.shotsNumber++;
+			
+			//assegno le nuove coordinate a lastHit
+			lastHit = new Coordinates(coordinates[0], coordinates[1]);
 		}
 		//se nextHits ha elementi
 		else {
 			//colpo random tra nextHits
 			Random r = new Random();
+			
 			//creo un indice casuale tra 0 e la dimensione di nextHits
 			int randomIndex = r.nextInt(nextHits.size());
-			//prendo le coordinate all'indice randomIndex e le metto nell'array coordinates
+			
+			//prendo le coordinate all'indice randomIndex e le metto nell'array coordinates, da restituire
 			coordinates = hits(nextHits.get(randomIndex).getRow(), nextHits.get(randomIndex).getColumn());
+			
 			//tolgo le coordinate scelte dalla lista nextHits
 			nextHits.remove(randomIndex);
-			//registro qual è stato il colpo prima di questo
-			if(shotsNumber >= 2) {
-				twoHitsAgo = new Coordinates(lastHit.getRow(), lastHit.getColumn());
-				//System.out.println("twoHitsAgo: "+twoHitsAgo.getRow()+", "+twoHitsAgo.getColumn());
-			}
-			//registro qual è stato l'ultimo colpo
-			if(shotsNumber >= 1) {
-				lastHit = new Coordinates(coordinates[0], coordinates[1]);
-				//System.out.println("lastHit: "+lastHit.getRow()+", "+lastHit.getColumn());
-			}
-			this.shotsNumber++;
+			
+			//assegno le nuove coordinate a lastHit
+			lastHit = new Coordinates(coordinates[0], coordinates[1]);
 		}
+		//restituisco l'array di due coordinate
 		return coordinates;
 	}
 	
 	//aggiunge le 4 caselle attorno a quella indicata alla lista nextHits
 	public void crossCheck(int row, int col) {
-		//System.out.print("\t\t>>cross-check: ");
+		int i = 0;
 		//se ci sono, aggiungo le caselle a nextHits
-		for(int i = 0; i < coordinatesList.size(); ++i) {
+		while(i < coordinatesList.size()) {
 			//se esiste una coppia di coordinate che corrispondono ai parametri di ricerca, la metto in nextHits
 			//(dovrebbero essere automaticamente escluse le caselle "fuori dalla griglia" e quelle già scelte
+			//se una casella ha riga = row-1 e colonna = col (stessa colonna ma una riga prima)
 			if(	(coordinatesList.get(i).getRow() == row - 1 && coordinatesList.get(i).getColumn() == col) ||
+				//oppure se ha riga = row+1 e colonna = col (stessa colonna ma una riga dopo)
 				(coordinatesList.get(i).getRow() == row + 1 && coordinatesList.get(i).getColumn() == col) ||
+				//oppure se ha riga = row e colonna = col-1 (stessa riga ma una colonna prima)
 				(coordinatesList.get(i).getRow() == row && coordinatesList.get(i).getColumn() == col - 1) ||
+				//oppure se ha riga = row e colonna = col+1 (stessa riga ma una colonna dopo)
 				(coordinatesList.get(i).getRow() == row && coordinatesList.get(i).getColumn() == col + 1)) {
+		
 				//metto la coordinata scelta in nextHits
 				nextHits.add(coordinatesList.get(i));
 				//rimuovo la coordinata scelta da coordinatesList
 				coordinatesList.remove(i);
-				//System.out.print("[" + coordinatesList.get(i).getRow() + ", " + coordinatesList.get(i).getColumn() + "] ");
+				--i;
 			}
+			++i;
 		}
-		//System.out.println();
+		//controllo di aver messo le coordinate in nextHits
+		//printNextHits();
 	}
 	
 	//aggiunge le caselle sulla stessa riga/colonna delle due colpite di seguito
-	public void linearCheck(Coordinates coordinates, ShipDirection direction) {
-		System.out.print("\t\t>>linear-check: ");
+	public void lineCheck(Coordinates lastHit, Coordinates lastSuccessfulHit, ShipDirection direction) {
+		//tolgo i nextHits - potrebbero esserci residui del crossCheck
+		clearNextHits();
+		
 		switch(direction) {
-		case HORIZONTAL:
-			//cerco tra le coordinate in coordinatesList
-			for(int i = 0; i < coordinatesList.size(); ++i) {
-				//se trovo una coordinata sulla stessa riga
-				if(coordinatesList.get(i).getRow() == coordinates.getRow()) {
-					//cerco nella colonna prima e nella colonna dopo e, se esiste, la aggiungo
-					if(	(coordinatesList.get(i).getColumn() == coordinates.getColumn() - 1) ||
-							(coordinatesList.get(i).getColumn() == coordinates.getColumn() + 1)) {
-						//aggiunge la coordinata cercata a nextHits
-						nextHits.add(coordinatesList.get(i));
-						//rimuove tale coordinata da coordinatesList
-						coordinatesList.remove(i);
-						System.out.print("[" + coordinatesList.get(i).getRow() + ", " + coordinatesList.get(i).getColumn() + "] ");
-					}
-				}	
-			}
-			break;
-			
-		case VERTICAL:
-			//cerco tra le coordinate in coordinatesList
-			for(int i = 0; i < coordinatesList.size(); ++i) {
-				//se trovo una coordinata sulla stessa colonna
-				if(coordinatesList.get(i).getColumn() == coordinates.getColumn()) {
-					//cerco nella riga prima e nella riga dopo e, se esiste, la aggiungo
-					if(	(coordinatesList.get(i).getRow() == coordinates.getRow() - 1) ||
-							(coordinatesList.get(i).getRow() == coordinates.getRow() + 1)) {
-						//aggiunge la coordinata cercata a nextHits
-						nextHits.add(coordinatesList.get(i));
-						//rimuove tale coordinata da coordinatesList
-						coordinatesList.remove(i);
-						System.out.print("[" + coordinatesList.get(i).getRow() + ", " + coordinatesList.get(i).getColumn() + "] ");
-					}
-				}	
-			}
-			break;
-			
-		default:
-			System.err.println("ERROR@Computer::linearCheck()");
-			break;
+			case HORIZONTAL:
+				int i = 0;
+				while(i < coordinatesList.size()) {
+					//se trovo una coordinata sulla stessa riga dei due colpi
+					if(		coordinatesList.get(i).getRow() == lastHit.getRow() &&
+							coordinatesList.get(i).getRow() == lastSuccessfulHit.getRow()) {
+						//cerco nella colonna prima e nella colonna dopo e, se esiste, la aggiungo
+						if(		(coordinatesList.get(i).getColumn() == lastHit.getColumn() - 1) ||
+								(coordinatesList.get(i).getColumn() == lastHit.getColumn() + 1) ||
+								(coordinatesList.get(i).getColumn() == lastSuccessfulHit.getColumn() - 1) ||
+								(coordinatesList.get(i).getColumn() == lastSuccessfulHit.getColumn() + 1)) {
+							//aggiunge la coordinata cercata a nextHits
+							nextHits.add(coordinatesList.get(i));
+							//rimuove tale coordinata da coordinatesList
+							coordinatesList.remove(i);
+							--i;
+						}
+					}	
+					++i;
+				}
+				//controllo le coordinate che ho messo in nextHits
+				//printNextHits();
+				break;
+				
+			case VERTICAL:
+				//cerco tra le coordinate in coordinatesList
+				int j = 0;
+				while(j < coordinatesList.size()) {
+					//se trovo una coordinata sulla stessa colonna dei due colpi
+					if(		coordinatesList.get(j).getColumn() == lastHit.getColumn() && 
+							coordinatesList.get(j).getColumn() == lastSuccessfulHit.getColumn()) {
+						//cerco nella riga prima e nella riga dopo e, se esiste, la aggiungo
+						if(		(coordinatesList.get(j).getRow() == lastHit.getRow() - 1) ||
+								(coordinatesList.get(j).getRow() == lastHit.getRow() + 1) ||
+								(coordinatesList.get(j).getRow() == lastSuccessfulHit.getRow() - 1) ||
+								(coordinatesList.get(j).getRow() == lastSuccessfulHit.getRow() + 1)) {
+							//aggiunge la coordinata cercata a nextHits
+							nextHits.add(coordinatesList.get(j));
+							//rimuove tale coordinata da coordinatesList
+							coordinatesList.remove(j);
+							--j;
+						}
+					}	
+					++j;
+				}
+				//controllo le coordinate che ho messo in nextHits
+				//printNextHits();
+				break;
+				
+			default:
+				System.err.println("ERROR@Computer::linearCheck()");
+				break;
 		}
 	}
 	
@@ -215,85 +233,61 @@ public class Computer extends Player{
 	public void clearNextHits() {
 		int i = 0;
 		while(i < nextHits.size()) {
-			//rimette le coordinate di nextHits inutilizzate in coordinatesList
 			coordinatesList.add(nextHits.get(i));
-			//rimuove quelle coordinate da nextHits
 			nextHits.remove(i);
 		}
 	}
 	
 	//computer controlla se ha colpito all'ultimo colpo e valorizza 
-	public void didComputerHit() {
-		//System.out.print("\t>>did Computer Hit? ");
-		//guardo quali sono i nextHits
-		/*System.out.print("\t>>nextHits: ");
-		for(int i = 0; i < nextHits.size(); ++i) {
-			System.out.print("[" + nextHits.get(i).getRow() + ", " + nextHits.get(i).getColumn() + "]" );
-		}*/
-		//System.out.println();
-		//se il gioco dice che il giocatore è in stato HIT (quindi se è stato colpito all'ultimo tiro)
-		if(BattleshipModel.playerState == PlayerState.HIT) {
-			//System.out.println("\t\t>>yes!");
-			//se ho colpito due caselle sulla stessa riga e o alla colonna prima o alla colonna dopo
-			if(lastHit.getRow() == twoHitsAgo.getRow() &&
-				(lastHit.getColumn() == twoHitsAgo.getColumn() - 1 || lastHit.getColumn() == twoHitsAgo.getColumn() + 1)) {
-				//System.out.print("\t\t>>same row: ");
-				//pulisco nextHits
-				clearNextHits();
-				//metto in nextHits le caselle sulla stessa linea di
-				linearCheck(lastHit, ShipDirection.HORIZONTAL);
-				/*System.out.print("\t\t>>nextHits: ");
-				for(int i = 0; i < nextHits.size(); ++i) {
-					System.out.print("[" + nextHits.get(i).getRow() + ", " + nextHits.get(i).getColumn() + "]" );
-				}*/
-			}
-			//se ho colpito due caselle sulla stessa colonna e o alla riga sopra o a quella sotto
-			else if(lastHit.getColumn() == twoHitsAgo.getColumn() &&
-					(lastHit.getRow() == twoHitsAgo.getRow() - 1 || lastHit.getRow() == twoHitsAgo.getRow() + 1)) {
-				//System.out.print("\t\t>>same column: ");
-				//pulisco nextHits
-				clearNextHits();
-				//metto in nextHits le caselle sulla stessa colonna
-				linearCheck(lastHit, ShipDirection.VERTICAL);
-				/*System.out.print("\t\t>>nextHits: ");
-				for(int i = 0; i < nextHits.size(); ++i) {
-					System.out.print("[" + nextHits.get(i).getRow() + ", " + nextHits.get(i).getColumn() + "]" );
-				}*/
-			}
-			else {
-				//pulisco nextHits
-				//clearNextHits();
-				//metto in nextHits le 4 celle che stanno intorno all'ultima cella colpita
-				crossCheck(lastHit.getRow(), lastHit.getColumn());
-				/*System.out.print("\t>>nextHits: ");
-				for(int i = 0; i < nextHits.size(); ++i) {
-					System.out.print("[" + nextHits.get(i).getRow() + ", " + nextHits.get(i).getColumn() + "]" );
+	public void didComputerHit(PlayerState state) {
+		//leggo lo stato del giocatore
+		switch(state){
+			//se mancato
+			case WATER:
+				//per ora non fa niente
+				break;
+			
+			//se colpito
+			case HIT:
+				//se sto colpendo una nuova nave
+				if(lastSuccessfulHit == null) {
+					//controllo incrociato attorno alla cella colpita
+					crossCheck(lastHit.getRow(), lastHit.getColumn());
 				}
-				*/
-			}
-		}
-		else if(BattleshipModel.playerState == PlayerState.WATER){
-			//System.out.println(">>MISSED!");
-		}
-		else if(BattleshipModel.playerState == PlayerState.HITANDSUNK){
-			//System.out.println(">>HITANDSUNK!");
-			clearNextHits();
+				
+				//se invece un colpo è andato a segno "di recente"
+				else {
+					//controllo se le due celle sono sulla stessa riga
+					if(lastHit.getRow() == lastSuccessfulHit.getRow()) {
+						//controllo in linea - aggiungo a nextHits le celle immediatamente accanto alle due colpite
+						lineCheck(lastHit, lastSuccessfulHit, ShipDirection.HORIZONTAL);
+					}
+					
+					//controllo se le due celle sono sulla stessa colonna
+					else if(lastHit.getColumn() == lastSuccessfulHit.getColumn()) {
+						//controllo in linea- aggiungo a nextHits le celle immediatamente sopra e sotto alle due colpite
+						lineCheck(lastHit, lastSuccessfulHit, ShipDirection.VERTICAL);
+					}
+				}
+				
+				//ho colpito, quindi ridefinisco lastSuccessfulHit
+				lastSuccessfulHit = new Coordinates(lastHit.getRow(), lastHit.getColumn());
+				break;
+			
+			//se colpito e affondato
+			case HITANDSUNK:
+				//cancello nextHits, torno a mirare a caso
+				clearNextHits();
+				
+				//metto l'ultimo colpo andato a segno a null (cambio bersaglio)
+				lastSuccessfulHit = null;
+				break;
+			
+			default:
+				System.err.println("ERROR@Computer::didComputerHit()");
+				break;
 		}
 	}
-	
-	//posizionamento di tutte le navi in modo randomico
-	/*public void computerSetShips() {
-		Random rand = new Random();
-		while(!this.getShipList().isEmpty()) {
-			int row = rand.nextInt(shipsGrid.length);
-			int col = rand.nextInt(shipsGrid.length);
-			int dir = rand.nextInt(2);
-			if(dir == 0)
-				setShip(0, row, col, ShipDirection.HORIZONTAL);
-			else if(dir == 1)
-				setShip(0, row, col, ShipDirection.VERTICAL);
-		}
-	}*/
 	
 	//un piccolo test per vedere se funziona
 	public static void main(String[] args) {
@@ -306,25 +300,20 @@ public class Computer extends Player{
 		p.randomSetShips();
 		System.out.println(p.toString());
 		int moves = 0;
+
 		//meccanismo per colpire il giocatore
 		int[] hit = new int[2];
-		for(int i = 0; i < gameSize; ++i) {
-			for(int j = 0; j < gameSize; ++j) {
-				System.out.println("Coordinates remaining: "+c.coordinatesList.size());
-				for(int k = 0; k < c.coordinatesList.size(); ++k)
-					System.out.print("[" + c.coordinatesList.get(k).getRow() + ", " + c.coordinatesList.get(k).getColumn() + "]");
-				System.out.println();
-				hit = c.computerHits();
-				p.isHit(hit[0], hit[1]);
-				moves++;
-				//System.out.println(hit[0]+","+hit[1]);
-				if(p.isDefeated())
-					break;
-			}
+		while(!p.isDefeated()) {
+			System.out.println();
+			hit = c.computerHits(p.getState());
+			p.isHit(hit[0], hit[1]);
+			System.out.println("PlayerState after hit: " + p.getState());
+			System.out.println();
+			if(p.getState() == PlayerState.HIT || p.getState() == PlayerState.HITANDSUNK)
+				System.out.println(p.toString());
+			moves++;
 		}
 		
-		
-		//System.out.println("Computer hits player:");
 		System.out.println(p.toString()+"\n\nmoves: "+moves);
 	}
 }

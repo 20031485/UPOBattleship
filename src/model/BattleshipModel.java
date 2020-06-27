@@ -30,7 +30,7 @@ public class BattleshipModel implements Serializable{
 	private Computer computer = null;
 	private int gameSize;//5, 10, 15 where 5 means 5x5 and so on
 	private BattleshipState state = BattleshipState.WELCOME;
-	public static PlayerState playerState;//needed by Computer, to check if Player was hit or not
+	private PlayerState playerState;//needed by Computer, to check if Player was hit or not
 	private boolean timed;//creates timer if true
 	//notify BattleshipView for every state BattleshipModel enters
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
@@ -100,6 +100,14 @@ public class BattleshipModel implements Serializable{
 		System.out.println("setState: " + state);
 		//state changed --> you can press "save" again
 		this.justSaved = false;
+	}
+	
+	public PlayerState getPlayerState() {
+		return this.playerState;
+	}
+	
+	public void setPlayerState(PlayerState newPlayerState) {
+		this.playerState = newPlayerState;
 	}
 	
 	//MVC VERSION
@@ -251,8 +259,9 @@ public class BattleshipModel implements Serializable{
 		int[] coordinates = new int[2];
 		coordinates = player.hits(row, col);
 		computer.isHit(coordinates[0], coordinates[1]);
-		coordinates = computer.computerHits();
+		coordinates = computer.computerHits(getPlayerState());
 		player.isHit(coordinates[0], coordinates[1]);
+		setPlayerState(player.getState());
 	}
 	
 	//il giocatore posiziona le sue navi - terminal version
@@ -309,7 +318,7 @@ public class BattleshipModel implements Serializable{
 		bm.newGame(new Player(10), new Computer(10, ComputerType.SMART), 10, false);
 		System.out.println(bm.getPlayer().toString());
 		System.out.println(bm.getComputer().toString());
-		bm.playerSetsShips();
+		bm.playerRandomSetShips();
 		bm.computerSetsShips();
 		System.out.println(bm.getPlayer().toString());
 		System.out.println(bm.getComputer().toString());

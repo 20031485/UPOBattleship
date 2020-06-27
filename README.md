@@ -2,12 +2,12 @@
 Java project for the Programming Paradigms course at University of Eastern Piedmont, Vercelli (IT).
 
 # Latest additions/fixes
- - **FIXED:** bug in `Computer`'s `crossCheck()` aiming method;
+ - **FIXED:** bug in `Computer`'s `lineCheck()` smart aiming method;
  - Semi-functioning terminal version (launch BattleshipModel.main() for a trial);
 
 # TODO
- - [ ] Implement smart `Computer` aiming methods: `crossCheck()` works, but `linearCheck()` needs fixing;
- - [ ] Implement system to tell model or computer if the last two hits were successful;
+ - [x] Implement smart `Computer` aiming methods: `crossCheck()` works, but `linearCheck()` needs fixing;
+ - [x] Implement system to tell model or computer if the last two hits were successful;
  - [ ] Implement `SetShipsController`;
  - [ ] Implement `BattlePanel`;
  - [ ] Implement `BattleController`;
