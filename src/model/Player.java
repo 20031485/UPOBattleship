@@ -19,7 +19,7 @@ public class Player implements Serializable{
 	//matrice in cui vengono salvati i colpi dell'avversario
 	protected boolean[][] hitsGrid;
 	protected int gameSize;	
-	protected PlayerState state = PlayerState.WATER;
+	protected PlayerState state;
 	
 	private ArrayList<Ship> shipList;
 	private ArrayList<Ship> placedShips;
@@ -34,6 +34,7 @@ public class Player implements Serializable{
 	public Player(int gameSize) {
 		this.name = "Player";
 		this.gameSize = gameSize;
+		this.state = PlayerState.WATER;
 		this.initGrids(gameSize);
 		this.initShips(gameSize);
 	}

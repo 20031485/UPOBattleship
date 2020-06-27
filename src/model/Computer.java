@@ -241,6 +241,8 @@ public class Computer extends Player{
 	//computer controlla se ha colpito all'ultimo colpo e valorizza 
 	public void didComputerHit(PlayerState state) {
 		//leggo lo stato del giocatore
+		if(state == null)
+			state = PlayerState.WATER;
 		switch(state){
 			//se mancato
 			case WATER:
