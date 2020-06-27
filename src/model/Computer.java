@@ -15,7 +15,7 @@ public class Computer extends Player{
 	private ComputerType difficulty;
 	//lista di tutte le coordinate che il computer può colpire
 	private ArrayList<Coordinates> coordinatesList;// [i=0[0,0], i=1[0,1], [0,2]...i.]
-	//lista delle coordinate 
+	//solo per computer SMART: lista delle coordinate che vado a colpire al prossimo turno
 	private ArrayList<Coordinates> nextHits;
 	private Coordinates lastHit;//remember last hit
 	private Coordinates lastSuccessfulHit;//remember last successful hit
