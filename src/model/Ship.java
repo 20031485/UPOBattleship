@@ -1,18 +1,18 @@
 package model;
 
 import utils.ShipDirection;
-import utils.ShipLength;
 import utils.ShipType;
 
+/**
+ * Class that represents a {@code Ship} entity, holding its
+ * absolute position and its characteristics (type, length, direction).
+ * @author 20027017 & 20031485
+ *
+ */
+
 public class Ship {
-	//attributes
 	private ShipType shipType;
 	private int length;
-	
-	public int getLength() {
-		return length;
-	}
-
 	//matrice che identifica la posizione assoluta di una nave 
 	//sulla matrice delle navi di un giocatore
 	private boolean[][] absolutePosition;
@@ -20,7 +20,13 @@ public class Ship {
 	//dimensione della griglia di gioco --> serve per absolutePosition
 	private int gameSize;
 	
-	//constructor
+	/**
+	 * Constructor for the class {@code Ship}. It creates a {@code Ship}
+	 * object with no absolute position yet.
+	 * @param shipType The type of the Ship {@link utils.ShipType}
+	 * @param length The length of the Ship {@link utils.ShipLength}
+	 * @param gameSize The size of the game grid
+	 */
 	public Ship(ShipType shipType, int length, int gameSize){
 		this.shipType = shipType;
 		this.length = length;
@@ -34,6 +40,23 @@ public class Ship {
 	}
 	
 	//methods
+	/**
+	 * A method that returns the length of a Ship object
+	 * @return The integer representing the length of the Ship object
+	 */
+	public int getLength() {
+		return length;
+	}
+	
+	/**
+	 * A method for assigning an absolute position to a Ship object
+	 * and then positioning it onto a Player's shipsGrid
+	 * @param x The row coordinate for positioning the Ship
+	 * @param y The column coordinate for positioning the Ship
+	 * @param direction Defines the vertical/horizontal orientation of the Ship
+	 * @param shipsGrid the Player's game grid where the Ship is being set
+	 * @return true if the positioning is successful, false on failure
+	 */
 	public boolean setShip(int x, int y, ShipDirection direction, boolean[][] shipsGrid) {
 		boolean result = true;
 		//controllo sulle coordinate
@@ -86,12 +109,22 @@ public class Ship {
 			}
 		}
 		//metodo per modificare shipsGrid
+		this.shipDirection = direction;
 		this.setShipOnShipsGrid(shipsGrid);
 		return result;
 	}
 	
 	//controlla che ci sia almeno una casella vuota intorno alla futura posizione della nave
-	boolean enoughSpace(int x, int y, ShipDirection direction, boolean[][] shipsGrid) {
+	/**
+	 * A method for checking if there is enough space on the grid for
+	 * the Ship which is being set.
+	 * @param x The row coordinate where the Ship is being set
+	 * @param y The column coordinate where the Ship is being set
+	 * @param direction The vertical/horizontal orientation of the Ship being set
+	 * @param shipsGrid The Player's game grid being probed
+	 * @return true if the Ship can be set, false if it cannot
+	 */
+	public boolean enoughSpace(int x, int y, ShipDirection direction, boolean[][] shipsGrid) {
 		boolean enoughSpace = true;
 		switch(direction) {
 			case HORIZONTAL:	
@@ -163,6 +196,11 @@ public class Ship {
 		return enoughSpace;
 	}
 	
+	/**
+	 * Overlaps the Ship's absolute position to the Player's game grid
+	 * to set the Ship on it
+	 * @param shipsGrid The Player's game grid
+	 */
 	public void setShipOnShipsGrid(boolean[][] shipsGrid) {
 		for(int i = 0; i < gameSize; ++i) {
 			for(int j = 0; j < gameSize; ++j) {
@@ -171,12 +209,20 @@ public class Ship {
 		}
 	}
 	
+	/**
+	 * Removes a Ship from its absolute position
+	 */
 	public void removeShip() {
 		for(int i = 0; i < gameSize; ++i)
 			for(int j = 0; j < gameSize; ++j)
 				absolutePosition[i][j] = true;
 	}
 	
+	/**
+	 * A method to check if a Ship has been sunk completely
+	 * @return true if there are no more false cells in the Ship's 
+	 * absolute position, false otherwise
+	 */
 	public boolean isSunk() {
 		boolean result = true;
 		for(int i = 0; i < gameSize; ++i)
@@ -185,6 +231,12 @@ public class Ship {
 		return result;
 	}
 	
+	/**
+	 * A method mimicking an incoming hit
+	 * @param row Row coordinate where the hit is addressed
+	 * @param col Column coordinate where the hit is addressed
+	 * @return true if the current ship has been hit, false otherwise
+	 */
 	public boolean isHit(int row, int col) {
 		boolean result = true;
 		if(!absolutePosition[row][col]) {
@@ -202,6 +254,9 @@ public class Ship {
 		return result;
 	}
 	
+	/**
+	 * A method for printing a Ship object, mostly used for debugging purposes
+	 */
 	public String toString() {
 		String s = "";
 		for(int i = 0; i < this.gameSize; ++i) {
@@ -212,7 +267,7 @@ public class Ship {
 		}
 		return s;
 	}
-	
+/*	
 	public static void main(String[] args) {
 		Player p = new Player(10);
 		Ship s = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, 10);
@@ -227,4 +282,5 @@ public class Ship {
 		System.out.println("ship's absolute position: \n" + u.toString());
 		System.out.println("player's grids after setShip: \n"+p.toString());
 	}
+	*/
 }

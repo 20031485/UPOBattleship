@@ -1,11 +1,10 @@
 package utils;
 
 /**
- * Class containing every ship length in primitive integer constants.
- * @author Ridovic Paco & Lorenzo Rossi
+ * Utility Class containing every ship length in primitive integer constants
+ * @author 20027017 & 20031485
  *
  */
-
 public final class ShipLength {
 	public static final int INCROCIATORELENGTH = 2;
 	public static final int CACCIATORPEDINIERELENGTH = 2;

@@ -1,5 +1,10 @@
 package utils;
 
+/**
+ * Utility Enum containing each possible state for a BattleshipModel object
+ * @author 20027017 & 20031485
+ *
+ */
 public enum BattleshipState {
 	WELCOME, 		//start/load screen
 	NEWGAME, 		//new game settings screen
