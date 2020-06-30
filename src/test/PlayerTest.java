@@ -5,37 +5,46 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import model.Player;
+import utils.PlayerState;
 import utils.ShipDirection;
 
 class PlayerTest {
 
 	@Test
 	void test() {
-		Player player = new Player("Gianni");
+		int gameSize = 10;
+		Player p = new Player(gameSize);
+		Player q = new Player(gameSize);
 		
-		assert(player != null);
+		//assertions after creation
+		assert p != null;
+		assert q != null;
+		assertEquals(p, q);
+		assertEquals(p.getName(), "Player");
+		assertEquals(p.getState(), PlayerState.WATER);
+		assertTrue(p.isDefeated());
 		
-		player.setScore(345);
+		//assertions after ship positioning
+		p.randomSetShips();
+		assertFalse(p.isDefeated());
+		assert p.getShipList().size() == 0;
 		
-		assert(player.getName().equals("Gianni"));
-		assert(player.getScore() == 345);
+		//assertion after ships removal
+		p.clearShips();
+		assertTrue(p.isDefeated());
+		assert p.getShipList().size() != 0;
 		
-		player.resetGrids(10);
+		//assertions after p is hit
+		p.setShip(0, 0, 0, ShipDirection.HORIZONTAL);
+		p.isHit(0, 0);
+		assertEquals(p.getState(), PlayerState.HIT);
+		assertNotEquals(p, q);
+		assertFalse(p.isDefeated());
 		
-		assert(player.isDefeated() == true);
-		
-		player.setShip(0, 0, 0, ShipDirection.VERTICAL);
-		
-		assert(player.isDefeated() != true);
-		
-		Player player2 = new Player(10);
-		player2.setName("Gianni");
-		player2.setScore(345);
-		
-		assertEquals(player, player2);
-		
-		Player player3 = new Player(10);
-		
-		assertNotEquals(player, player3);
+		//assertions for p's hits
+		int[] coords = new int[2];
+		coords = p.hits(2, 3);
+		assertEquals(coords[0], 2);
+		assertEquals(coords[1], 3);
 	}
 }

@@ -255,7 +255,7 @@ public class Ship {
 	}
 	
 	/**
-	 * A method for printing a Ship object, mostly used for debugging purposes
+	 * Utility method for printing a {@code Ship} object, mostly used for debugging purposes
 	 */
 	public String toString() {
 		String s = "";

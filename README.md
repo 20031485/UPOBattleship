@@ -2,9 +2,7 @@
 Java project for the Programming Paradigms course at University of Eastern Piedmont, Vercelli (IT).
 
 # Latest additions/fixes
- - **FIXED:** bug in `Computer`'s `lineCheck()` smart aiming method;
- - **FIXED:** bug in `Computer`'s `didComputerHit()`: PlayerState was null at the first turn;
- - Semi-functioning terminal version (launch BattleshipModel.main() for a trial);
+ - Slowly adding JavaDOC to all public methods and classes.
 
 # TODO
  - [x] Implement smart `Computer` aiming methods: `crossCheck()` works, but `linearCheck()` needs fixing;

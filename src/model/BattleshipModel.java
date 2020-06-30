@@ -309,10 +309,8 @@ public class BattleshipModel implements Serializable{
 		computer.randomSetShips();
 	}
 	
+
 	/*
-	 * MAIN
-	 * 
-	 */
 	public static void main(String[] args) {
 		BattleshipModel bm = new BattleshipModel(10);
 		bm.newGame(new Player(10), new Computer(10, ComputerType.SMART), 10, false);
@@ -323,13 +321,6 @@ public class BattleshipModel implements Serializable{
 		System.out.println(bm.getPlayer().toString());
 		System.out.println(bm.getComputer().toString());
 		bm.turns();
-		
-		
-		/*FUNZIONAMENTO
-		 * 1) imposto parametri partita (difficulty, gameSize, timed);
-		 * 2) giocatore posiziona le navi;
-		 * 3) computer posiziona le navi;
-		 * 4) gioco finchè uno dei due non perde;
-		 * */
 	}
+	*/
 }

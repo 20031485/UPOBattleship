@@ -23,7 +23,7 @@ public class Computer extends Player{
 	//constructor
 	public Computer(int gameSize, ComputerType difficulty) {
 		super(gameSize);
-		this.name = "Computer";
+		setName("Computer");
 		this.difficulty = difficulty;
 		initCoordinatesList();
 		nextHits = new ArrayList<>();
@@ -34,8 +34,8 @@ public class Computer extends Player{
 	//inizializza la lista di coordinate che il computer sceglierà a caso
 	public void initCoordinatesList() {
 		coordinatesList = new ArrayList<>();
-		for(int i = 0; i < gameSize; ++i) {
-			for(int j = 0; j < gameSize; ++j) {
+		for(int i = 0; i < this.gameSize; ++i) {
+			for(int j = 0; j < this.gameSize; ++j) {
 				Coordinates coordinates = new Coordinates(i, j);
 				coordinatesList.add(coordinates);
 			}
