@@ -8,19 +8,28 @@ import utils.Coordinates;
 import utils.PlayerState;
 import utils.ShipDirection;
 
-//Computer is a Player which calls superclass methods with custom input
+/**
+ * Class that represents the A.I. of a Battleship opponent.
+ * @author 20027017 & 20031485
+ *
+ */
 public class Computer extends Player{
 	//attributes
 	private static final long serialVersionUID = 1L;
 	private ComputerType difficulty;
 	//lista di tutte le coordinate che il computer può colpire
-	private ArrayList<Coordinates> coordinatesList;// [i=0[0,0], i=1[0,1], [0,2]...i.]
-	//solo per computer SMART: lista delle coordinate che vado a colpire al prossimo turno
+	private ArrayList<Coordinates> coordinatesList;
+	//solo per computer SMART: lista delle coordinate 
+	//che vado a colpire al prossimo turno
 	private ArrayList<Coordinates> nextHits;
 	private Coordinates lastHit;//remember last hit
 	private Coordinates lastSuccessfulHit;//remember last successful hit
 	
-	//constructor
+	/**
+	 * Constructor for the class {@code Computer}
+	 * @param gameSize The size of the Battleship game grid
+	 * @param difficulty The "intelligence" of the {@code Computer}
+	 */
 	public Computer(int gameSize, ComputerType difficulty) {
 		super(gameSize);
 		setName("Computer");
@@ -31,8 +40,7 @@ public class Computer extends Player{
 		this.lastSuccessfulHit = null;
 	}
 
-	//inizializza la lista di coordinate che il computer sceglierà a caso
-	public void initCoordinatesList() {
+	private void initCoordinatesList() {
 		coordinatesList = new ArrayList<>();
 		for(int i = 0; i < this.gameSize; ++i) {
 			for(int j = 0; j < this.gameSize; ++j) {
@@ -42,7 +50,54 @@ public class Computer extends Player{
 		}
 	}
 
-	//debug-utility
+	/**
+	 * Returns the difficulty set for the {@code Computer}
+	 * @return The difficulty of the {@code Computer}
+	 */
+	public ComputerType getDifficulty() {
+		return difficulty;
+	}
+
+	/**
+	 * Returns the ArrayList of the coordinates the {@code Computer}
+	 * can hit
+	 * @return ArrayList of Coordinates
+	 */
+	public ArrayList<Coordinates> getCoordinatesList() {
+		return coordinatesList;
+	}
+
+	/**
+	 * Returns the ArrayList of the possible coordinates the 
+	 * {@code Computer} will hit in its next move
+	 * @return ArrayList of Coordinates
+	 */
+	public ArrayList<Coordinates> getNextHits() {
+		return nextHits;
+	}
+	
+	/**
+	 * Returns the Coordinates of the last hit the {@code Computer} did
+	 * @return Coordinates of {@code Computer}'s last hit
+	 */
+	public Coordinates getLastHit() {
+		return lastHit;
+	}
+
+	/**
+	 * Returns the Coordinates of the last successful hit the
+	 * {@code Computer} did
+	 * @return Coordinates of {@code Computer}'s last successful hit
+	 */
+	public Coordinates getLastSuccessfulHit() {
+		return lastSuccessfulHit;
+	}
+
+	/**
+	 * Method that prints the coordinates a smart {@code Computer} is 
+	 * going to aim in its next turns
+	 * 
+	 */
 	public void printNextHits() {
 		System.out.print("\nnextHits: ");
 		for(int i = 0; i < nextHits.size(); ++i) {
@@ -51,9 +106,15 @@ public class Computer extends Player{
 		System.out.println("\n");
 	}
 	
-	//restituisce le coordinate che il computer sceglie di colpire
+	/**
+	 * According to the {@code Player}'s state, the {@code Computer}
+	 * decides where to aim for its next hit
+	 * @param state The current {@code Player}'s state
+	 * @return A bidimensional integer array containing the two coordinates
+	 * the {@code Computer} has chosen to hit
+	 */
 	public int[] computerHits(PlayerState state) {
-		System.out.print("\nCOMPUTERHITS -> ");
+		//System.out.print("\nCOMPUTERHITS -> ");
 		//istanzio array di coordinate
 		int[] coordinates = new int[2];
 		switch(this.difficulty) {
@@ -74,11 +135,15 @@ public class Computer extends Player{
 				break;
 		}
 		//ritorna array bidimensionale con le coordinate estratte
-		System.out.println("Computer hits: (" + coordinates[0] + ", " + coordinates[1] + ")");
+		//System.out.println("Computer hits: (" + coordinates[0] + ", " + coordinates[1] + ")");
 		return coordinates;
 	}
 	
-	//restituisce le coordinate estratte a caso
+	/**
+	 * Randomly extract a couple of coordinates from the list of
+	 * coordinates {@code Computer} still has not hit
+	 * @return A bidimensional integer array containing the two coordinates
+	 */
 	public int[] randomHit() {
 		int[] coordinates = new int[2];
 		//crea intero tra 0 e coordinatesList.size()
@@ -100,7 +165,12 @@ public class Computer extends Player{
 		return coordinates;
 	}
 	
-	//colpo intelligente
+	/**
+	 * Only if the {@code Computer} is set as "smart", it chooses
+	 * a couple of coordinates more wisely
+	 * @param state The current {@code Player}'s state
+	 * @return A bidimensional integer array containing the coordinates chosen
+	 */
 	public int[] smartHit(PlayerState state) {
 		//istanzio array di due coordinate
 		int[] coordinates = new int[2];
@@ -140,7 +210,13 @@ public class Computer extends Player{
 		return coordinates;
 	}
 	
-	//aggiunge le 4 caselle attorno a quella indicata alla lista nextHits
+	/**
+	 * Given a cell's coordinates, the {@code Computer} aims to the 
+	 * (at most) four cells vertically and horizontally surrounding 
+	 * the chosen cell
+	 * @param row The row coordinate of the chosen cell
+	 * @param col The col coordinate of the chosen cell
+	 */
 	public void crossCheck(int row, int col) {
 		int i = 0;
 		//se ci sono, aggiungo le caselle a nextHits
@@ -168,7 +244,14 @@ public class Computer extends Player{
 		//printNextHits();
 	}
 	
-	//aggiunge le caselle sulla stessa riga/colonna delle due colpite di seguito
+	/**
+	 * Given two couples of aligned coordinates, the {@code Computer} 
+	 * chooses at most two other cells, aligned to the parameters, to be
+	 * aimed to in its next hits
+	 * @param lastHit A {@code Coordinates} object containing the coordinates of the first cell
+	 * @param lastSuccessfulHit A {@code Coordinates} object containing the coordinates of the second cell
+	 * @param direction
+	 */
 	public void lineCheck(Coordinates lastHit, Coordinates lastSuccessfulHit, ShipDirection direction) {
 		//tolgo i nextHits - potrebbero esserci residui del crossCheck
 		clearNextHits();
@@ -229,7 +312,10 @@ public class Computer extends Player{
 		}
 	}
 	
-	//svuota nextHits
+	/**
+	 * Empties the list of the next {@code Coordinates} the 
+	 * {@code Computer} wants to hit
+	 */
 	public void clearNextHits() {
 		int i = 0;
 		while(i < nextHits.size()) {
@@ -238,7 +324,11 @@ public class Computer extends Player{
 		}
 	}
 	
-	//computer controlla se ha colpito all'ultimo colpo e valorizza 
+	/**
+	 * The {@code Computer} checks if its last hit was successful or not
+	 * according to the state the {@code Player} is in
+	 * @param state The current state of the {@code Player}
+	 */
 	public void didComputerHit(PlayerState state) {
 		//leggo lo stato del giocatore
 		if(state == null)
@@ -291,7 +381,7 @@ public class Computer extends Player{
 		}
 	}
 	
-	//un piccolo test per vedere se funziona
+	/*
 	public static void main(String[] args) {
 		int gameSize = 10;
 		Computer c = new Computer(gameSize, ComputerType.SMART);
@@ -318,4 +408,5 @@ public class Computer extends Player{
 		
 		System.out.println(p.toString()+"\n\nmoves: "+moves);
 	}
+	*/
 }

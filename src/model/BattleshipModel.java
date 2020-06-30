@@ -13,10 +13,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 //import java.text.SimpleDateFormat;
 //import java.util.Date;
-import java.util.Observable;
 import java.util.Scanner;
 //import java.util.Scanner;
-import java.util.Timer;
+
 
 import utils.BattleshipState;
 import utils.ComputerType;
@@ -229,9 +228,7 @@ public class BattleshipModel implements Serializable{
 	public String toString() {
 		return 	"Game Size: "+ getGameSize() +
 				"\nPlayer1:\n\tname: " + getPlayer().getName() +
-				"\n\tscore: "+ getPlayer().getScore() +
-				"\nPlayer2:\n\tname: " + getComputer().getName() +
-				"\n\tscore: " + getComputer().getScore() + "\n\n";
+				"\nPlayer2:\n\tname: " + getComputer().getName() + "\n\n";
 	}
 	
 	//TERMINAL VERSION
@@ -310,7 +307,7 @@ public class BattleshipModel implements Serializable{
 	}
 	
 
-	/*
+	
 	public static void main(String[] args) {
 		BattleshipModel bm = new BattleshipModel(10);
 		bm.newGame(new Player(10), new Computer(10, ComputerType.SMART), 10, false);
@@ -322,5 +319,5 @@ public class BattleshipModel implements Serializable{
 		System.out.println(bm.getComputer().toString());
 		bm.turns();
 	}
-	*/
+	
 }

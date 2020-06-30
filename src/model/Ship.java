@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.ShipDirection;
 import utils.ShipType;
 
@@ -10,12 +12,15 @@ import utils.ShipType;
  *
  */
 
-public class Ship {
+public class Ship implements Serializable{
+	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private ShipType shipType;
 	private int length;
 	//matrice che identifica la posizione assoluta di una nave 
 	//sulla matrice delle navi di un giocatore
 	private boolean[][] absolutePosition;
+	@SuppressWarnings("unused")
 	private ShipDirection shipDirection;
 	//dimensione della griglia di gioco --> serve per absolutePosition
 	private int gameSize;

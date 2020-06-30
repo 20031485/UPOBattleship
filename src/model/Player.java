@@ -19,6 +19,7 @@ import utils.ShipType;
  *
  */
 public class Player implements Serializable{
+	private static final long serialVersionUID = 1L;
 	//attributes
 	private String name;
 	//matrice in cui ogni giocatore può posizionare le proprie navi
