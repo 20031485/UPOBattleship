@@ -2,14 +2,21 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.WindowConstants;
 
 import controller.BattleshipController;
@@ -27,6 +34,12 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 	private NewGamePanel newGamePanel;
 	private SetShipsPanel setShipsPanel;
 	private BattlePanel battlePanel;
+	private JMenuBar mainframe;
+	
+	
+	
+	
+	
 	
 	//constructor
 	public BattleshipView(BattleshipModel model) {
@@ -48,6 +61,10 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 		setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
 		setTitle("WELCOME: "+startLoadPanel.getTitle());
 		setVisible(true);
+		setShipsPanel = new SetShipsPanel(model, controller.getSetShipsController());
+		add(setShipsPanel);
+		setShipsPanel.setVisible(false);
+	
 	}
 	
 	//methods
@@ -59,21 +76,31 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 				case WELCOME:
 					setTitle("WELCOME: " + startLoadPanel.getTitle());
 					setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
+					//this.pack();
 					break;
 				
 				case BATTLE:
 					setTitle(battlePanel.getTitle());
 					setSize(battlePanel.getWidth(), battlePanel.getHeight());
+					//this.pack();
 					break;
 			
 				case NEWGAME:
 					setTitle(newGamePanel.getTitle());
 					setSize(newGamePanel.getWidth(), newGamePanel.getHeight());
+					//this.pack();
 					break;
 				
 				case SETSHIPS:
+					System.out.println("ciao paco");
 					setTitle(setShipsPanel.getTitle());
-					setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
+					
+					
+					mainframe = this.createMenuBar();
+					this.setJMenuBar(mainframe);				
+					    this.setVisible(true);
+					    setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
+					//this.pack();
 					break;
 					
 				default:
@@ -81,4 +108,44 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 			}
 		}
 	}
+	
+	
+	
+	
+	
+
+	
+	public JMenuBar createMenuBar() {
+        //Costruzione della menuBar
+        JMenuBar menuBar = new JMenuBar();
+            JMenu menuFile = new JMenu("Setup");
+                JMenuItem apri = new JMenuItem("SalvaP");
+                JMenuItem esci = new JMenuItem("Esci");
+                JMenu radioButtonMenu = new JMenu("Timer");
+                    JRadioButtonMenuItem buttonBlue = new JRadioButtonMenuItem("Si");
+                    JRadioButtonMenuItem buttonRed = new JRadioButtonMenuItem("No");
+                    ButtonGroup group = new ButtonGroup();
+                    group.add(buttonBlue);
+                    group.add(buttonRed);
+                radioButtonMenu.add(buttonBlue);
+                radioButtonMenu.add(buttonRed);
+            menuFile.add(apri);
+            menuFile.add(radioButtonMenu);//popup pull-right
+            menuFile.addSeparator();
+            menuFile.add(esci);
+            JMenu menuHelp = new JMenu("Aiuto");
+        menuBar.add(menuFile);
+        menuBar.add(menuHelp);
+        esci.addActionListener(new ExitActionListener());
+        //Listeners
+      return menuBar;
+      
+      //  menuBar.setVisible(true);
+    }
+	
+	  private class ExitActionListener implements ActionListener {
+	        public void actionPerformed(ActionEvent e) {
+	            System.exit(0);
+	        }
+	    }
 }

@@ -12,9 +12,9 @@ public class SetShipsController implements ActionListener{
 	private SetShipsPanel setShipsPanel;
 	
 	//constructor
-	public SetShipsController(BattleshipModel model, SetShipsPanel setShipsPanel) {
+	public SetShipsController(BattleshipModel model /*, SetShipsPanel setShipsPanel*/) {
 		this.model = model;
-		this.setShipsPanel = setShipsPanel;
+	//	this.setShipsPanel = setShipsPanel;
 	}
 	
 	//methods

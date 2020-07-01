@@ -34,6 +34,7 @@ public class NewGameController extends Observable implements ActionListener{
 					//feature unavilable
 					model.setState(BattleshipState.NEWGAME);
 					System.out.println("\tP1vsP2");
+					
 				}
 				else {
 					if(newGamePanel.p1vsCPUButton.isSelected()) {
@@ -54,7 +55,8 @@ public class NewGameController extends Observable implements ActionListener{
 							System.out.println("\tTimed");
 					}
 					//perhaps SETSHIPS...
-					model.setState(BattleshipState.SETNAMES);
+					model.setState(BattleshipState.SETSHIPS);
+					//SetShipsPanel.
 				}
 				break;
 				

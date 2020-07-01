@@ -4,18 +4,29 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
+import controller.SetShipsController;
 import model.BattleshipModel;
 import utils.BattleshipState;
 
@@ -27,52 +38,70 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	private static final String TITLE = "SET YOUR SHIPS!";
 	private static final String[] COLUMNS = { " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"};
 	private static final String[] ROWS = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
-	private static final int WIDTH = 500;
-	private static final int HEIGHT = 500;
-	
+	private static final int WIDTH = 1000;
+	private static final int HEIGHT = 1000;
+	private SetShipsController controller;
+	private JPanel frame1;
+	private JMenuBar mainframe;
+	private JMenuItem pvp;
+	private JButton[][] grid;
 	private JPanel gridPanel;
-	private JPanel gridTable;
+	private JPanel NaveBoard;
 	private JButton[][] buttonGrid;
+	
+	private static String[] navi = { "PORTAEREI", "CORAZZATE", "SOTTOMARINO",
+			"CACCIATORPERDINIERE", "INCROCIATORE" };
+	
+	/**
+	 * Array di stringhe per le direzioni
+	 */
+	private static String[] direzione = { "Verticale", "Horizzontale" };
+	
+	/**
+	 * JComboBox utilizzata per contenere la selezione di navi per la frame di input.
+	 */
+	private JComboBox SceltaNave;
+	
+
+	/**
+	 * Combo Box used to hold the selection of directions for the input boards.
+	 */
+	private JComboBox SceltaDirezione;
+	
+	/**
+	 * bottone che l'utente clicca dopo aver posizionato tutte le sue nave . quando il giocatore clicca
+	 * resta i attesa e aspetta che il giocatore 2 posiziona le sue navi.
+	 */
+	private JButton play;
+	
+	private JButton clean;
 	
 
 	//constructor
-	public SetShipsPanel(BattleshipModel model/*, BattleshipSetShipsController controller*/) {
+	public SetShipsPanel(BattleshipModel model  , SetShipsController controller) {
 		this.model = model;
-		//this.setSize(WIDTH, HEIGHT);
+		this.controller =controller;
+		this.model.addPropertyChangeListener(this);
+		NaveBoard = new JPanel();
+		frame1 = new JPanel();
+		mainframe = new JMenuBar();
+        this.setNaveInputFrame1();
+		frame1 = this.getNaveInputFrame1();
+		this.setPosizionaNaveGrigliaInput();
+		NaveBoard = this.getPosizionaNaveGrigliaInput();
+	//	this.createMenuBar();
+	//	mainframe = this.getCreateMenuBar();
+		add(frame1, BorderLayout.NORTH);
+		add(NaveBoard, BorderLayout.SOUTH);
+	//	add(mainframe, BorderLayout.WEST);
+		this.setMainFrame();
+		System.out.println("ciao sono il modello di setship");
 		
-		//carico in dim il gameSize di model
-		int dim = model.getGameSize();
+	 //	gridTable.setBackground(Color.GREEN);
+	
 		
-		gridPanel = new JPanel();
-		gridPanel.setLayout(new BorderLayout());
+	
 		
-		gridTable = new JPanel();
-		gridTable.setBackground(Color.GREEN);
-		gridTable.setLayout(new GridLayout(dim+1, dim+1));//deve essere dim+1 per contenere le label di righe e colonne
-		
-		buttonGrid = new JButton[dim][dim];
-		
-		for(int i = 0; i < dim + 1; ++i) {
-			for(int j = 0; j < dim + 1; ++j) {
-				System.out.println(i+" "+j+"\n");
-				if(i != 0 && j != 0) {
-					buttonGrid[i-1][j-1] = new JButton();
-					buttonGrid[i-1][j-1].setSize(50, 50);
-					gridTable.add(buttonGrid[i-1][j-1]);
-				}
-				else if(i == 0 && j != 0) {
-					gridTable.add(new JLabel(COLUMNS[j]));
-				}
-				else if(i != 0 && j == 0) {
-					gridTable.add(new JLabel(ROWS[i]));
-				}
-				else if(i == 0 && j == 0) {
-					gridTable.add(new JLabel(" "));
-				}
-			}
-		}
-		
-		add(gridTable, BorderLayout.CENTER);
 	}
 	
 	//methods
@@ -84,9 +113,111 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		return WIDTH;
 	}
 	
+	
 	public int getHeight() {
 		return HEIGHT;
 	}
+	
+	
+	public final void setNaveInputFrame1() 
+	{
+		frame1.setLayout(new GridLayout());
+		
+		JPanel input = new JPanel();
+		JTextField textoIndicatico = new JTextField();
+		textoIndicatico.setText("Benvenuto");
+		textoIndicatico.setEditable(false);
+		input.add(textoIndicatico);
+		
+		SceltaNave = new JComboBox(navi);
+		SceltaNave.setSelectedIndex(0);  // Per impostare la nave zero come nave di default visibile dal giocatore sul combox box
+		
+		
+
+		TitledBorder titolo;
+		titolo = BorderFactory.createTitledBorder("Navi");
+		//titolo.setTitleJustification(TitledBorder.CENTER);
+		SceltaNave.setBorder(titolo);
+		input.add(SceltaNave);
+
+		
+		SceltaDirezione = new JComboBox(direzione);
+		SceltaDirezione.setSelectedIndex(0);
+		
+		titolo = BorderFactory.createTitledBorder("Direzione");
+		SceltaDirezione.setBorder(titolo);
+		input.add(SceltaDirezione);
+		
+		play = new JButton("play");
+		play.setEnabled(true);
+		input.add(play);
+		
+	    clean = new JButton("Cancella");
+		play.setEnabled(true);
+		input.add(clean);
+
+		frame1.add(input);
+		frame1.setVisible(true);
+		
+		
+	}
+	
+	public JPanel getNaveInputFrame1() {
+		// TODO Auto-generated method stub
+		return frame1;
+	}
+	
+	
+	public final void setPosizionaNaveGrigliaInput() 
+	{
+	 
+	 NaveBoard.setLayout(new GridLayout(COLUMNS.length, ROWS.length));
+		grid = new JButton[COLUMNS.length][ROWS.length];
+		for (int y = 0; y < COLUMNS.length; y++) {
+
+			for (int x = 0; x < ROWS.length; x++) {
+
+				if (x != 0 && y != 0) {
+					grid[x][y] = new JButton();
+					NaveBoard.add(grid[x][y]);
+					//grid[x][y].addActionListener(new PlacementButton());
+				}
+				if (x == 0) {
+					if (y != 0) {
+						JTextField t = new JTextField(ROWS[y]);
+						t.setEditable(false);
+						t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
+						NaveBoard.add(t);
+					} else {
+						JTextField t = new JTextField();
+						t.setEditable(false);
+						NaveBoard.add(t);
+					}
+				} else if (y == 0) {
+					JTextField t = new JTextField(COLUMNS[x]);
+					t.setEditable(false);
+					t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
+					NaveBoard.add(t);
+				}
+			}
+		}
+		// shipBoard.setSize(250, 250);
+		NaveBoard.setVisible(true);
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+ 
+ public final JPanel getPosizionaNaveGrigliaInput()
+{
+	return NaveBoard;
+}
+	
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -105,15 +236,73 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		
 	}
 	
+	
+	public final void setMainFrame() {
+	
+		
+		
+		
+	}
+	
+	
+	public final JMenuBar getCreateMenuBar() {
+		return mainframe;
+	}
+
+	
+	public void createMenuBar() {
+        //Costruzione della menuBar
+        JMenuBar menuBar = new JMenuBar();
+            JMenu menuFile = new JMenu("Setup");
+                JMenuItem apri = new JMenuItem("Apri");
+                JMenuItem esci = new JMenuItem("Esci");
+                JMenu radioButtonMenu = new JMenu("Setta sfondo");
+                    JRadioButtonMenuItem buttonBlue = new JRadioButtonMenuItem("Blue");
+                    JRadioButtonMenuItem buttonRed = new JRadioButtonMenuItem("Rosso");
+                    JRadioButtonMenuItem buttonGreen = new JRadioButtonMenuItem("Verde");
+                    ButtonGroup group = new ButtonGroup();
+                    group.add(buttonBlue);
+                    group.add(buttonGreen);
+                    group.add(buttonRed);
+                radioButtonMenu.add(buttonBlue);
+                radioButtonMenu.add(buttonGreen);
+                radioButtonMenu.add(buttonRed);
+            menuFile.add(apri);
+            menuFile.add(radioButtonMenu);//popup pull-right
+            menuFile.addSeparator();
+            menuFile.add(esci);
+            JMenu menuHelp = new JMenu("Aiuto");
+        menuBar.add(menuFile);
+        menuBar.add(menuHelp);
+        //Listeners
+      
+        esci.addActionListener(new ExitActionListener());
+        menuBar.setVisible(true);
+    }
+
+	
+	  private class ExitActionListener implements ActionListener {
+	        public void actionPerformed(ActionEvent e) {
+	            System.exit(0);
+	        }
+	    }
+	
+	
+	
 	public static void main(String[] args) {
 		BattleshipModel m = new BattleshipModel();
-		SetShipsPanel bsp = new SetShipsPanel(m);
-		JFrame frame = new JFrame();
-		frame.setSize(500, 500);
-		frame.setTitle(bsp.getTitle());
-		frame.setLayout(new FlowLayout());
-		frame.add(bsp);
-		frame.setVisible(true);
+		SetShipsController controller = new SetShipsController(m);
+		SetShipsPanel bsp = new SetShipsPanel(m,  controller);
+		JFrame a = new JFrame();
+		//frame.setSize(600, 600);
+		//frame.setTitle(bsp.getTitle());
+	//	frame.setLayout(new FlowLayout());
+		a.setContentPane(bsp);
+		a.getContentPane();
+		a.pack();
+		a.setVisible(true);
 	}
+	
+	
 
 }

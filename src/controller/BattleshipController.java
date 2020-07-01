@@ -9,6 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Observable;
 
 import model.BattleshipModel;
+import view.SetShipsPanel;
 
 public class BattleshipController{
 	//attributes
@@ -20,6 +21,7 @@ public class BattleshipController{
 	private StartLoadController startLoadController;
 	private NewGameController newGameController;
 	private SetShipsController setShipsController;
+	private SetShipsPanel a;
 	//private BattleController battleController;
 
 	//constructor
@@ -27,7 +29,7 @@ public class BattleshipController{
 		this.model = model;
 		this.startLoadController = new StartLoadController(model);
 		//this.newGameController = new NewGameController(model);
-		//this.setShipsController = new SetShipsController(model);
+		this.setShipsController = new SetShipsController(model/*, a*/);
 		//this.battleController = new BattleController();
 	}
 	
@@ -37,5 +39,9 @@ public class BattleshipController{
 	
 	public NewGameController getNewGameController() {
 		return this.newGameController;
+	}
+	
+	public SetShipsController getSetShipsController() {
+		return this.setShipsController;
 	}
 }
