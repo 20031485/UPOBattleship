@@ -3,6 +3,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.AbstractButton;
+import javax.swing.JButton;
+
 import model.BattleshipModel;
 import view.SetShipsPanel;
 
@@ -21,15 +23,10 @@ public class SetShipsController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		AbstractButton source = (AbstractButton)e.getSource();
-		String command = source.getText();
-		switch(command) {
-			case "":
-				break;
-		
-			default:
-				System.out.println("error in setShipsController");
-				break;
-		}
+		//if(source instanceof JButton) {
+			int x = source.getX();
+			int y = source.getY();
+		System.out.println("x = "+x+", y = "+y);
 	}
 
 }

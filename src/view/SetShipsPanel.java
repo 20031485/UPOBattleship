@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -60,7 +61,7 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	/**
 	 * Array di stringhe per le direzioni
 	 */
-	private static String[] direction = { "Verticale", "Horizzontale" };
+	private static String[] direction = { "VERTICAL", "HORIZONTAL" };
 	
 	/**
 	 * JComboBox utilizzata per contenere la selezione di navi per la frame di input.
@@ -88,6 +89,7 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		this.model = model;
 		this.controller =controller;
 		this.model.addPropertyChangeListener(this);
+		
 		shipBoard = new JPanel();
 		frame1 = new JPanel();
 		mainframe = new JMenuBar();
@@ -145,7 +147,7 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		
 
 		TitledBorder titolo;
-		titolo = BorderFactory.createTitledBorder("Ships");
+		titolo = BorderFactory.createTitledBorder("Ship (length)");
 		//titolo.setTitleJustification(TitledBorder.CENTER);
 		chooseShip.setBorder(titolo);
 		input.add(chooseShip);
@@ -157,6 +159,10 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		titolo = BorderFactory.createTitledBorder("Direction");
 		chooseDirection.setBorder(titolo);
 		input.add(chooseDirection);
+		
+		randomSetShips = new JButton("Random set");
+		randomSetShips.setEnabled(true);
+		input.add(randomSetShips);
 		
 		play = new JButton("Play");
 		play.setEnabled(true);
@@ -189,12 +195,13 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 
 				if (x != 0 && y != 0) {
 					grid[x][y] = new JButton();
+					grid[x][y].setPreferredSize(new Dimension(15, 15));
 					shipBoard.add(grid[x][y]);
 					//grid[x][y].addActionListener(new PlacementButton());
 				}
 				if (x == 0) {
 					if (y != 0) {
-						JTextField t = new JTextField(ROWS[y]);
+						JTextField t = new JTextField(COLUMNS[y]);
 						t.setEditable(false);
 						t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
 						shipBoard.add(t);
@@ -204,14 +211,13 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 						shipBoard.add(t);
 					}
 				} else if (y == 0) {
-					JTextField t = new JTextField(COLUMNS[x]);
+					JTextField t = new JTextField(ROWS[x]);
 					t.setEditable(false);
 					t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
 					shipBoard.add(t);
 				}
 			}
 		}
-		// shipBoard.setSize(250, 250);
 		shipBoard.setVisible(true);
 	
 	}
