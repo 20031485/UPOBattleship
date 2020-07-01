@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Observable;
 //import java.text.SimpleDateFormat;
 //import java.util.Date;
 import java.util.Scanner;
@@ -23,7 +24,7 @@ import utils.PlayerState;
 import utils.ShipDirection;
 
 //BattleshipModel
-public class BattleshipModel implements Serializable{
+public class BattleshipModel extends Observable implements Serializable{
 	//attributes
 	private Player player = null;
 	private Computer computer = null;
@@ -57,6 +58,8 @@ public class BattleshipModel implements Serializable{
 		this.timed = false;
 		this.player = null;
 		this.computer = null;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public BattleshipModel(int gameSize) {
@@ -68,6 +71,8 @@ public class BattleshipModel implements Serializable{
 		if(timed) {
 			//TODO implement timer
 		}
+		setChanged();
+		notifyObservers();
 	}
 	
 	//ComputerType is initialized from Computer's constructor (passed as new Computer(...))
@@ -80,6 +85,8 @@ public class BattleshipModel implements Serializable{
 		if(timed) {
 			//TODO implement timer
 		}
+		setChanged();
+		notifyObservers();
 	}
 	
 	
@@ -129,6 +136,8 @@ public class BattleshipModel implements Serializable{
 			System.out.println(savedFileName+" written!");
 			//you just pressed "save", so don't show (or disable) "save" button
 			this.justSaved = true;
+			setChanged();
+			notifyObservers();
 		} 
 		catch (IOException e) {
 			System.out.println("IOException");
@@ -144,6 +153,8 @@ public class BattleshipModel implements Serializable{
 		setTimed(timed);
 		//game created, so you might want to save it immediately
 		this.justSaved = false;
+		setChanged();
+		notifyObservers();
 	}
 	
 	//not launched if savedGameExists == false
@@ -194,6 +205,8 @@ public class BattleshipModel implements Serializable{
 
 	public void setGameSize(int gameSize) {
 		this.gameSize = gameSize;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void setTimed(boolean timed) {

@@ -70,8 +70,9 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 	private ButtonGroup timedButtonGroup;
 	
 	//constructor
-	public NewGamePanel(BattleshipModel model, NewGameController controller) {
+	public NewGamePanel(BattleshipModel model/*, NewGameController controller*/) {
 		this.model = model;
+		//instance its own controller
 		this.newGameController = new NewGameController(model, this);
 		this.model.addPropertyChangeListener(this);
 		

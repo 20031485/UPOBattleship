@@ -18,7 +18,7 @@ import utils.ShipType;
  * @author 20027017 & 20031485
  *
  */
-public class Player implements Serializable{
+public class Player extends AbstractPlayer implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//attributes
 	private String name;
@@ -175,6 +175,8 @@ public class Player implements Serializable{
 	 */
 	public void setState(PlayerState state) {
 		this.state = state;
+		setChanged();
+		notifyObservers();
 	}
 	
 	/**
@@ -217,6 +219,9 @@ public class Player implements Serializable{
 			}
 		}
 		setState(newState);
+		//the next two instructions are included in "setState()"
+		//setChanged();
+		//notifyObservers();
 	}
 	
 	/**
@@ -247,6 +252,8 @@ public class Player implements Serializable{
 				//tolgo una nave dalla lista delle navi disponibili e la aggiungo alla lista delle navi piazzate
 				this.placedShips.add(this.shipList.get(shipIndex));
 				this.shipList.remove(shipIndex);
+				setChanged();
+				notifyObservers();
 			}
 			//else
 				//System.err.println("No room for this ship!");
@@ -269,6 +276,7 @@ public class Player implements Serializable{
 				setShip(0, row, col, ShipDirection.HORIZONTAL);
 			else
 				setShip(0, row, col, ShipDirection.VERTICAL);
+			//notify observers in setShip
 		}
 	}
 	
@@ -283,6 +291,8 @@ public class Player implements Serializable{
 			placedShips.get(i).removeShip();
 			//rimuovo la nave dalla lista delle navi posizionate
 			placedShips.remove(i);
+			setChanged();
+			notifyObservers();
 		}
 		resetShipsGrid();
 	}
@@ -300,6 +310,8 @@ public class Player implements Serializable{
 		for(int i = 0; i < shipsGrid.length; ++i)
 			for(int j = 0; j < shipsGrid.length; ++j)
 				shipsGrid[i][j] = true;
+		setChanged();
+		notifyObservers();
 	}
 	
 	//controlla se ci sono ancora (pezzi di) navi sulla griglia del giocatore
@@ -318,9 +330,11 @@ public class Player implements Serializable{
 	}
 	
 	/**
-	 * Utility method for comparing two {@code Player} objects.
+	 * Utility method for comparing two {@code Player} objects, 
+	 * mostly used for testing and debugging purposes
 	 * @param o {@code Object} to probe
-	 * @return true if {@code o} and the callin {@code Player} are the same object with the same attributes, false otherwise
+	 * @return true if {@code o} and the calling {@code Player} are the same 
+	 * object with the same attributes, false otherwise
 	 */
 	public boolean equals(Object o) {
 		if(o instanceof Player) {

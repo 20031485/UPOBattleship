@@ -29,9 +29,9 @@ public class StartLoadPanel extends JPanel implements PropertyChangeListener{
 	protected JButton loadGameButton;
 	
 	//constructors
-	StartLoadPanel(BattleshipModel model, StartLoadController controller){
+	StartLoadPanel(BattleshipModel model/*, StartLoadController controller*/){
 		this.model = model;
-		this.controller = controller;
+		this.controller =  new StartLoadController(model, this);//controller;
 		this.model.addPropertyChangeListener(this); //view listens to model
 		
 		//settings

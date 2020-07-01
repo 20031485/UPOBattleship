@@ -2,13 +2,16 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
 import javax.swing.AbstractButton;
 import model.BattleshipModel;
+import model.Computer;
+import model.Player;
 import utils.BattleshipState;
 import view.NewGamePanel;
 
-public class NewGameController extends Observable implements ActionListener{
+import utils.ComputerType;
+
+public class NewGameController implements ActionListener{
 	//attributes
 	private BattleshipModel model;
 	private NewGamePanel newGamePanel;
@@ -29,34 +32,48 @@ public class NewGameController extends Observable implements ActionListener{
 		switch(command) {
 			case "CONFIRM":
 				System.out.println("confirm");
-				//TODO: get selections and launch Game
 				if(newGamePanel.p1vsp2Button.isSelected()) {
-					//feature unavilable
+					//feature unavailable
 					model.setState(BattleshipState.NEWGAME);
 					System.out.println("\tP1vsP2");
-					
 				}
 				else {
+					int gameSize = 10;
+					ComputerType computerType = ComputerType.STUPID;
+					boolean timed = false;
 					if(newGamePanel.p1vsCPUButton.isSelected()) {
 						System.out.println("\tP1vsCPU");
+						
 						if(newGamePanel.easyModeButton.isSelected())
-							System.out.println("\t\teasy cheesy");
+							computerType = ComputerType.STUPID;
+						
 						if(newGamePanel.hardModeButton.isSelected())
-							System.out.println("\t\thard as hell");
-						if(newGamePanel.sizeSButton.isSelected())
+							computerType = ComputerType.SMART;
+						
+						if(newGamePanel.sizeSButton.isSelected())//da togliere
 							System.out.println("\t5x5");
+						
 						if(newGamePanel.sizeMButton.isSelected())
-							System.out.println("\t10x10");
+							gameSize = 10;
+						
 						if(newGamePanel.sizeLButton.isSelected())
-							System.out.println("\t15x15");
+							gameSize = 15;
+						
 						if(newGamePanel.sizeXLButton.isSelected())
-							System.out.println("\t20x20");
+							gameSize = 20;
+						
 						if(newGamePanel.timedCheckBox.isSelected())
-							System.out.println("\tTimed");
+							timed = true;
+						
+						//model = new BattleshipModel(gameSize);
+						model.setGameSize(gameSize);
+						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed);
+						model.getPlayer().randomSetShips();
+						System.out.println("model.newGame(new Player("+gameSize+"), new Computer("+gameSize+", "+computerType+"), "+gameSize+", "+timed+")");
+						System.out.println("GameSize: "+model.getGameSize());
+						System.out.println(model.getPlayer().toString());
 					}
-					//perhaps SETSHIPS...
 					model.setState(BattleshipState.SETSHIPS);
-					//SetShipsPanel.
 				}
 				break;
 				

@@ -52,19 +52,21 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 		addWindowListener(new WindowDestructor());
 		setLayout(new BorderLayout());
 		
-		startLoadPanel = new StartLoadPanel(model, controller.getStartLoadController());
+		startLoadPanel = new StartLoadPanel(model/*, controller.getStartLoadController()*/);
 		add(startLoadPanel);
 		startLoadPanel.setVisible(true);
-		newGamePanel = new NewGamePanel(model, controller.getNewGameController());
+		
+		newGamePanel = new NewGamePanel(model/*, controller.getNewGameController()*/);
 		add(newGamePanel);
 		newGamePanel.setVisible(false);
+		
+		setShipsPanel = new SetShipsPanel(model);
+		add(setShipsPanel);
+		setShipsPanel.setVisible(false);
+		
 		setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
 		setTitle("WELCOME: "+startLoadPanel.getTitle());
 		setVisible(true);
-		setShipsPanel = new SetShipsPanel(model, controller.getSetShipsController());
-		add(setShipsPanel);
-		setShipsPanel.setVisible(false);
-	
 	}
 	
 	//methods
@@ -88,18 +90,17 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 				case NEWGAME:
 					setTitle(newGamePanel.getTitle());
 					setSize(newGamePanel.getWidth(), newGamePanel.getHeight());
+					//newGamePanel = new NewGamePanel(model/*, controller.getNewGameController()*/);
+					//add(newGamePanel);
 					//this.pack();
 					break;
 				
 				case SETSHIPS:
-					//System.out.println("ciao paco");
 					setTitle(setShipsPanel.getTitle());
-					
-					
-					mainframe = this.createMenuBar();
-					this.setJMenuBar(mainframe);				
-					    this.setVisible(true);
-					    setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
+					setShipsPanel = new SetShipsPanel(model/*, controller.getSetShipsController()*/);
+					//add(setShipsPanel);
+					setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
+					//setShipsPanel.setVisible(true);
 					//this.pack();
 					break;
 					
@@ -114,7 +115,7 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 	
 	
 
-	
+/*	
 	public JMenuBar createMenuBar() {
         //Costruzione della menuBar
         JMenuBar menuBar = new JMenuBar();
@@ -148,4 +149,5 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 	            System.exit(0);
 	        }
 	    }
+	*/
 }

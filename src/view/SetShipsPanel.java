@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
 import controller.SetShipsController;
@@ -44,19 +45,13 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	private static final String TITLE = "SET YOUR SHIPS!";
 	private static final String[] COLUMNS = { " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"};
 	private static final String[] ROWS = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
-	private static final int WIDTH = 1000;
-	private static final int HEIGHT = 1000;
-	private SetShipsController controller;
-	private JPanel frame1;
+	private static final int WIDTH = 1700;//700
+	private static final int HEIGHT = 1350;//350
+	private SetShipsController setShipsController;
+	private JPanel dropDownAndButtonsPanel;
 	private JMenuBar mainframe;
-	private JMenuItem pvp;
-	private JButton[][] grid;
-	private JPanel gridPanel;
 	private JPanel shipBoard;
 	private JButton[][] buttonGrid;
-	
-	private static String[] navi = { "PORTAEREI", "CORAZZATE", "SOTTOMARINO",
-			"CACCIATORPERDINIERE", "INCROCIATORE" };
 	
 	/**
 	 * Array di stringhe per le direzioni
@@ -68,7 +63,6 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	 */
 	private JComboBox chooseShip;
 	
-
 	/**
 	 * Combo Box used to hold the selection of directions for the input boards.
 	 */
@@ -79,37 +73,206 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	 * resta i attesa e aspetta che il giocatore 2 posiziona le sue navi.
 	 */
 	private JButton play;
-	
 	private JButton clean;
-	private JButton randomSetShips;
+	//private JButton randomSetOne;
+	private JButton randomSetAll;
 	
 
-	//constructor
-	public SetShipsPanel(BattleshipModel model  , SetShipsController controller) {
+	/**
+	 * Constructor for the Class {@code SetShipsPanel}. It creates a JPanel to
+	 * be shown in the main game frame
+	 * @param model A {@code BattleshipModel} object
+	 */
+	public SetShipsPanel(BattleshipModel model/*, SetShipsController controller*/) {
 		this.model = model;
-		this.controller =controller;
+		this.setShipsController = new SetShipsController(model, this);
+		
+		//listen to property changes
 		this.model.addPropertyChangeListener(this);
 		
-		shipBoard = new JPanel();
-		frame1 = new JPanel();
-		mainframe = new JMenuBar();
-        this.setNaveInputFrame1();
-		frame1 = this.getNaveInputFrame1();
-		this.setPosizionaNaveGrigliaInput();
-		shipBoard = this.getPosizionaNaveGrigliaInput();
-	//	this.createMenuBar();
-	//	mainframe = this.getCreateMenuBar();
-		add(frame1, BorderLayout.NORTH);
+		//observe model and player
+		this.model.addObserver(this);
+		this.model.getPlayer().addObserver(this);
+		
+		//shipBoard = new JPanel();
+		//dropDownAndButtonsPanel = new JPanel();
+		
+		//creates the comboBox + buttons panel
+        setDropDownAndButtonsPanel();
+		//dropDownAndButtonsPanel = this.getDropDownAndButtonsPanel();
+		
+		//creates the buttonGrid and shipBoard (containing buttonGrid)
+		createButtonGrid();
+		
+		//add(dropDownAndButtonsPanel, BorderLayout.NORTH);
+		//add(shipBoard, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * Creates and adds a panel with two dropdown menus and some buttons to the main panel
+	 */
+	public void setDropDownAndButtonsPanel() {
+		dropDownAndButtonsPanel = new JPanel();
+		dropDownAndButtonsPanel.setLayout(new BorderLayout());
+		
+		JPanel input = new JPanel();
+		
+		//alloco un array di stringhe della dimensione dell'arraylist di navi del giocatore
+		String[] playersShips;// = new String[model.getPlayer().getShipList().size()];
+		playersShips = getPlayersShipsStrings(model);
+		
+		chooseShip = new JComboBox(playersShips);
+		chooseShip.setSelectedIndex(0);  // Per impostare la nave zero come nave di default visibile dal giocatore sul combox box
+		
+		TitledBorder titolo;
+		titolo = BorderFactory.createTitledBorder("Ship (length)");
+		chooseShip.setBorder(titolo);
+		input.add(chooseShip);
+
+		chooseDirection = new JComboBox(direction);
+		chooseDirection.setSelectedIndex(0);
+		
+		titolo = BorderFactory.createTitledBorder("Direction");
+		chooseDirection.setBorder(titolo);
+		input.add(chooseDirection);
+		
+		randomSetAll = new JButton("RANDOM");
+		randomSetAll.setEnabled(true);
+		randomSetAll.addActionListener(setShipsController);
+		input.add(randomSetAll);
+		
+	    clean = new JButton("CLEAR");
+		clean.setEnabled(true);
+		clean.addActionListener(setShipsController);
+		input.add(clean);
+
+		play = new JButton("PLAY");
+		play.setEnabled(false);
+		play.addActionListener(setShipsController);
+		input.add(play);
+		
+		dropDownAndButtonsPanel.add(input);
+		dropDownAndButtonsPanel.setVisible(true);
+		
+		add(dropDownAndButtonsPanel, BorderLayout.NORTH);
+	}
+	
+	/**
+	 * 
+	 */
+	public void updateDropDownAndButtonsPanel() {
+		dropDownAndButtonsPanel = new JPanel();
+		dropDownAndButtonsPanel.setLayout(new BorderLayout());
+		
+		JPanel input = new JPanel();
+		
+		//alloco un array di stringhe della dimensione dell'arraylist di navi del giocatore
+		String[] playersShips;// = new String[model.getPlayer().getShipList().size()];
+		playersShips = getPlayersShipsStrings(model);
+		
+		chooseShip = new JComboBox(playersShips);
+		chooseDirection.setSelectedIndex(0);
+		
+		//if there are no more ships to be set
+		if(model.getPlayer().getShipList().size() == 0) {
+			play.setEnabled(true);
+			play.addActionListener(setShipsController);
+		}
+	}
+	
+	public JPanel getDropDownAndButtonsPanel() {
+		// TODO Auto-generated method stub
+		return dropDownAndButtonsPanel;
+	}
+	
+	/**
+	 * Creates and adds a buttonGrid as big as the game size to the main panel
+	 */
+	public void createButtonGrid(){
+		int gameSize = model.getGameSize();
+		int dim = 20;
+		boolean[][] playersShipsGrid  = new boolean[gameSize][gameSize];
+		playersShipsGrid = model.getPlayer().getShipsGrid();
+		this.shipBoard = new JPanel();
+		this.shipBoard.setLayout(new GridLayout(gameSize + 1, gameSize + 1));
+		this.buttonGrid = new JButton[gameSize+1][gameSize+1];//[COLUMNS.length][ROWS.length];
+		
+		for (int y = 0; y < gameSize + 1; y++) {
+			for (int x = 0; x < gameSize +1; x++) {
+				
+				if (x != 0 && y != 0) {
+					if(playersShipsGrid[x-1][y-1]) {//if true, there is no ship underneath
+						buttonGrid[x][y] = new JButton();
+						buttonGrid[x][y].setPreferredSize(new Dimension(dim, dim));
+						shipBoard.add(buttonGrid[x][y]);
+						buttonGrid[x][y].addActionListener(setShipsController);
+						System.out.println("x:"+ x +", y:"+y);
+					}
+					else {
+						buttonGrid[x][y] = new JButton();
+						buttonGrid[x][y].setPreferredSize(new Dimension(dim, dim));
+						buttonGrid[x][y].setBackground(Color.BLACK);
+						buttonGrid[x][y].setOpaque(true);
+						shipBoard.add(buttonGrid[x][y]);
+					}
+				}
+				else if (x == 0) {
+					if (y != 0) {
+						JTextField t = new JTextField(COLUMNS[y]);
+						t.setEditable(false);
+						t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
+						t.setPreferredSize(new Dimension(dim, dim));
+						shipBoard.add(t);
+					} 
+					else {
+						JTextField t = new JTextField();
+						t.setEditable(false);
+						t.setPreferredSize(new Dimension(dim, dim));
+						shipBoard.add(t);
+					}
+				} 
+
+				else if (y == 0) {
+					JTextField t = new JTextField(ROWS[x]);
+					t.setEditable(false);
+					t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
+					shipBoard.add(t);
+				}
+			}
+		}
 		add(shipBoard, BorderLayout.SOUTH);
-	//	add(mainframe, BorderLayout.WEST);
-		this.setMainFrame();
-		System.out.println("ciao sono il modello di setship");
-		
-	 //	gridTable.setBackground(Color.GREEN);
+		shipBoard.setVisible(true);
+	}
 	
+	public void updateButtonGrid() {
+		int gameSize = model.getGameSize();
+		boolean[][] playersShipsGrid  = new boolean[gameSize][gameSize];
+		playersShipsGrid = model.getPlayer().getShipsGrid();
+		//this.shipBoard = new JPanel();
+		//this.shipBoard.setLayout(new GridLayout(gameSize + 1, gameSize + 1));
+		//this.buttonGrid = new JButton[gameSize][gameSize];//[COLUMNS.length][ROWS.length];
 		
+		for (int y = 0; y < gameSize + 1; y++) {
+			for (int x = 0; x < gameSize +1; x++) {
+				if (x != 0 && y != 0) {
+					if(!playersShipsGrid[x-1][y-1]) {
+						buttonGrid[x][y].setBackground(Color.BLACK);
+						buttonGrid[x][y].setEnabled(false);
+						buttonGrid[x][y].setOpaque(true);
+					}
+				}
+			}
+		}
+		//setBackground(Color.BLUE);
+		shipBoard.setVisible(true);
+	}
 	
-		
+	public JButton[][] getButtonGrid() {
+		return buttonGrid;
+	}
+	
+	public JButton getButtonFromButtonGrid(int i, int j) {
+		return buttonGrid[i][j];
 	}
 	
 	//methods
@@ -121,188 +284,32 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		return WIDTH;
 	}
 	
-	
 	public int getHeight() {
 		return HEIGHT;
 	}
 	
-	
-	public final void setNaveInputFrame1() 
-	{
-		frame1.setLayout(new GridLayout());
-		
-		JPanel input = new JPanel();
-		/*JTextField textoIndicatico = new JTextField();
-		textoIndicatico.setText("Benvenuto");
-		textoIndicatico.setEditable(false);
-		input.add(textoIndicatico);
-		*/
-		//alloco un array di stringhe della dimensione dell'arraylist di navi del giocatore
-		String[] playersShips = new String[model.getPlayer().getShipList().size()];
-		playersShips = getPlayersShipsStrings(model);
-		
-		chooseShip = new JComboBox(playersShips);
-		chooseShip.setSelectedIndex(0);  // Per impostare la nave zero come nave di default visibile dal giocatore sul combox box
-		
-		
-
-		TitledBorder titolo;
-		titolo = BorderFactory.createTitledBorder("Ship (length)");
-		//titolo.setTitleJustification(TitledBorder.CENTER);
-		chooseShip.setBorder(titolo);
-		input.add(chooseShip);
-
-		
-		chooseDirection = new JComboBox(direction);
-		chooseDirection.setSelectedIndex(0);
-		
-		titolo = BorderFactory.createTitledBorder("Direction");
-		chooseDirection.setBorder(titolo);
-		input.add(chooseDirection);
-		
-		randomSetShips = new JButton("Random set");
-		randomSetShips.setEnabled(true);
-		input.add(randomSetShips);
-		
-		play = new JButton("Play");
-		play.setEnabled(true);
-		input.add(play);
-		
-	    clean = new JButton("Clear");
-		play.setEnabled(true);
-		input.add(clean);
-
-		frame1.add(input);
-		frame1.setVisible(true);
-		
+	@Override
+	public void update(Observable o, Object arg) {
+		this.remove(shipBoard);
+		setDropDownAndButtonsPanel();
+		updateDropDownAndButtonsPanel();
+		//createButtonGrid();
+		updateButtonGrid();
 		
 	}
-	
-	public JPanel getNaveInputFrame1() {
-		// TODO Auto-generated method stub
-		return frame1;
-	}
-	
-	
-	public final void setPosizionaNaveGrigliaInput() 
-	{
-	 
-	 shipBoard.setLayout(new GridLayout(model.getGameSize()+1, model.getGameSize()+1));
-		grid = new JButton[COLUMNS.length][ROWS.length];
-		for (int y = 0; y < model.getGameSize()+1; y++) {
-
-			for (int x = 0; x < model.getGameSize()+1; x++) {
-
-				if (x != 0 && y != 0) {
-					grid[x][y] = new JButton();
-					grid[x][y].setPreferredSize(new Dimension(15, 15));
-					shipBoard.add(grid[x][y]);
-					//grid[x][y].addActionListener(new PlacementButton());
-				}
-				if (x == 0) {
-					if (y != 0) {
-						JTextField t = new JTextField(COLUMNS[y]);
-						t.setEditable(false);
-						t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
-						shipBoard.add(t);
-					} else {
-						JTextField t = new JTextField();
-						t.setEditable(false);
-						shipBoard.add(t);
-					}
-				} else if (y == 0) {
-					JTextField t = new JTextField(ROWS[x]);
-					t.setEditable(false);
-					t.setHorizontalAlignment((int) JFrame.CENTER_ALIGNMENT);
-					shipBoard.add(t);
-				}
-			}
-		}
-		shipBoard.setVisible(true);
-	
-	}
-	
-	
-	
-	
-	
-	
-	
- 
- public final JPanel getPosizionaNaveGrigliaInput()
-{
-	return shipBoard;
-}
-	
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
 		if(propertyName.equals("setState")) {
 			if(model.getState() == BattleshipState.SETSHIPS) {
-				setPosizionaNaveGrigliaInput();
+				//createButtonGrid();
 				this.setVisible(true);
 			}
 			else
 				this.setVisible(false);
 		}
 	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		
-	}
-	
-	
-	public final void setMainFrame() {
-	
-		
-		
-		
-	}
-	
-	
-	public final JMenuBar getCreateMenuBar() {
-		return mainframe;
-	}
-
-	
-	public void createMenuBar() {
-        //Costruzione della menuBar
-        JMenuBar menuBar = new JMenuBar();
-            JMenu menuFile = new JMenu("Setup");
-                JMenuItem apri = new JMenuItem("Apri");
-                JMenuItem esci = new JMenuItem("Esci");
-                JMenu radioButtonMenu = new JMenu("Setta sfondo");
-                    JRadioButtonMenuItem buttonBlue = new JRadioButtonMenuItem("Blue");
-                    JRadioButtonMenuItem buttonRed = new JRadioButtonMenuItem("Rosso");
-                    JRadioButtonMenuItem buttonGreen = new JRadioButtonMenuItem("Verde");
-                    ButtonGroup group = new ButtonGroup();
-                    group.add(buttonBlue);
-                    group.add(buttonGreen);
-                    group.add(buttonRed);
-                radioButtonMenu.add(buttonBlue);
-                radioButtonMenu.add(buttonGreen);
-                radioButtonMenu.add(buttonRed);
-            menuFile.add(apri);
-            menuFile.add(radioButtonMenu);//popup pull-right
-            menuFile.addSeparator();
-            menuFile.add(esci);
-            JMenu menuHelp = new JMenu("Aiuto");
-        menuBar.add(menuFile);
-        menuBar.add(menuHelp);
-        //Listeners
-      
-        esci.addActionListener(new ExitActionListener());
-        menuBar.setVisible(true);
-    }
-
-	
-	  private class ExitActionListener implements ActionListener {
-	        public void actionPerformed(ActionEvent e) {
-	            System.exit(0);
-	        }
-	    }
 	
 	/**
 	 * Returns the String array representation of the list of Player's Ships
@@ -312,6 +319,14 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	public String[] getPlayersShipsStrings(BattleshipModel model) {
 		int playerShipsNo = model.getPlayer().getShipList().size();
 		String[] stringArray = new String[playerShipsNo];
+		
+		//if there are no more ships:
+		if(playerShipsNo == 0) {
+			stringArray = new String[1];
+			stringArray[0] = "NO SHIPS LEFT!";
+		}
+		
+		//if there is at least one ship:
 		int i = 0;
 		while(i < playerShipsNo) {
 			Ship currentShip = model.getPlayer().getShipList().get(i);
@@ -345,23 +360,4 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		}
 		return stringArray;
 	}
-	
-	
-	public static void main(String[] args) {
-		BattleshipModel m = new BattleshipModel();
-		m.newGame(new Player(10), new Computer(10, ComputerType.STUPID), 10, false);
-		SetShipsController controller = new SetShipsController(m);
-		SetShipsPanel bsp = new SetShipsPanel(m,  controller);
-		JFrame a = new JFrame();
-		//frame.setSize(600, 600);
-		//frame.setTitle(bsp.getTitle());
-	//	frame.setLayout(new FlowLayout());
-		a.setContentPane(bsp);
-		a.getContentPane();
-		a.pack();
-		a.setVisible(true);
-	}
-	
-	
-
 }
