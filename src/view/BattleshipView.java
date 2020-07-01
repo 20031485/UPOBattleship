@@ -92,7 +92,7 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 					break;
 				
 				case SETSHIPS:
-					System.out.println("ciao paco");
+					//System.out.println("ciao paco");
 					setTitle(setShipsPanel.getTitle());
 					
 					

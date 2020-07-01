@@ -75,7 +75,7 @@ public class Player implements Serializable{
 				break;
 				
 			case 10:
-				ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				ship = new Ship(ShipType.CACCIATORPEDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
 				shipList.add(ship);
 				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
 				shipList.add(ship);
@@ -88,7 +88,7 @@ public class Player implements Serializable{
 				break;
 				
 			case 15:
-				ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				ship = new Ship(ShipType.CACCIATORPEDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
 				shipList.add(ship);
 				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
 				shipList.add(ship);
@@ -105,7 +105,7 @@ public class Player implements Serializable{
 				break;
 				
 			case 20:
-				ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				ship = new Ship(ShipType.CACCIATORPEDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
 				shipList.add(ship);
 				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
 				shipList.add(ship);
@@ -115,7 +115,7 @@ public class Player implements Serializable{
 				shipList.add(ship);
 				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.CACCIATORPERDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				ship = new Ship(ShipType.CACCIATORPEDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
 				shipList.add(ship);
 				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
 				shipList.add(ship);

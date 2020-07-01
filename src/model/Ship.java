@@ -54,6 +54,14 @@ public class Ship implements Serializable{
 	}
 	
 	/**
+	 * Returns the type of the Ship
+	 * @return The type of the Ship
+	 */
+	public ShipType getShipType() {
+		return shipType;
+	}
+
+	/**
 	 * A method for assigning an absolute position to a Ship object
 	 * and then positioning it onto a Player's shipsGrid
 	 * @param x The row coordinate for positioning the Ship
