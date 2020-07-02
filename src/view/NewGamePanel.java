@@ -75,6 +75,7 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 		//instance its own controller
 		this.newGameController = new NewGameController(model, this);
 		this.model.addPropertyChangeListener(this);
+		System.out.println("NewGamePanel: " + model.toString());
 		
 		//settings
 		this.setSize(WIDTH, HEIGHT);

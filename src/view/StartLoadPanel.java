@@ -33,6 +33,7 @@ public class StartLoadPanel extends JPanel implements PropertyChangeListener{
 		this.model = model;
 		this.controller =  new StartLoadController(model, this);//controller;
 		this.model.addPropertyChangeListener(this); //view listens to model
+		System.out.println("StartLoadPanel: " + model.toString());
 		
 		//settings
 		this.setLayout(new BorderLayout());
