@@ -203,8 +203,8 @@ public class Player extends AbstractPlayer implements Serializable{
 	 * @param col The column coordinate being hit
 	 */
 	public void isHit(int row, int col) {
-		hitsGrid[row][col] = false;
-		shipsGrid[row][col] = true;
+		hitsGrid[row][col] = false;//there IS a hit
+		shipsGrid[row][col] = true;//there is NOT a ship
 		PlayerState newState = PlayerState.WATER;
 		for(int i = 0; i < placedShips.size(); ++i) {
 			Ship ship = this.placedShips.get(i);

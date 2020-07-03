@@ -44,6 +44,9 @@ public class BattleController implements ActionListener{
 						col = j;
 						//TODO hit computer at the coordinates
 						System.out.println("row = "+ row +", col = "+ col);
+						//model.getComputer().isHit(row, col);
+						model.hitAndGetHit(row, col);
+						System.out.println(model.getComputer().toString());
 					}
 				}
 			}

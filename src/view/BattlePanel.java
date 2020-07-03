@@ -32,7 +32,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	
 	private static final String TITLE = "BATTLE!";
 	private static final int WIDTH = 1000;
-	private static final int HEIGHT = 550;
+	private static final int HEIGHT = 560;
 	
 	private JPanel bothGridsPanel;
 	
@@ -91,6 +91,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 			JLabel label = new JLabel("Un bellissimo timer");
 			label.setHorizontalAlignment(JLabel.CENTER);
 			label.setFont(new Font("Monospace", Font.PLAIN, 20));
+			label.setBorder(timerTitle);
 			timerPanel.add(label);
 			add(timerPanel, BorderLayout.NORTH);
 		}
@@ -225,8 +226,8 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		boolean[][] hitsGrid = new boolean[gameSize][gameSize];
 		hitsGrid = model.getPlayer().getHitsGrid();
 		
-		for(int i = 0; i < gameSize + 1; ++i) {
-			for(int j = 0; j < gameSize + 1; ++j) {
+		for(int i = 0; i < gameSize; ++i) {
+			for(int j = 0; j < gameSize; ++j) {
 				//if there are no ships and no hits (true/true)
 				if(shipsGrid[i][j] && hitsGrid[i][j]) {
 					//doesn't touch the button
@@ -240,13 +241,13 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				//if there are no ships but hits (true/false)
 				else if(shipsGrid[i][j] && !hitsGrid[i][j]) {
 					shipsButtonGrid[i][j].setBackground(Color.BLUE);
-					//shipsButtonGrid[i-1][j-1].setOpaque(true);
+					shipsButtonGrid[i][j].setOpaque(true);
 				}
 				
 				//if there are both ships and hits (false/false)
 				else if(!shipsGrid[i][j] && !hitsGrid[i][j]) {
 					shipsButtonGrid[i][j].setBackground(Color.RED);
-					//shipsButtonGrid[i-1][j-1].setOpaque(true);
+					shipsButtonGrid[i][j].setOpaque(true);
 				}
 			}
 		}
@@ -306,44 +307,8 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 					hitsButtonGrid[i-1][j-1] = new JButton();
 					hitsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
 					hitsButtonGrid[i-1][j-1].setBackground(Color.WHITE);
-					shipsButtonGrid[i-1][j-1].addActionListener(controller);
+					hitsButtonGrid[i-1][j-1].addActionListener(controller);
 					hitsGridPanel.add(hitsButtonGrid[i-1][j-1]);
-					/*
-					//if there are no ships and no hits (true/true)
-					if(shipsGrid[i-1][j-1] && hitsGrid[i-1][j-1]) {
-						hitsButtonGrid[i-1][j-1] = new JButton();
-						hitsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
-						hitsButtonGrid[i-1][j-1].setBackground(Color.WHITE);
-						shipsButtonGrid[i-1][j-1].addActionListener(controller);
-						hitsGridPanel.add(hitsButtonGrid[i-1][j-1]);
-					}
-					//if there are ships but no hits (false/true)
-					else if(!shipsGrid[i-1][j-1] && hitsGrid[i-1][j-1]){
-						hitsButtonGrid[i-1][j-1] = new JButton();
-						hitsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
-						hitsButtonGrid[i-1][j-1].setBackground(Color.BLACK);
-						hitsButtonGrid[i-1][j-1].setOpaque(true);
-						hitsButtonGrid[i-1][j-1].setEnabled(false);
-						hitsGridPanel.add(hitsButtonGrid[i-1][j-1]);
-					}
-					//if there are no ships but hits (true/false)
-					else if(shipsGrid[i-1][j-1] && !hitsGrid[i-1][j-1]) {
-						hitsButtonGrid[i-1][j-1] = new JButton();
-						hitsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
-						hitsButtonGrid[i-1][j-1].setBackground(Color.BLUE);
-						hitsButtonGrid[i-1][j-1].setOpaque(true);
-						hitsButtonGrid[i-1][j-1].setEnabled(false);
-						hitsGridPanel.add(hitsButtonGrid[i-1][j-1]);
-					}
-					//if there are both ships and hits (false/false)
-					else if(!shipsGrid[i-1][j-1] && !hitsGrid[i-1][j-1]) {
-						hitsButtonGrid[i-1][j-1] = new JButton();
-						hitsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
-						hitsButtonGrid[i-1][j-1].setBackground(Color.RED);
-						hitsButtonGrid[i-1][j-1].setOpaque(true);
-						hitsButtonGrid[i-1][j-1].setEnabled(false);
-						hitsGridPanel.add(hitsButtonGrid[i-1][j-1]);
-					}*/
 				}
 			}
 		}
@@ -356,34 +321,38 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		int gameSize = model.getGameSize();
 		
 		boolean[][] shipsGrid = new boolean[gameSize][gameSize];
-		shipsGrid = model.getPlayer().getShipsGrid();
+		shipsGrid = model.getComputer().getShipsGrid();
 		
 		boolean[][] hitsGrid = new boolean[gameSize][gameSize];
-		hitsGrid = model.getPlayer().getHitsGrid();
+		hitsGrid = model.getComputer().getHitsGrid();
 		
-		for(int i = 0; i < gameSize + 1; ++i) {
-			for(int j = 0; j < gameSize + 1; ++j) {
+		for(int i = 0; i < gameSize; ++i) {
+			for(int j = 0; j < gameSize; ++j) {				
 				//if there are no ships and no hits (true/true)
 				if(shipsGrid[i][j] && hitsGrid[i][j]) {
-					//doesn't touch the button
+					
 				}
 				
 				//if there are ships but no hits (false/true)
 				else if(!shipsGrid[i][j] && hitsGrid[i][j]){
-					//doesn't touch the button
+					
 				}
 				
 				//if there are no ships but hits (true/false)
 				else if(shipsGrid[i][j] && !hitsGrid[i][j]) {
+					System.out.println("ship:" + shipsGrid[i][j] + "\thit: "+hitsGrid[i][j]);
+					System.out.println("\nBLUE\n");
 					hitsButtonGrid[i][j].setBackground(Color.BLUE);
-					shipsButtonGrid[i-1][j-1].setOpaque(true);
+					hitsButtonGrid[i][j].setOpaque(true);
 					hitsButtonGrid[i][j].setEnabled(false);
 				}
 				
 				//if there are both ships and hits (false/false)
 				else if(!shipsGrid[i][j] && !hitsGrid[i][j]) {
+					System.out.println("ship:" + shipsGrid[i][j]+"\thit: " + hitsGrid[i][j]);
+					System.out.println("\nRED\n");
 					hitsButtonGrid[i][j].setBackground(Color.RED);
-					shipsButtonGrid[i-1][j-1].setOpaque(true);
+					hitsButtonGrid[i][j].setOpaque(true);
 					hitsButtonGrid[i][j].setEnabled(false);
 				}
 			}
