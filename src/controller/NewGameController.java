@@ -68,7 +68,7 @@ public class NewGameController implements ActionListener{
 						//model = new BattleshipModel(gameSize);
 						//model.setGameSize(gameSize);
 						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed);
-						model.getPlayer().randomSetShips();
+						//model.getPlayer().randomSetShips();
 						System.out.println("model.newGame(new Player("+gameSize+"), new Computer("+gameSize+", "+computerType+"), "+gameSize+", "+timed+")");
 						System.out.println("GameSize: "+model.getGameSize());
 						System.out.println(model.getPlayer().toString());

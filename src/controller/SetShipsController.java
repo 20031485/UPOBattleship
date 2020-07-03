@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import model.BattleshipModel;
 import view.SetShipsPanel;
 import utils.BattleshipState;
+import utils.ShipDirection;
 
 public class SetShipsController implements ActionListener{
 	//attributes
@@ -23,39 +24,54 @@ public class SetShipsController implements ActionListener{
 	//methods
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		AbstractButton source = (AbstractButton)e.getSource();
+		JButton source = (JButton) e.getSource();
 		int gameSize = model.getGameSize();
-		int row, column;
+		int row, col;
 		
 		String command = source.getText();
 		if(command.equals("RANDOM")) {
 			System.out.println("Random Set pressed");
 			model.getPlayer().randomSetShips();
-			//setShipsPanel.setAllComponents();
 			System.out.println(model.getPlayer().toString());
 		}
+		
 		if(command.equals("CLEAR")) {
 			System.out.println("Clear pressed");
 			model.getPlayer().clearShips();
-			//setShipsPanel.setAllComponents();
+			model.getPlayer().clearShips();
+			model.getPlayer().clearShips();
 		}
+		
 		if(command.equals("PLAY")) {
 			System.out.println("PLAY pressed");
 			model.setState(BattleshipState.BATTLE);
 			System.out.println(model.getPlayer().toString());
 		}
+		
 		else {
 			for(int i = 0; i < gameSize; ++i) {
 				for(int j = 0; j < gameSize; ++j) {
 					if(source == setShipsPanel.getButtonFromButtonGrid(i, j)) {
 						row = i;
-						column = j;
-						System.out.println("x = "+i+", y = "+j);
+						col = j;
+						System.out.println("row = "+ row +", col = "+ col);
+						int shipIndex = setShipsPanel.getChooseShip().getSelectedIndex();
+						
+						ShipDirection direction;
+						int directionIndex = setShipsPanel.getChooseDirection().getSelectedIndex();
+						
+						if(directionIndex == 0)
+							direction = ShipDirection.VERTICAL;
+						else
+							direction = ShipDirection.HORIZONTAL;
+						
+						model.getPlayer().setShip(shipIndex, row, col, direction);
+						System.out.println("model.getPlayer().setShip("+shipIndex+", "+row+", "+col+", "+direction+")");
 					}
 				}
 			}
-			System.out.println("x = "+source.getX()/20+", y = "+source.getY()/20);
 		}
+		System.out.println(model.getPlayer().toString());
 	}
 
 }

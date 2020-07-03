@@ -2,10 +2,11 @@
 Java project for the Programming Paradigms course at University of Eastern Piedmont, Vercelli (IT).
 
 # Latest additions/fixes
- - Slowly adding JavaDOC to all public methods and classes and creating tests for model classes.
+Ships can now be successfully set, even randomly.
 
 # TODO
- - [ ] Implement `SetShipsPanel` -- **ongoing**;
+ - [x] Implement `SetShipsPanel`;
+ - [ ] Implement minor fixes in `SetShipsPanel` (i.e. panel size, colors... minor stuff);
  - [ ] Implement `SetShipsController`-- **ongoing**;
  - [ ] Implement `BattlePanel`;
  - [ ] Implement `BattleController`;

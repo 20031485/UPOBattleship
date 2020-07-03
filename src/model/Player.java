@@ -197,7 +197,6 @@ public class Player extends AbstractPlayer implements Serializable{
 			}
 	}
 	
-	//funzione da chiamare quando viene ricevuto un colpo
 	/**
 	 * Method mimicking an incoming hit to the {@code Player}
 	 * @param row The row coordinate being hit
@@ -218,10 +217,8 @@ public class Player extends AbstractPlayer implements Serializable{
 				}
 			}
 		}
+		//includes setChanged and notifyObservers
 		setState(newState);
-		//the next two instructions are included in "setState()"
-		//setChanged();
-		//notifyObservers();
 	}
 	
 	/**
@@ -252,15 +249,16 @@ public class Player extends AbstractPlayer implements Serializable{
 				//tolgo una nave dalla lista delle navi disponibili e la aggiungo alla lista delle navi piazzate
 				this.placedShips.add(this.shipList.get(shipIndex));
 				this.shipList.remove(shipIndex);
-				setChanged();
-				notifyObservers();
 			}
-			//else
-				//System.err.println("No room for this ship!");
+			else
+				System.err.println("No room for this ship!");
 		}
 		catch(IndexOutOfBoundsException e) {
 			System.err.println("No more ships for this player!");
 		}
+		//update the view anyway
+		setChanged();
+		notifyObservers();
 	}
 	
 	/**
@@ -291,10 +289,11 @@ public class Player extends AbstractPlayer implements Serializable{
 			placedShips.get(i).removeShip();
 			//rimuovo la nave dalla lista delle navi posizionate
 			placedShips.remove(i);
-			setChanged();
-			notifyObservers();
 		}
 		resetShipsGrid();
+		
+		setChanged();
+		notifyObservers();
 	}
 	
 	/**
@@ -310,8 +309,6 @@ public class Player extends AbstractPlayer implements Serializable{
 		for(int i = 0; i < shipsGrid.length; ++i)
 			for(int j = 0; j < shipsGrid.length; ++j)
 				shipsGrid[i][j] = true;
-		setChanged();
-		notifyObservers();
 	}
 	
 	//controlla se ci sono ancora (pezzi di) navi sulla griglia del giocatore
