@@ -282,13 +282,13 @@ public class Player extends AbstractPlayer implements Serializable{
 	 * Removes all {@code Player}'s {@code Ship}s from its game grid
 	 */
 	public void clearShips() {
-		for(int i = 0; i < placedShips.size(); ++i) {
+		while(placedShips.size() != 0) {
 			//aggiungo una nave che c'è sulla griglia alla lista delle navi disponibili
-			shipList.add(placedShips.get(i));
+			shipList.add(placedShips.get(0));
 			//resetto la sua absolutePosition (campo di Ship)
-			placedShips.get(i).removeShip();
+			placedShips.get(0).removeShip();
 			//rimuovo la nave dalla lista delle navi posizionate
-			placedShips.remove(i);
+			placedShips.remove(0);
 		}
 		resetShipsGrid();
 		

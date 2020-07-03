@@ -66,7 +66,7 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	 */
 	public SetShipsPanel(BattleshipModel model) {
 		this.model = model;
-		this.controller = new SetShipsController(model, this);
+		this.controller = new SetShipsController(model, this);//getNewController
 		//System.out.println("SetShipsPanel: " + model.toString());
 		this.setLayout(new FlowLayout());
 		this.setSize(WIDTH, HEIGHT);
@@ -281,29 +281,6 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	}
 	
 	//methods
-
-	
-	@Override
-	public void update(Observable o, Object arg) {
-		updateAllComponents();
-		
-	}
-	
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String propertyName = evt.getPropertyName();
-		if(propertyName.equals("setState")) {
-			if(model.getState() == BattleshipState.SETSHIPS) {
-				//set the two panels with their content
-				setAllComponents();
-				System.out.println("setAllComponents() launched from propertyChange()");
-				this.setVisible(true);
-			}
-			else
-				this.setVisible(false);
-		}
-	}
-	
 	/**
 	 * Returns the String array representation of the list of Player's Ships
 	 * @param model The BattleshipModel object
@@ -366,11 +343,30 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		return HEIGHT;
 	}
 	
-	public JComboBox getChooseShip() {
+	public JComboBox<String> getChooseShip() {
 		return chooseShip;
 	}
 	
-	public JComboBox getChooseDirection() {
+	public JComboBox<String> getChooseDirection() {
 		return chooseDirection;
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		updateAllComponents();
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		String propertyName = evt.getPropertyName();
+		if(propertyName.equals("setState")) {
+			if(model.getState() == BattleshipState.SETSHIPS) {
+				//set the two panels with their content
+				setAllComponents();
+				this.setVisible(true);
+			}
+			else
+				this.setVisible(false);
+		}
 	}
 }

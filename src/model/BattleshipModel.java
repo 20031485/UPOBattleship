@@ -58,8 +58,6 @@ public class BattleshipModel extends Observable implements Serializable{
 		this.timed = false;
 		this.player = null;
 		this.computer = null;
-		setChanged();
-		notifyObservers();
 	}
 	
 	public BattleshipModel(int gameSize) {
@@ -71,8 +69,6 @@ public class BattleshipModel extends Observable implements Serializable{
 		if(timed) {
 			//TODO implement timer
 		}
-		setChanged();
-		notifyObservers();
 	}
 	
 	//ComputerType is initialized from Computer's constructor (passed as new Computer(...))
@@ -85,12 +81,18 @@ public class BattleshipModel extends Observable implements Serializable{
 		if(timed) {
 			//TODO implement timer
 		}
-		setChanged();
-		notifyObservers();
 	}
 	
 	
 	//methods
+	
+	public boolean isTimed() {
+		return this.timed;
+	}
+	
+	public boolean isJustSaved() {
+		return this.justSaved;
+	}
 	
 	//MVC VERSION
 	public BattleshipState getState() {

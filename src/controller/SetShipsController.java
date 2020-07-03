@@ -27,31 +27,32 @@ public class SetShipsController implements ActionListener{
 		JButton source = (JButton) e.getSource();
 		int gameSize = model.getGameSize();
 		int row, col;
-		
 		String command = source.getText();
+		
 		if(command.equals("RANDOM")) {
 			System.out.println("Random Set pressed");
+			model.getPlayer().clearShips();
 			model.getPlayer().randomSetShips();
 			//System.out.println(model.getPlayer().toString());
 		}
 		
 		if(command.equals("CLEAR")) {
-			System.out.println("Clear pressed");
 			model.getPlayer().clearShips();
-			model.getPlayer().clearShips();
-			model.getPlayer().clearShips();
+			//model.getPlayer().clearShips();
+			//model.getPlayer().clearShips();
 		}
 		
 		if(command.equals("PLAY")) {
 			System.out.println("PLAY pressed");
+			model.getComputer().randomSetShips();
+			
 			model.setState(BattleshipState.BATTLE);
-			//System.out.println(model.getPlayer().toString());
+			System.out.println(model.getPlayer().toString());
+			System.out.println(model.getComputer().toString());
 		}
 		
 		if(command.equals("BACK")) {
-			System.out.println("BACK pressed");
 			model.setState(BattleshipState.NEWGAME);
-			//System.out.println(model.getPlayer().toString());
 		}
 		
 		else {
@@ -79,5 +80,4 @@ public class SetShipsController implements ActionListener{
 		}
 		System.out.println(model.getPlayer().toString());
 	}
-
 }

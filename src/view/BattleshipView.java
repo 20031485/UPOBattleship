@@ -64,6 +64,10 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 		add(setShipsPanel);
 		setShipsPanel.setVisible(false);
 		
+		battlePanel = new BattlePanel(model);
+		add(battlePanel);
+		battlePanel.setVisible(false);
+		
 		setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
 		setTitle("WELCOME: "+startLoadPanel.getTitle());
 		setVisible(true);
@@ -97,7 +101,7 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 				
 				case SETSHIPS:
 					setTitle(setShipsPanel.getTitle());
-					setShipsPanel = new SetShipsPanel(model/*, controller.getSetShipsController()*/);
+					//setShipsPanel = new SetShipsPanel(model/*, controller.getSetShipsController()*/);
 					//add(setShipsPanel);
 					setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
 					//setShipsPanel.setVisible(true);
