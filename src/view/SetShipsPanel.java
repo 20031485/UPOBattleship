@@ -250,6 +250,8 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 					buttonGrid[i][j].setBackground(Color.WHITE);
 					buttonGrid[i][j].setOpaque(false);
 					buttonGrid[i][j].setEnabled(true);
+					if(model.getPlayer().getShipList().size() == 0)
+						buttonGrid[i][j].setEnabled(false);
 				}
 			}
 		}
