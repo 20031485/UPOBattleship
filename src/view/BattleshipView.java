@@ -101,7 +101,7 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 					//add(setShipsPanel);
 					setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
 					//setShipsPanel.setVisible(true);
-					//this.pack();
+					//this.pack();//activated when created!
 					break;
 					
 				default:

@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -20,7 +21,7 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 	
 	//attributes
 	private static final int WIDTH = 400;
-	private static final int HEIGHT = 250;
+	private static final int HEIGHT = 225;
 	private static final String TITLE = "NEW GAME SETTINGS";
 
 	//model
@@ -188,13 +189,17 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 		timedPanel.add(timed15minsButton);
 		buttonPanel.add(timedCheckBox);
 		buttonPanel.add(timedPanel);
+		buttonPanel.add(confirmButton);
+		buttonPanel.add(backButton);
+		//buttonPanel.setBackground(Color.BLUE);
 		
-		confirmBackButtonPanel.add(confirmButton);
-		confirmBackButtonPanel.add(backButton);
+		//confirmBackButtonPanel.add(confirmButton);
+		//confirmBackButtonPanel.add(backButton);
 
+		//confirmBackButtonPanel.setBackground(Color.RED);
 		//NewGamePanel
 		this.add(buttonPanel, BorderLayout.CENTER);
-		this.add(confirmBackButtonPanel, BorderLayout.AFTER_LAST_LINE);
+		//this.add(confirmBackButtonPanel, BorderLayout.PAGE_END);
 	}
 	
 	//methods

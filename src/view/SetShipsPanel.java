@@ -38,8 +38,9 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	private static final String[] COLUMNS = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
 	private static String[] direction = { "VERTICAL", "HORIZONTAL" };
 	
-	private static final int WIDTH = 700;
-	private static final int HEIGHT = 500;
+	//base dimensions
+	private int WIDTH = 700;
+	private int HEIGHT = 700;
 	
 	private JPanel dropDownAndButtonsPanel; //panel hosting buttons and dropdown menus
 	private JPanel shipsPanel; //panel on which the buttonGrid will be shown
@@ -76,6 +77,13 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	
 	
 	public void setAllComponents() {
+		if(model.getGameSize() == 10)
+			setSize(WIDTH, HEIGHT);
+		if(model.getGameSize() == 15)
+			setSize(WIDTH, HEIGHT+50);
+		if(model.getGameSize() == 20)
+			setSize(WIDTH, HEIGHT+100);
+		
 		//observe player
 		this.model.getPlayer().addObserver(this);
 		setDropDownAndButtonsPanel();
