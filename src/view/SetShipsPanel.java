@@ -55,6 +55,7 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	private JButton clearShips;
 	//private JButton randomSetOne;
 	private JButton randomSetAll;
+	private JButton back;
 	
 
 	/**
@@ -131,6 +132,12 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 			play.setEnabled(false);
 		play.addActionListener(controller);
 		dropDownAndButtonsPanel.add(play);
+		
+		//button that deletes all ships from the grid
+		back = new JButton("BACK");
+		back.setEnabled(true);
+		back.addActionListener(controller);
+		dropDownAndButtonsPanel.add(back);
 		
 		dropDownAndButtonsPanel.setVisible(true);
 		add(dropDownAndButtonsPanel);
