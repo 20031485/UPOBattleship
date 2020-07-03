@@ -50,9 +50,6 @@ public class NewGameController implements ActionListener{
 						if(newGamePanel.hardModeButton.isSelected())
 							computerType = ComputerType.SMART;
 						
-						if(newGamePanel.sizeSButton.isSelected())//da togliere
-							System.out.println("\t5x5");
-						
 						if(newGamePanel.sizeMButton.isSelected())
 							gameSize = 10;
 						

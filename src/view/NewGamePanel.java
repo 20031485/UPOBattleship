@@ -20,8 +20,8 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
 	
 	//attributes
-	private static final int WIDTH = 400;
-	private static final int HEIGHT = 225;
+	private static final int WIDTH = 1000;//400
+	private static final int HEIGHT = 500;//225
 	private static final String TITLE = "NEW GAME SETTINGS";
 
 	//model
@@ -106,19 +106,20 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 		
 		hardModeButton = new JRadioButton("hard as hell");
 		
-		sizeSButton = new JRadioButton("5x5");
 		sizeMButton = new JRadioButton("10x10");
 		sizeMButton.setSelected(true);
 		sizeLButton = new JRadioButton("15x15");
 		sizeXLButton = new JRadioButton("20x20");
+		
+		timedCheckBox = new JCheckBox("Timed");
+		timedCheckBox.setSelected(false);
 		
 		timed5minsButton = new JRadioButton("5mins");
 		timed5minsButton.setSelected(true);
 		timed10minsButton = new JRadioButton("10mins");
 		timed15minsButton = new JRadioButton("15mins");
 		
-		timedCheckBox = new JCheckBox("Timed");
-		timedCheckBox.setSelected(false);
+		
 		
 		//all buttonGroups		
 		radioButtonModeGroup = new ButtonGroup();
@@ -147,12 +148,15 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 		
 		gameModePanel = new JPanel();
 		gameModePanel.setLayout(new BorderLayout());
+		gameModePanel.setBackground(Color.BLUE);
 			
 		confirmBackButtonPanel = new JPanel();
 		confirmBackButtonPanel.setLayout(new FlowLayout());
+		confirmBackButtonPanel.setBackground(Color.GREEN);
 		
 		radioButtonSizePanel = new JPanel();
 		radioButtonSizePanel.setLayout(new FlowLayout());
+		radioButtonSizePanel.setBackground(Color.YELLOW);
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
@@ -161,7 +165,8 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 		chooseGameModePanel.setLayout(new BorderLayout());
 		
 		timedPanel = new JPanel();
-		timedPanel.setLayout(new FlowLayout());
+		timedPanel.setLayout(new BorderLayout());
+		timedPanel.setBackground(Color.BLUE);
 	
 		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
 		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
@@ -175,7 +180,6 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 		chooseGameModePanel.add(difficultyPanel, BorderLayout.EAST);
 				
 		radioButtonSizePanel.add(gridSizeLabel);
-		radioButtonSizePanel.add(sizeSButton);
 		radioButtonSizePanel.add(sizeMButton);
 		radioButtonSizePanel.add(sizeLButton);
 		radioButtonSizePanel.add(sizeXLButton);
@@ -183,11 +187,13 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 		buttonPanel.add(chooseGameModePanel);
 		buttonPanel.add(radioButtonSizePanel);
 		
+		timedPanel.add(timedCheckBox, BorderLayout.NORTH);
+		timedPanel.add(timed5minsButton, BorderLayout.CENTER);
+		timedPanel.add(timed10minsButton, BorderLayout.CENTER);
+		timedPanel.add(timed15minsButton, BorderLayout.CENTER);
+		timedPanel.setBackground(Color.BLACK);
 		
-		timedPanel.add(timed5minsButton);
-		timedPanel.add(timed10minsButton);
-		timedPanel.add(timed15minsButton);
-		buttonPanel.add(timedCheckBox);
+		//buttonPanel.add(timedCheckBox);
 		buttonPanel.add(timedPanel);
 		buttonPanel.add(confirmButton);
 		buttonPanel.add(backButton);
