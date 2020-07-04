@@ -7,18 +7,23 @@ import java.io.FileNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import model.BattleshipModel;
+import model.Computer;
 import model.Player;
+import utils.ComputerType;
 
 class BattleshipModelTest {
 
 	@Test
 	void test() {
-		Player p1 = new Player("P1");
-		Player p2 = new Player("P2");
-		BattleshipModel bm = new BattleshipModel(p1, p2, 15, false);
+		int gameSize = 10;
+		Player p1 = new Player(gameSize);
+		Computer p2 = new Computer(gameSize, ComputerType.STUPID);
+		p1.randomSetShips();
+		p2.randomSetShips();
+		
+		BattleshipModel bm = new BattleshipModel(p1, p2, gameSize, false);
 		assert(bm != null);
-		p1.setScore(25);
-		p2.setScore(43);
+		
 		bm.saveGame();
 		
 		//savedGameExist test
@@ -31,12 +36,16 @@ class BattleshipModelTest {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println(bm.toString());
 		assertEquals(bm, bm2);
 		
 		//newGame test
 		BattleshipModel bm3 = new BattleshipModel();
-		bm3.newGame(p1, p2, 15, false);
+		bm3.newGame(p1, p2, gameSize, false);
 		assertEquals(bm, bm3);
+		System.out.println("\n\nbm:\n"+bm.toString());
+		System.out.println("\n\nbm2:\n"+bm2.toString());
+		System.out.println("\n\nbm3:\n"+bm3.toString());
 	}
 
 }

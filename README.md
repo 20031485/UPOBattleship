@@ -5,14 +5,11 @@ Java project for the Programming Paradigms course at University of Eastern Piedm
 Ships can now be successfully set, even randomly.
 
 # TODO
- - [x] Implement `SetShipsPanel`;
- - [ ] Implement minor fixes in `SetShipsPanel` (i.e. panel size, colors... minor stuff);
- - [ ] Implement `SetShipsController`-- **ongoing**;
- - [ ] Implement `BattlePanel`;
- - [ ] Implement `BattleController`;
- - [ ] Implement `BattleshipModelTest`;
+ - [x] Implement `BattlePanel`;
+ - [x] Implement `BattleController`;
+ - [x] Implement `BattleshipModelTest`;
  - [ ] Check if some `Exception`s can be launched - add them if so;
- - [ ] Implement `Timer` from javax.swing for a basic countdown if the "Timed" box is checked;
+ - [ ] Implement `Timer` - **ongoing** but it still doesn't show up - working on it;
  - [ ] Write JavaDOC - **ongoing**.
 
 # Useful links

@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 
@@ -33,6 +34,13 @@ public class StartLoadController implements ActionListener{
 				break;
 				
 			case "Load game":
+				try {
+					model = BattleshipModel.loadGame();
+					System.out.println("Loaded: " + model.toString());
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				System.out.println("loading saved file... ready to battle?");
 				model.setState(BattleshipState.BATTLE);
 				break;

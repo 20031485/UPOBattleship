@@ -22,6 +22,7 @@ import controller.BattleController;
 import model.BattleshipModel;
 import utils.BattleshipState;
 import utils.Utility;
+import view.CountdownPanel;
 
 public class BattlePanel extends JPanel implements Observer, PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
@@ -37,10 +38,12 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	private JPanel bothGridsPanel;
 	
 	private static final TitledBorder shipsGridTitle = BorderFactory.createTitledBorder("YOUR SHIPS");
+	private JPanel leftPanel;
 	private JPanel shipsGridPanel;
 	private JButton[][] shipsButtonGrid;
 	
 	private static final TitledBorder hitsGridTitle = BorderFactory.createTitledBorder("ENEMY'S SHIPS");
+	private JPanel rightPanel;
 	private JPanel hitsGridPanel;
 	private JButton[][] hitsButtonGrid;
 	
@@ -48,10 +51,18 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	
 	private JButton saveButton;
 	private JButton pauseButton;
+	private JButton rematchButton;
 	
 	private JPanel timerPanel;
+	private CountdownPanel countdownPanel;
 	private static final TitledBorder timerTitle = BorderFactory.createTitledBorder("TIMER");
 	private JLabel timerLabel;
+	
+	private static final String PLAYER_STATUS = "PLAYER STATUS: ";
+	private static final String COMPUTER_STATUS = "COMPUTER STATUS: ";
+	
+	private JLabel playerStatusLabel = new JLabel(PLAYER_STATUS);
+	private JLabel computerStatusLabel = new JLabel(COMPUTER_STATUS);
 
 	
 
@@ -88,11 +99,13 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 			timerPanel.setLayout(new BorderLayout());
 			
 			//TODO set timerPanel content
-			JLabel label = new JLabel("Un bellissimo timer");
-			label.setHorizontalAlignment(JLabel.CENTER);
-			label.setFont(new Font("Monospace", Font.PLAIN, 20));
-			label.setBorder(timerTitle);
-			timerPanel.add(label);
+			//JLabel label = new JLabel("Un bellissimo timer");
+			countdownPanel = new CountdownPanel(1);
+			//label.setHorizontalAlignment(JLabel.CENTER);
+			//label.setFont(new Font("Monospace", Font.PLAIN, 20));
+			//countdownPanel.setBorder(timerTitle);
+			countdownPanel.setVisible(true);
+			timerPanel.add(countdownPanel, BorderLayout.CENTER);
 			add(timerPanel, BorderLayout.NORTH);
 		}
 		
@@ -108,7 +121,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		
 		//create panel with buttons
 		setButtonsPanel();
-		
+		countdownPanel.countdownStart();
 	}
 	
 	public void updateAllComponents() {
@@ -116,10 +129,19 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		
 		updateHitsGrid();
 		
-		if(model.isJustSaved())
+		if(!model.isJustSaved())
 			saveButton.setEnabled(false);
 		else
 			saveButton.setEnabled(true);
+	}
+	
+	public void removeAllComponents() {
+		if(timerPanel != null)
+			remove(timerPanel);
+		if(bothGridsPanel != null)
+			remove(bothGridsPanel);
+		if(allButtonsPanel != null)
+			remove(allButtonsPanel);
 	}
 	
 	public void setShipsGrid() {
@@ -132,6 +154,9 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		if(gameSize == 20)
 			dim = 20;
 
+		leftPanel = new JPanel();
+		leftPanel.setLayout(new BorderLayout());
+		
 		//Player's shipsGrid
 		boolean[][] shipsGrid = new boolean[gameSize][gameSize];
 		shipsGrid = model.getPlayer().getShipsGrid();
@@ -212,16 +237,19 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				}
 			}
 		}
+		
 		shipsGridPanel.setBorder(shipsGridTitle);
 		shipsGridPanel.setVisible(true);
-		bothGridsPanel.add(shipsGridPanel);
+		leftPanel.add(shipsGridPanel, BorderLayout.NORTH);
+		leftPanel.add(playerStatusLabel, BorderLayout.CENTER);
+		bothGridsPanel.add(leftPanel);
 	}
 	
 	public void updateShipsGrid() {
 		int gameSize = model.getGameSize();
 		
 		boolean[][] shipsGrid = new boolean[gameSize][gameSize];
-		shipsGrid = model.getPlayer().getShipsGrid();
+		shipsGrid = model.getPlayer().getInitialShipsGrid();
 		
 		boolean[][] hitsGrid = new boolean[gameSize][gameSize];
 		hitsGrid = model.getPlayer().getHitsGrid();
@@ -230,26 +258,48 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 			for(int j = 0; j < gameSize; ++j) {
 				//if there are no ships and no hits (true/true)
 				if(shipsGrid[i][j] && hitsGrid[i][j]) {
-					//doesn't touch the button
+					
 				}
 				
 				//if there are ships but no hits (false/true)
 				else if(!shipsGrid[i][j] && hitsGrid[i][j]){
-					//doesn't touch the button
+					/*
+					shipsButtonGrid[i][j].setBackground(Color.BLACK);
+					shipsButtonGrid[i][j].setOpaque(true);
+					*/
 				}
 				
 				//if there are no ships but hits (true/false)
 				else if(shipsGrid[i][j] && !hitsGrid[i][j]) {
 					shipsButtonGrid[i][j].setBackground(Color.BLUE);
 					shipsButtonGrid[i][j].setOpaque(true);
+					//statusLabel.setText("Computer missed you!");
 				}
 				
 				//if there are both ships and hits (false/false)
 				else if(!shipsGrid[i][j] && !hitsGrid[i][j]) {
 					shipsButtonGrid[i][j].setBackground(Color.RED);
 					shipsButtonGrid[i][j].setOpaque(true);
+					//statusLabel.setText("Computer hits you!");
 				}
 			}
+		}
+		
+		switch(model.getPlayer().getState()) {
+			case HIT:
+				playerStatusLabel.setText(PLAYER_STATUS + "It hurts, doesn't it?");
+				break;
+			
+			case HITANDSUNK:
+				if(model.getPlayer().isDefeated())
+					playerStatusLabel.setText(PLAYER_STATUS + "Ha-ha! You're a looser!");
+				else
+					playerStatusLabel.setText(PLAYER_STATUS + "Ha-ha! I sunk your ship!");
+				break;
+				
+			case WATER:
+				playerStatusLabel.setText(PLAYER_STATUS + "I will hit you next time!");
+				break;
 		}
 	}
 	
@@ -262,6 +312,9 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 			dim = 25;
 		if(gameSize == 20)
 			dim = 20;
+		
+		rightPanel = new JPanel();
+		rightPanel.setLayout(new BorderLayout());
 		
 		//Player's shipsGrid
 		boolean[][] shipsGrid = new boolean[gameSize][gameSize];
@@ -312,16 +365,19 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				}
 			}
 		}
+		//hitsGridPanel.add(computerStatusLabel);
 		hitsGridPanel.setBorder(hitsGridTitle);
 		hitsGridPanel.setVisible(true);
-		bothGridsPanel.add(hitsGridPanel);
+		rightPanel.add(hitsGridPanel, BorderLayout.NORTH);
+		rightPanel.add(computerStatusLabel, BorderLayout.CENTER);
+		bothGridsPanel.add(rightPanel);
 	}
 	
 	public void updateHitsGrid() {
 		int gameSize = model.getGameSize();
 		
 		boolean[][] shipsGrid = new boolean[gameSize][gameSize];
-		shipsGrid = model.getComputer().getShipsGrid();
+		shipsGrid = model.getComputer().getInitialShipsGrid();
 		
 		boolean[][] hitsGrid = new boolean[gameSize][gameSize];
 		hitsGrid = model.getComputer().getHitsGrid();
@@ -340,23 +396,41 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				
 				//if there are no ships but hits (true/false)
 				else if(shipsGrid[i][j] && !hitsGrid[i][j]) {
-					System.out.println("ship:" + shipsGrid[i][j] + "\thit: "+hitsGrid[i][j]);
-					System.out.println("\nBLUE\n");
 					hitsButtonGrid[i][j].setBackground(Color.BLUE);
-					hitsButtonGrid[i][j].setOpaque(true);
 					hitsButtonGrid[i][j].setEnabled(false);
 				}
 				
 				//if there are both ships and hits (false/false)
 				else if(!shipsGrid[i][j] && !hitsGrid[i][j]) {
-					System.out.println("ship:" + shipsGrid[i][j]+"\thit: " + hitsGrid[i][j]);
-					System.out.println("\nRED\n");
 					hitsButtonGrid[i][j].setBackground(Color.RED);
-					hitsButtonGrid[i][j].setOpaque(true);
+					hitsButtonGrid[i][j].setEnabled(false);
+				}
+				hitsButtonGrid[i][j].setOpaque(true);
+				
+				if(model.getPlayer().isDefeated() || model.getComputer().isDefeated()) {
 					hitsButtonGrid[i][j].setEnabled(false);
 				}
 			}
 		}
+		
+		switch(model.getComputer().getState()) {
+			case HIT:
+				computerStatusLabel.setText(COMPUTER_STATUS + "Ouch, you hit me!");
+				break;
+			
+			case HITANDSUNK:
+				if(model.getComputer().isDefeated())
+					computerStatusLabel.setText(COMPUTER_STATUS + "Oh no! My fleet!");
+				else
+					computerStatusLabel.setText(COMPUTER_STATUS + "Damn you, you sunk my ship!");
+				break;
+				
+			case WATER:
+				computerStatusLabel.setText(COMPUTER_STATUS + "Ha-ha! You missed!");
+				break;
+		}
+		
+		
 	}
 	
 	public void setButtonsPanel() {
@@ -365,10 +439,18 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		
 		saveButton = new JButton("SAVE GAME");
 		saveButton.addActionListener(controller);
+		
+		rematchButton = new JButton("REMATCH");
+		rematchButton.addActionListener(controller);
+		
 		if(model.isJustSaved()) {
 			saveButton.setEnabled(false);
 		}
+		
 		allButtonsPanel.add(saveButton);
+		allButtonsPanel.add(rematchButton);
+		
+		rematchButton.setVisible(false);
 		
 		if(model.isTimed()) {
 			pauseButton = new JButton("PAUSE");
@@ -383,6 +465,10 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		return hitsButtonGrid[i][j];
 	}
 	
+	public void addRematchPanel() {
+		
+	}
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
@@ -392,6 +478,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				this.setVisible(true);
 			}
 			else
+				//removeAllComponents();
 				this.setVisible(false);
 		}
 	}
@@ -399,5 +486,11 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	@Override
 	public void update(Observable o, Object arg) {
 		updateAllComponents();
+		if(model.getPlayer().isDefeated() || model.getComputer().isDefeated()) {
+			//addRematchPanel();
+			saveButton.setVisible(false);
+			rematchButton.setVisible(true);
+			pauseButton.setVisible(false);
+		}
 	}
 }

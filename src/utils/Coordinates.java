@@ -1,11 +1,13 @@
 package utils;
 
+import java.io.Serializable;
+
 /**
  * Class for representing couple of coordinates as objects
  * @author 20027017 & 20031485
  *
  */
-public class Coordinates {
+public class Coordinates implements Serializable{
 	private int row;
 	private int column;
 	

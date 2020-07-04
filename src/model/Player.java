@@ -22,6 +22,7 @@ public class Player extends AbstractPlayer implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//attributes
 	private String name;
+	private boolean[][] initialShipsGrid;
 	//matrice in cui ogni giocatore può posizionare le proprie navi
 	private boolean[][] shipsGrid;
 	//matrice in cui vengono salvati i colpi dell'avversario
@@ -146,7 +147,16 @@ public class Player extends AbstractPlayer implements Serializable{
 	}
 	
 	/**
-	 * Gets the matrix of the {@code Player}'s set {@code Ship}s
+	 * Gets the matrix of the {@code Player}'s {@code Ship}s set at the beginning
+	 * of the game.
+	 * @return The boolean matrix of the {@code Player}'s set {@code Ship}s
+	 */
+	public boolean[][] getInitialShipsGrid(){
+		return this.initialShipsGrid;
+	}
+	
+	/**
+	 * Gets the matrix of the current {@code Player}'s set {@code Ship}s
 	 * @return The boolean matrix of the {@code Player}'s set {@code Ship}s
 	 */
 	public boolean[][] getShipsGrid(){
@@ -188,10 +198,12 @@ public class Player extends AbstractPlayer implements Serializable{
 	}
 	
 	private void initGrids(int gridSize) {
+		initialShipsGrid = new boolean[gridSize][gridSize];
 		shipsGrid = new boolean[gridSize][gridSize];
 		hitsGrid = new boolean[gridSize][gridSize];
 		for(int i=0; i<gridSize; ++i)
 			for(int j=0; j<gridSize; ++j) {
+				initialShipsGrid[i][j] = true;
 				shipsGrid[i][j] = true;
 				hitsGrid[i][j] = true;
 			}
@@ -246,6 +258,8 @@ public class Player extends AbstractPlayer implements Serializable{
 		//se ho posizionato la nave, la rimuovo dalla lista
 		try{
 			if(this.shipList.get(shipIndex).setShip(row, col, direction, this.shipsGrid)) {
+				//metto la nave anche sulla griglia iniziale
+				this.shipList.get(shipIndex).setShip(row, col, direction, this.initialShipsGrid);
 				//tolgo una nave dalla lista delle navi disponibili e la aggiungo alla lista delle navi piazzate
 				this.placedShips.add(this.shipList.get(shipIndex));
 				this.shipList.remove(shipIndex);

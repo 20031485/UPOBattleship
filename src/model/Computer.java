@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,7 +14,7 @@ import utils.ShipDirection;
  * @author 20027017 & 20031485
  *
  */
-public class Computer extends Player{
+public class Computer extends Player implements Serializable{
 	//attributes
 	private static final long serialVersionUID = 1L;
 	private ComputerType difficulty;
@@ -254,8 +255,17 @@ public class Computer extends Player{
 	 */
 	public void lineCheck(Coordinates lastHit, Coordinates lastSuccessfulHit, ShipDirection direction) {
 		//tolgo i nextHits - potrebbero esserci residui del crossCheck
-		clearNextHits();
-		
+		//clearNextHits();
+		int k = 0;
+		while(k < nextHits.size()) {
+			if(		!(nextHits.get(k).getRow() == lastHit.getRow() && nextHits.get(k).getRow() == lastSuccessfulHit.getRow()) ||
+					!(nextHits.get(k).getColumn() == lastHit.getColumn() && nextHits.get(k).getColumn() == lastSuccessfulHit.getColumn())) {
+				//tolgo solo quelli 
+				nextHits.remove(k);
+				--k;
+			}
+			++k;
+		}
 		switch(direction) {
 			case HORIZONTAL:
 				int i = 0;

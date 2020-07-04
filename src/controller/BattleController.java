@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import model.BattleshipModel;
+import utils.BattleshipState;
 import utils.ShipDirection;
 import view.BattlePanel;
 
@@ -28,11 +29,17 @@ public class BattleController implements ActionListener{
 		
 		if(command.equals("SAVE GAME")) {
 			System.out.println("SAVE");
-			//TODO
+			model.saveGame();
 		}
 		
 		if(command.equals("PAUSE")) {
 			System.out.println("PAUSE");
+			//TODO
+		}
+		
+		if(command.equals("REMATCH")) {
+			System.out.println("REMATCH");
+			model.setState(BattleshipState.NEWGAME);
 			//TODO
 		}
 		
@@ -42,11 +49,9 @@ public class BattleController implements ActionListener{
 					if(source == battlePanel.getButtonFromHitsButtonGrid(i, j)) {
 						row = i;
 						col = j;
-						//TODO hit computer at the coordinates
-						System.out.println("row = "+ row +", col = "+ col);
-						//model.getComputer().isHit(row, col);
+						//System.out.println("row = "+ row +", col = "+ col);
 						model.hitAndGetHit(row, col);
-						System.out.println(model.getComputer().toString());
+						//System.out.println(model.getComputer().toString());
 					}
 				}
 			}

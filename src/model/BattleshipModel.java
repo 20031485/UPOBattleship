@@ -2,22 +2,22 @@ package model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-//import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
 import java.util.Observable;
 //import java.text.SimpleDateFormat;
 //import java.util.Date;
 import java.util.Scanner;
-//import java.util.Scanner;
 
-
+//import utils.BattleshipPropertyChangeSupport;
 import utils.BattleshipState;
 import utils.ComputerType;
 import utils.PlayerState;
@@ -33,7 +33,7 @@ public class BattleshipModel extends Observable implements Serializable{
 	private PlayerState playerState;//needed by Computer, to check if Player was hit or not
 	private boolean timed;//creates timer if true
 	//notify BattleshipView for every state BattleshipModel enters
-	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+	private /*Battleship*/PropertyChangeSupport propertyChangeSupport = new /*Battleship*/PropertyChangeSupport(this);
 	//name of the saved file slot
 	private static final String savedFileName = "battleship_saved_game.dat";
 	//every move will set justSaved to false, but the method saveGame will set it to true
@@ -242,8 +242,8 @@ public class BattleshipModel extends Observable implements Serializable{
 	//utility
 	public String toString() {
 		return 	"Game Size: "+ getGameSize() +
-				"\nPlayer1:\n\tname: " + getPlayer().getName() +
-				"\nPlayer2:\n\tname: " + getComputer().getName() + "\n\n";
+				"\nPlayer1:\n\tname: " + getPlayer().toString() +
+				"\nPlayer2:\n\tname: " + getComputer().toString() + "\n\n";
 	}
 	
 	//TERMINAL VERSION
@@ -332,7 +332,8 @@ public class BattleshipModel extends Observable implements Serializable{
 		bm.computerSetsShips();
 		System.out.println(bm.getPlayer().toString());
 		System.out.println(bm.getComputer().toString());
-		bm.turns();
+		//bm.turns();
+		bm.saveGame();
 	}
 	
 }
