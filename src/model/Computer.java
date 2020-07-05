@@ -85,6 +85,10 @@ public class Computer extends Player implements Serializable{
 		return lastHit;
 	}
 
+	public void printLastHit() {
+		System.out.println("lastHit: ["+lastHit.getRow()+", "+lastHit.getColumn()+"]");
+	}
+	
 	/**
 	 * Returns the Coordinates of the last successful hit the
 	 * {@code Computer} did
@@ -94,13 +98,17 @@ public class Computer extends Player implements Serializable{
 		return lastSuccessfulHit;
 	}
 
+	public void printLastSuccessfulHit() {
+		System.out.println("lastSuccessfulHit: ["+lastSuccessfulHit.getRow()+", "+lastSuccessfulHit.getColumn()+"]");
+	}
+	
 	/**
-	 * Method that prints the coordinates a smart {@code Computer} is 
+	 * Utility method that prints the coordinates a smart {@code Computer} is 
 	 * going to aim in its next turns
 	 * 
 	 */
 	public void printNextHits() {
-		System.out.print("\nnextHits: ");
+		System.out.println("\nnextHits: ");
 		for(int i = 0; i < nextHits.size(); ++i) {
 			System.out.print("["+nextHits.get(i).getRow()+","+nextHits.get(i).getColumn()+"] ");
 		}
@@ -108,8 +116,25 @@ public class Computer extends Player implements Serializable{
 	}
 	
 	/**
+	 * Utility method that prints the coordinates {@code Computer} still has
+	 * to hit in its next turns
+	 * 
+	 */
+	public void printCoordinatesList() {
+		System.out.println("\ncoordinatesList: ");
+		for(int i = 0; i < coordinatesList.size(); ++i) {
+			if(i >= 1 && coordinatesList.get(i-1).getRow() != coordinatesList.get(i).getRow())
+				System.out.println();
+			System.out.print("["+coordinatesList.get(i).getRow()+","+coordinatesList.get(i).getColumn()+"] ");
+			
+		}
+		System.out.println("\n");
+	}
+	
+	/**
 	 * According to the {@code Player}'s state, the {@code Computer}
-	 * decides where to aim for its next hit
+	 * decides where to aim for its next hit. If the {@code Computer} is
+	 * "stupid", it will aim randomly. 
 	 * @param state The current {@code Player}'s state
 	 * @return A bidimensional integer array containing the two coordinates
 	 * the {@code Computer} has chosen to hit
@@ -241,8 +266,9 @@ public class Computer extends Player implements Serializable{
 			}
 			++i;
 		}
+		System.out.print("after crossCheck: ");
 		//controllo di aver messo le coordinate in nextHits
-		//printNextHits();
+		printNextHits();
 	}
 	
 	/**
@@ -257,15 +283,38 @@ public class Computer extends Player implements Serializable{
 		//tolgo i nextHits - potrebbero esserci residui del crossCheck
 		//clearNextHits();
 		int k = 0;
-		while(k < nextHits.size()) {
-			if(		!(nextHits.get(k).getRow() == lastHit.getRow() && nextHits.get(k).getRow() == lastSuccessfulHit.getRow()) ||
-					!(nextHits.get(k).getColumn() == lastHit.getColumn() && nextHits.get(k).getColumn() == lastSuccessfulHit.getColumn())) {
-				//tolgo solo quelli 
-				nextHits.remove(k);
-				--k;
+		printLastHit();
+		printLastSuccessfulHit();
+		printCoordinatesList();
+		System.out.print("before ");
+		/*
+		if(direction == ShipDirection.HORIZONTAL) {
+			System.out.println("horizontal linecheck");
+			while(k < nextHits.size()) {
+				if((nextHits.get(k).getRow() == lastHit.getRow() && nextHits.get(k).getRow() == lastSuccessfulHit.getRow())) {
+					coordinatesList.add(nextHits.get(k));
+					//tolgo solo quelli che non sono sulla stessa riga/colonna
+					nextHits.remove(k);
+					--k;
+				}
+				++k;
 			}
-			++k;
 		}
+		
+		else if(direction == ShipDirection.VERTICAL) {
+			System.out.println("vertical linecheck");
+			while(k < nextHits.size()) {
+				if((nextHits.get(k).getColumn() == lastHit.getColumn() && nextHits.get(k).getColumn() == lastSuccessfulHit.getColumn())) {
+					coordinatesList.add(nextHits.get(k));
+					//tolgo solo quelli che non sono sulla stessa riga/colonna
+					nextHits.remove(k);
+					--k;
+				}
+				++k;
+			}
+		}*/
+		
+		printNextHits();
 		switch(direction) {
 			case HORIZONTAL:
 				int i = 0;
@@ -280,11 +329,23 @@ public class Computer extends Player implements Serializable{
 								(coordinatesList.get(i).getColumn() == lastSuccessfulHit.getColumn() + 1)) {
 							//aggiunge la coordinata cercata a nextHits
 							nextHits.add(coordinatesList.get(i));
+							
 							//rimuove tale coordinata da coordinatesList
 							coordinatesList.remove(i);
 							--i;
 						}
 					}	
+					++i;
+				}
+				
+				//remove coordinates which are not on the same row
+				i = 0;
+				while(i < nextHits.size()) {
+					if(nextHits.get(i).getRow() != lastHit.getRow() && nextHits.get(i).getRow() != lastSuccessfulHit.getRow()){
+						coordinatesList.add(nextHits.get(i));
+						nextHits.remove(i);
+						--i;
+					}
 					++i;
 				}
 				//controllo le coordinate che ho messo in nextHits
@@ -305,11 +366,22 @@ public class Computer extends Player implements Serializable{
 								(coordinatesList.get(j).getRow() == lastSuccessfulHit.getRow() + 1)) {
 							//aggiunge la coordinata cercata a nextHits
 							nextHits.add(coordinatesList.get(j));
+							
 							//rimuove tale coordinata da coordinatesList
 							coordinatesList.remove(j);
 							--j;
 						}
 					}	
+					++j;
+				}
+				//remove coordinates which are not on the same column
+				j = 0;
+				while(j < nextHits.size()) {
+					if(nextHits.get(j).getColumn() != lastHit.getColumn() && nextHits.get(j).getColumn() != lastSuccessfulHit.getColumn()){
+						coordinatesList.add(nextHits.get(j));
+						nextHits.remove(j);
+						--j;
+					}
 					++j;
 				}
 				//controllo le coordinate che ho messo in nextHits
@@ -320,6 +392,8 @@ public class Computer extends Player implements Serializable{
 				System.err.println("ERROR@Computer::linearCheck()");
 				break;
 		}
+		System.out.println("after linecheck");
+		printNextHits();
 	}
 	
 	/**

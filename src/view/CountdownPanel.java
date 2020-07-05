@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class CountdownPanel extends /*JFrame*/JPanel{
+class CountdownLabel extends /*JFrame*/JLabel{
 
 	private static final long serialVersionUID = 1L;
 	private ActionListener actionListener;
@@ -15,10 +15,7 @@ class CountdownPanel extends /*JFrame*/JPanel{
 	private int currentTime;
 	private Timer timer;
 	
-	public CountdownPanel(long minutes){
-		//setLocation(400,300);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		    
+	public CountdownLabel(long minutes){
 		time = minutes*60000;
 		    
 		dateFormat = new SimpleDateFormat("mm : ss");
@@ -43,9 +40,6 @@ class CountdownPanel extends /*JFrame*/JPanel{
 		
 		jp.add(clock);
 		
-		//getContentPane().add(jp);
-		//timer.start();
-		//pack();
 	}
 	  
 	public void countdownStart() {
@@ -56,9 +50,9 @@ class CountdownPanel extends /*JFrame*/JPanel{
 		timer.stop();
 	}
 	  
-	public static void main(String args[]){
+	/*public static void main(String args[]){
 		CountdownPanel p = new CountdownPanel(1);
 		p.setVisible(true);
 		p.countdownStart();
-	}
+	}*/
 }

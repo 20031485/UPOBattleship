@@ -2,12 +2,13 @@
 Java project for the Programming Paradigms course at University of Eastern Piedmont, Vercelli (IT).
 
 # Latest additions/fixes
-Ships can now be successfully set, even randomly.
+Since a rematch button after win/loss is not required, we are not going to implement one (we will leave it semi-implemented).
 
 # TODO
- - [x] Implement `BattlePanel`;
- - [x] Implement `BattleController`;
- - [x] Implement `BattleshipModelTest`;
+ - [ ] **FIX** `Computer::lineCheck()`: it does not keep aligned cells and it does not return "unused" cells to `coordinatesList`;
+ - [ ] **FIX** `BattlePanel::Timer`: it does not work LOL;
+ - [ ] **FIX** `BattleshipModel::saveGame()` and `BattleshipModel::loadGame()`: they work in tests, but they don't communicate well with the GUI;
+ - [ ] Implement `BattleshipModelTest`;
  - [ ] Check if some `Exception`s can be launched - add them if so;
  - [ ] Implement `Timer` - **ongoing** but it still doesn't show up - working on it;
  - [ ] Write JavaDOC - **ongoing**.

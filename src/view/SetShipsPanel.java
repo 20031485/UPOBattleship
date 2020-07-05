@@ -91,7 +91,7 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	}
 	
 	public void updateAllComponents() {
-		System.out.println("updateAllComponents");
+		//System.out.println("updateAllComponents");
 		updateDropDownAndButtonsPanel();
 		updateButtonGrid();
 	}
@@ -152,7 +152,7 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	}
 	
 	public void updateDropDownAndButtonsPanel() {
-		System.out.println("updateDropDownEcc");
+		//System.out.println("updateDropDownEcc");
 		//ships comboBox
 		String[] availableShips = getPlayersShipsStrings(model);
 		chooseShip.removeAllItems();
@@ -245,7 +245,7 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 	}
 	
 	public void updateButtonGrid() {
-		System.out.println("updateButtonGrid");
+		//System.out.println("updateButtonGrid");
 		int gameSize = model.getGameSize();
 		
 		

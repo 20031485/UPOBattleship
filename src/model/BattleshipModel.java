@@ -128,7 +128,7 @@ public class BattleshipModel extends Observable implements Serializable{
 	}
 	
 	//MVC VERSION
-	public void saveGame() {
+	/*public void saveGame() {
 		ObjectOutputStream outputStream = null;
 		
 		try {
@@ -145,6 +145,9 @@ public class BattleshipModel extends Observable implements Serializable{
 			System.out.println("IOException");
 			e.printStackTrace();
 		}
+	}*/
+	public void saveGame() {
+		this.justSaved = true;
 	}
 	
 	//MVC VERSION
@@ -271,9 +274,16 @@ public class BattleshipModel extends Observable implements Serializable{
 		int[] coordinates = new int[2];
 		coordinates = player.hits(row, col);
 		computer.isHit(coordinates[0], coordinates[1]);
-		coordinates = computer.computerHits(getPlayerState());
-		player.isHit(coordinates[0], coordinates[1]);
-		setPlayerState(player.getState());
+		
+		//tell GUI there has been a move
+		justSaved = false;
+		
+		//computer hits back only if it is not defeated
+		if(!computer.isDefeated()) {
+			coordinates = computer.computerHits(getPlayerState());
+			player.isHit(coordinates[0], coordinates[1]);
+			setPlayerState(player.getState());
+		}
 	}
 	
 	//il giocatore posiziona le sue navi - terminal version
