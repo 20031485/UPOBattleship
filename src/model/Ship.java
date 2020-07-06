@@ -254,10 +254,10 @@ public class Ship implements Serializable{
 		boolean result = true;
 		if(!absolutePosition[row][col]) {
 			absolutePosition[row][col] = true;
-			if(isSunk())
+			/*if(isSunk())
 				System.out.println("\t>>Hit and sunk!");
 			else
-				System.out.println("\t>>Hit!");
+				System.out.println("\t>>Hit!");*/
 			result = true;
 		}
 		else { 

@@ -44,21 +44,10 @@ public class BattleshipModel extends Observable implements Serializable{
 	private static final String savedFileName = "battleship_saved_game.dat";
 	//every move will set justSaved to false, but the method saveGame will set it to true
 	private boolean justSaved;
-	private boolean isDefeated;
+	//private boolean isDefeated;
 
 	//constructors
-	/*public BattleshipModel() {
-		System.out.println("model created");
-		this.gameSize = 10;
-		this.timed = false;
-		this.player = new Player(gameSize);
-		this.computer = new Computer(gameSize, ComputerType.STUPID);
 		
-		if(timed) {
-			//TODO come lo implementiamo? da thread o dalla gui?
-		}
-	}*/
-	
 	//default constructor for when you start the game - parameters are initialized later
 	public BattleshipModel() {
 		this.gameSize = 0;
@@ -79,7 +68,7 @@ public class BattleshipModel extends Observable implements Serializable{
 		this.player = player;
 		this.computer = computer;
 		this.gameSize = gameSize;
-		this.isDefeated = false;
+		//this.isDefeated = false;
 		this.justSaved = false;
 		setTimed(timed, mins);
 	}
@@ -92,7 +81,7 @@ public class BattleshipModel extends Observable implements Serializable{
 	
 	//MVC VERSION
 	public BattleshipState getState() {
-		System.out.println("getState: " + this.state);
+		//System.out.println("getState: " + this.state);
 		return this.state;
 	}
 	

@@ -33,7 +33,11 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 	
 	private static final String TITLE = "BATTLE!";
 	private static final int WIDTH = 1000;
-	private static final int HEIGHT = 600;
+	private static final int HEIGHT = 650;
+	
+	private final int smallDim = 30;
+	private final int mediumDim = 25;
+	private final int largeDim = 20;
 	
 	private JPanel bothGridsPanel;
 	
@@ -102,6 +106,7 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		//if the game is timed
 		if(model.isTimed()) {
 			setTimer(model.getSecs());	
+			//setTimer(5);
 		}
 		
 		//create panel with grids
@@ -148,11 +153,11 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		int gameSize = model.getGameSize();
 		int dim = 0;
 		if(gameSize == 10)
-			dim = 30;
+			dim = smallDim;
 		if(gameSize == 15)
-			dim = 25;
+			dim = mediumDim;
 		if(gameSize == 20)
-			dim = 20;
+			dim = largeDim;
 
 		leftPanel = new JPanel();
 		leftPanel.setLayout(new BorderLayout());
@@ -296,11 +301,11 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		int gameSize = model.getGameSize();
 		int dim = 0;
 		if(gameSize == 10)
-			dim = 30;
+			dim = smallDim;
 		if(gameSize == 15)
-			dim = 25;
+			dim = mediumDim;
 		if(gameSize == 20)
-			dim = 20;
+			dim = largeDim;
 		
 		rightPanel = new JPanel();
 		rightPanel.setLayout(new BorderLayout());
@@ -435,7 +440,7 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 				if(model.getComputer().isDefeated())
 					computerStatusLabel.setText(COMPUTER_STATUS + "Oh no! My fleet!");
 				else
-					computerStatusLabel.setText(COMPUTER_STATUS + "Damn you, you sunk my ship!");
+					computerStatusLabel.setText(COMPUTER_STATUS + "Damn! You sunk my ship!");
 				break;
 				
 			case WATER:
@@ -529,7 +534,8 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 				here = true;
 			}
 			//real update
-			updateAllComponents();
+			else
+				updateAllComponents();
 			
 			//update saveButton
 			if(model.isJustSaved()) {
@@ -543,17 +549,18 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 			if(model.getPlayer().isDefeated() || model.getComputer().isDefeated() || model.getPlayer().isTimedOut()) {
 
 				saveButton.setVisible(false);
-				//if(model.isTimed())
-					//pauseButton.setVisible(false);
+				
 				//if computer wins
 				if(model.getPlayer().isDefeated()) {
 					youLoseLabel.setVisible(true);
-					
-					//if time runs out
-					if(model.getPlayer().isTimedOut()) {
-						if(timerPanel != null)
-							timerPanel.timerStop();
-					}
+					if(timerPanel != null)
+						timerPanel.timerStop();
+				}
+				//if time runs out
+				if(model.getPlayer().isTimedOut()) {
+					if(timerPanel != null)
+						timerPanel.timerStop();
+					youLoseLabel.setVisible(true);
 				}
 				//if player wins
 				if(model.getComputer().isDefeated()) {

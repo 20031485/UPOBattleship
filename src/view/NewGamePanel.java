@@ -60,9 +60,9 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 	public JRadioButton sizeMButton;
 	public JRadioButton sizeLButton;
 	public JRadioButton sizeXLButton;
+	public JRadioButton timed1minsButton;
+	public JRadioButton timed2minsButton;
 	public JRadioButton timed5minsButton;
-	public JRadioButton timed10minsButton;
-	public JRadioButton timed15minsButton;
 	
 	//JCheckboxes
 	public JCheckBox timedCheckBox;
@@ -126,10 +126,10 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 		timedCheckBox.setSelected(false);
 		timedCheckBox.setHorizontalAlignment(JLabel.CENTER);
 		
+		timed1minsButton = new JRadioButton("1min");
+		timed1minsButton.setSelected(true);
+		timed2minsButton = new JRadioButton("2mins");
 		timed5minsButton = new JRadioButton("5mins");
-		timed5minsButton.setSelected(true);
-		timed10minsButton = new JRadioButton("10mins");
-		timed15minsButton = new JRadioButton("15mins");
 		
 		
 		
@@ -149,9 +149,9 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 		radioButtonSizeGroup.add(sizeXLButton);
 		
 		timedButtonGroup = new ButtonGroup();
+		timedButtonGroup.add(timed1minsButton);
+		timedButtonGroup.add(timed2minsButton);
 		timedButtonGroup.add(timed5minsButton);
-		timedButtonGroup.add(timed10minsButton);
-		timedButtonGroup.add(timed15minsButton);
 		
 		
 		//all panels
@@ -206,9 +206,9 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 		buttonPanel.add(radioButtonSizePanel);
 		
 		timedPanel.add(timedCheckBox, BorderLayout.NORTH);
-		timedPanel.add(timed5minsButton, BorderLayout.WEST);
-		timedPanel.add(timed10minsButton, BorderLayout.CENTER);
-		timedPanel.add(timed15minsButton, BorderLayout.EAST);
+		timedPanel.add(timed1minsButton, BorderLayout.WEST);
+		timedPanel.add(timed2minsButton, BorderLayout.CENTER);
+		timedPanel.add(timed5minsButton, BorderLayout.EAST);
 		
 		
 		//buttonPanel.add(timedCheckBox);

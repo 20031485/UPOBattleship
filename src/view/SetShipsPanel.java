@@ -287,6 +287,18 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 		return buttonGrid[i][j];
 	}
 	
+	public void removeAllComponents() {
+		dropDownAndButtonsPanel = null; //panel hosting buttons and dropdown menus
+		shipsPanel = null; //panel on which the buttonGrid will be shown
+		buttonGrid = null; //clickable grid of buttons for setting ships
+		chooseShip = null;
+		chooseDirection = null;
+		play = null;
+		clearShips = null;
+		randomSetAll = null;
+		back = null;
+	}
+	
 	//methods
 	/**
 	 * Returns the String array representation of the list of Player's Ships
@@ -367,29 +379,17 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 				this.setVisible(true);
 				here = true;
 			}
-			updateAllComponents();
+			else
+				updateAllComponents();
 		}
 		else {
 			this.setVisible(false);
+			//removeAllComponents();
+			this.removeAll();
 			here = false;
 		}
 		
 		//real update
 		updateAllComponents();
 	}
-	/*
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String propertyName = evt.getPropertyName();
-		if(propertyName.equals("setState")) {
-			if(model.getState() == BattleshipState.SETSHIPS) {
-				//set the two panels with their content
-				setAllComponents();
-				this.setVisible(true);
-			}
-			else
-				this.setVisible(false);
-		}
-	}
-	*/
 }

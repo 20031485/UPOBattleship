@@ -35,13 +35,13 @@ public class StartLoadPanel extends JPanel implements Observer/*, PropertyChange
 	//constructors
 	StartLoadPanel(BattleshipModel model){
 		this.model = model;
-		this.controller =  new StartLoadController(model, this);//controller;
+		this.controller = new StartLoadController(model, this);//controller;
 		//this.model.addPropertyChangeListener(this); //view listens to model
 		this.here = true;
 		
 		//add Observer
 		this.model.addObserver(this);
-		System.out.println("StartLoadPanel: " + model.toString());
+		//System.out.println("StartLoadPanel: " + model.toString());
 		
 		
 		

@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 
 import utils.PlayerState;
@@ -18,7 +19,7 @@ import utils.ShipType;
  * @author 20027017 & 20031485
  *
  */
-public class Player extends AbstractPlayer implements Serializable{
+public class Player extends Observable implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//attributes
 	private String name;

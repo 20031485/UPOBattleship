@@ -118,7 +118,6 @@ public class BattleshipView extends JFrame implements Observer{
 		
 		switch(this.model.getState()) {
 			case WELCOME:
-				setTitle("WELCOME!");
 				setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
 				break;
 			

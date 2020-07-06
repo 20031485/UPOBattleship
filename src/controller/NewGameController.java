@@ -63,14 +63,14 @@ public class NewGameController implements ActionListener{
 						if(newGamePanel.timedCheckBox.isSelected())
 							timed = true;
 						
+						if(newGamePanel.timed1minsButton.isSelected())
+							secs = 1*60;
+						
+						if(newGamePanel.timed2minsButton.isSelected())
+							secs = 2*60;
+						
 						if(newGamePanel.timed5minsButton.isSelected())
 							secs = 5*60;
-						
-						if(newGamePanel.timed10minsButton.isSelected())
-							secs = 10*60;
-						
-						if(newGamePanel.timed15minsButton.isSelected())
-							secs = 15*60;
 						//model = new BattleshipModel(gameSize);
 						//model.setGameSize(gameSize);
 						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed, secs);
