@@ -9,38 +9,36 @@ import java.beans.PropertyChangeListener;
 import java.util.Observable;
 
 import model.BattleshipModel;
+import view.BattlePanel;
+import view.NewGamePanel;
 import view.SetShipsPanel;
+import view.StartLoadPanel;
 
 public class BattleshipController{
 	//attributes
 	
 	//model
 	private BattleshipModel model;
-	
-	//sub-controllers
-	private StartLoadController startLoadController;
-	private NewGameController newGameController;
-	private SetShipsController setShipsController;
-	//private BattleController battleController;
 
 	//constructor
 	public BattleshipController(BattleshipModel model) {
 		this.model = model;
-		//this.startLoadController = new StartLoadController(model);
-		//this.newGameController = new NewGameController(model);
-		//this.setShipsController = new SetShipsController(model/*, a*/);
-		//this.battleController = new BattleController();
 	}
 	
-	public StartLoadController getStartLoadController() {
-		return this.startLoadController;
+	//methods
+	public StartLoadController giveStartLoadController(BattleshipModel model, StartLoadPanel panel) {
+		return new StartLoadController(model, panel);
 	}
 	
-	public NewGameController getNewGameController() {
-		return this.newGameController;
+	public NewGameController giveNewGameController(BattleshipModel model, NewGamePanel panel) {
+		return new NewGameController(model, panel);
 	}
 	
-	public SetShipsController getSetShipsController() {
-		return this.setShipsController;
+	public SetShipsController giveSetShipsController(BattleshipModel model, SetShipsPanel panel) {
+		return new SetShipsController(model, panel);
+	}
+	
+	public BattleController giveBattleController(BattleshipModel model, BattlePanel panel) {
+		return new BattleController(model, panel);
 	}
 }

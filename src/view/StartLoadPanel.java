@@ -10,6 +10,8 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import controller.BattleshipController;
 import controller.StartLoadController;
 import model.BattleshipModel;
 import utils.BattleshipState;
@@ -23,7 +25,8 @@ public class StartLoadPanel extends JPanel implements Observer/*, PropertyChange
 	private static final int HEIGHT = 100;
 	private static final String TITLE = "NEW/LOAD GAME";
 	private BattleshipModel model;
-	private StartLoadController controller;
+	private BattleshipController controller;
+	private StartLoadController startLoadController;
 	private JLabel label;
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
@@ -33,18 +36,16 @@ public class StartLoadPanel extends JPanel implements Observer/*, PropertyChange
 	private boolean here = false;
 	
 	//constructors
-	StartLoadPanel(BattleshipModel model){
+	StartLoadPanel(BattleshipModel model, BattleshipController controller){
 		this.model = model;
-		this.controller = new StartLoadController(model, this);//controller;
-		//this.model.addPropertyChangeListener(this); //view listens to model
+		this.controller = controller;
+		//this.controller = new StartLoadController(model, this);//controller;
+		this.startLoadController = this.controller.giveStartLoadController(model, this);
 		this.here = true;
 		
 		//add Observer
 		this.model.addObserver(this);
-		//System.out.println("StartLoadPanel: " + model.toString());
-		
-		
-		
+
 		//settings
 		this.setLayout(new BorderLayout());
 		this.setSize(WIDTH, HEIGHT);
@@ -64,11 +65,11 @@ public class StartLoadPanel extends JPanel implements Observer/*, PropertyChange
 		buttonPanel.setLayout(new FlowLayout());
 		
 		newGameButton = new JButton("New game");
-		newGameButton.addActionListener(controller);
+		newGameButton.addActionListener(startLoadController);
 		buttonPanel.add(newGameButton);
 		
 		loadGameButton = new JButton("Load game");
-		loadGameButton.addActionListener(controller);
+		loadGameButton.addActionListener(startLoadController);
 		buttonPanel.add(loadGameButton);
 		if(!BattleshipModel.savedGameExists())
 			loadGameButton.setVisible(false);

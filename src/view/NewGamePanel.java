@@ -13,6 +13,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
+import controller.BattleshipController;
 import controller.NewGameController;
 import model.BattleshipModel;
 import utils.BattleshipState;
@@ -28,8 +30,7 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 
 	//model
 	private BattleshipModel model;
-	
-	//own controller
+	private BattleshipController controller;
 	private NewGameController newGameController;
 		
 	//JPanels
@@ -76,13 +77,13 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 	private boolean here = false;
 	
 	//constructor
-	public NewGamePanel(BattleshipModel model) {
+	public NewGamePanel(BattleshipModel model, BattleshipController controller) {
 		this.model = model;
 		//instance its own controller
-		this.newGameController = new NewGameController(model, this);
-		//this.model.addPropertyChangeListener(this);
+		this.controller = controller;
+		this.newGameController = this.controller.giveNewGameController(model, this);//new NewGameController(model, this);
+		
 		this.model.addObserver(this);
-		System.out.println("NewGamePanel: " + model.toString());
 		
 		//settings
 		this.setSize(WIDTH, HEIGHT);

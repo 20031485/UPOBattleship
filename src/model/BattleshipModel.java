@@ -54,6 +54,8 @@ public class BattleshipModel extends Observable implements Serializable{
 		this.timed = false;
 		this.player = null;
 		this.computer = null;
+		this.player = new Player(gameSize);
+		this.computer = new Computer(gameSize, ComputerType.STUPID);
 	}
 	
 	public BattleshipModel(int gameSize) {

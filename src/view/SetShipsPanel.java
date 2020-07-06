@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import controller.BattleshipController;
 import controller.SetShipsController;
 import model.BattleshipModel;
 import model.Ship;
@@ -29,7 +30,8 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 
 	//attributes
 	private BattleshipModel model;
-	private SetShipsController controller;
+	private BattleshipController controller;
+	private SetShipsController setShipsController;
 	private static final String TITLE = "SET YOUR SHIPS!";
 	private static final String[] ROWS = { " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"};
 	private static final String[] COLUMNS = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
@@ -64,9 +66,11 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 	 * be shown in the main game frame
 	 * @param model A {@code BattleshipModel} object
 	 */
-	public SetShipsPanel(BattleshipModel model) {
+	public SetShipsPanel(BattleshipModel model, BattleshipController controller) {
 		this.model = model;
-		this.controller = new SetShipsController(model, this);//getNewController
+		this.controller = controller;
+		this.setShipsController = this.controller.giveSetShipsController(model, this);
+		//new SetShipsController(model, this);//getNewController
 		//System.out.println("SetShipsPanel: " + model.toString());
 		this.setLayout(new FlowLayout());
 		this.setSize(WIDTH, HEIGHT);
@@ -123,13 +127,13 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 		//button that sets all ships randomly
 		randomSetAll = new JButton("RANDOM");
 		randomSetAll.setEnabled(true);
-		randomSetAll.addActionListener(controller);
+		randomSetAll.addActionListener(setShipsController);
 		dropDownAndButtonsPanel.add(randomSetAll);
 		
 		//button that deletes all ships from the grid
 		clearShips = new JButton("CLEAR");
 		clearShips.setEnabled(true);
-		clearShips.addActionListener(controller);
+		clearShips.addActionListener(setShipsController);
 		dropDownAndButtonsPanel.add(clearShips);
 		
 		//enabled only if all ships have been set
@@ -139,13 +143,13 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 			play.setEnabled(true);
 		else
 			play.setEnabled(false);
-		play.addActionListener(controller);
+		play.addActionListener(setShipsController);
 		dropDownAndButtonsPanel.add(play);
 		
 		//button that deletes all ships from the grid
 		back = new JButton("BACK");
 		back.setEnabled(true);
-		back.addActionListener(controller);
+		back.addActionListener(setShipsController);
 		dropDownAndButtonsPanel.add(back);
 		
 		dropDownAndButtonsPanel.setVisible(true);
@@ -230,7 +234,7 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 						buttonGrid[i-1][j-1] = new JButton();
 						buttonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
 						buttonGrid[i-1][j-1].setBackground(Color.WHITE);
-						buttonGrid[i-1][j-1].addActionListener(controller);
+						buttonGrid[i-1][j-1].addActionListener(setShipsController);
 						shipsPanel.add(buttonGrid[i-1][j-1]);
 					}
 					//if there is a ship underneath

@@ -51,19 +51,19 @@ public class BattleshipView extends JFrame implements Observer{
 		addWindowListener(new WindowDestructor());
 		setLayout(new BorderLayout());
 		
-		startLoadPanel = new StartLoadPanel(model/*, controller.getStartLoadController()*/);
+		startLoadPanel = new StartLoadPanel(model, controller);
 		add(startLoadPanel);
 		startLoadPanel.setVisible(true);
 		
-		newGamePanel = new NewGamePanel(model/*, controller.getNewGameController()*/);
+		newGamePanel = new NewGamePanel(model, controller);
 		add(newGamePanel);
 		newGamePanel.setVisible(false);
 		
-		setShipsPanel = new SetShipsPanel(model);
+		setShipsPanel = new SetShipsPanel(model, controller);
 		add(setShipsPanel);
 		setShipsPanel.setVisible(false);
 		
-		battlePanel = new BattlePanel(model);
+		battlePanel = new BattlePanel(model, controller);
 		add(battlePanel);
 		battlePanel.setVisible(false);
 		
