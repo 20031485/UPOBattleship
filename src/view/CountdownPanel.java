@@ -37,7 +37,7 @@ public class CountdownPanel extends JPanel {
 	    timerLabel = new JLabel(dateFormat.format(new Date(time)),JLabel.CENTER);
 	    timerLabel.setFont(new Font("Monospace", Font.PLAIN, 30));
 	   	timerLabel.setBorder(timerTitle);
-	    controller = new CountdownController(this, model);
+	    controller = new CountdownController(model, this);
 	    setTimer(controller);  
 	    add(timerLabel);
 

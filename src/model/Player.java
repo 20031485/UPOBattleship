@@ -11,44 +11,42 @@ import utils.ShipLength;
 import utils.ShipType;
 
 /**
- * Class representing a Player in the Battleship game. 
- * It holds its default name, a matrix for each ship the Player sets
- * and a matrix for each hit the Player receives. For every incoming hit,
- * the Player changes its state according to the result of the hit.
- * When a Player has no Ships on his shipsGrid, it is considered defeated.
+ * Class representing a player in the Battleship game. 
+ * It holds its default name, a matrix for each {@link Ship} the {@link Player} sets
+ * and a matrix for each hit the {@link Player} receives. For every incoming hit,
+ * the {@link Player} changes its state according to the result of the hit.
+ * When a {@link Player} has no {@link Ship}s on his ships grid, it is considered 
+ * defeated.
+ * 
  * @author 20027017 & 20031485
  *
  */
 public class Player extends Observable implements Serializable{
 	private static final long serialVersionUID = 1L;
-	//attributes
 	private String name;
 	private boolean[][] initialShipsGrid;
-	//matrice in cui ogni giocatore può posizionare le proprie navi
 	private boolean[][] shipsGrid;
-	//matrice in cui vengono salvati i colpi dell'avversario
 	private boolean[][] hitsGrid;
-	// gameSize is protected because it must be visible from Player's derivative classes
-	protected int gameSize;	
+	private int gameSize;	
 	private PlayerState state;
 	private boolean timedOut;
-	
 	private ArrayList<Ship> shipList;
 	private ArrayList<Ship> placedShips;
 	private ArrayList<Ship> deadShips;
 	
-	//constructors
 	/**
-	 * Constructor for the class {@code Player}
-	 * @param playerName The name of the {@code Player}
+	 * Constructor for the class {@link Player}.
+	 * 
+	 * @param playerName The name of the {@link Player}.
 	 */
 	public Player(String playerName) {
 		this.name = playerName;
 	}
 	
 	/**
-	 * Constructor for the class {@code Player}
-	 * @param gameSize The size of the game grid
+	 * Constructor for the class {@link Player}.
+	 * 
+	 * @param gameSize The size of the game grid.
 	 */
 	public Player(int gameSize) {
 		this.name = "Player";
@@ -59,8 +57,14 @@ public class Player extends Observable implements Serializable{
 		this.initShips(gameSize);
 	}
 	
-	
-	//methods
+
+	/**
+	 * Initializes all the ship lists a {@link Player} holds: a list for its available 
+	 * (unplaced) {@link Ship}s, a list for its placed {@link Ship}s and a list
+	 * for its sunk {@link Ship}s.
+	 * 
+	 * @param gameSize The size of the current Battleship match.
+	 */
 	private void initShips(int gameSize) {
 		this.shipList = new ArrayList<Ship>();
 		this.placedShips = new ArrayList<Ship>();
@@ -133,6 +137,12 @@ public class Player extends Observable implements Serializable{
 		}
 	}
 	
+	/**
+	 * Initializes a boolean grid with the position of set {@link Ship}s marked as false
+	 * and free cells marked as true, copying it from an existing boolean grid.
+	 * 
+	 * @param grid A boolean grid.
+	 */
 	public void setInitialShipsGrid(boolean[][] grid) {
 		for(int i = 0; i < gameSize; ++i) {
 			for(int j = 0; j < gameSize; ++j) {
@@ -141,6 +151,10 @@ public class Player extends Observable implements Serializable{
 		}
 	}
 	
+	/**
+	 * Utility method that prints a representation of the initial position of the
+	 * {@link Player}'s {@link Ship}s.
+	 */
 	public void printInitialShipsGrid() {
 		for(int i = 0; i < gameSize; ++i) {
 			for(int j = 0; j < gameSize; ++j) {
@@ -152,58 +166,75 @@ public class Player extends Observable implements Serializable{
 			System.out.println();
 		}
 	}
+	
 	/**
-	 * Gets the name of the {@code Player}
-	 * @return A String containing the name of the {@code Player}
+	 * Gets the name of the {@link Player}.
+	 *
+	 * @return A String containing the name of the {@link Player}.
 	 */
 	public String getName() {
 		return this.name;
 	}
 	
 	/**
-	 * Sets the name of the {@code Player}
-	 * @param newName String containing the new {@code Player}'s name
+	 * Gets the game size of the Battleship game.
+	 * 
+	 * @return An integer representing the game size of the current Battleship match.
+	 */
+	public int getGameSize() {
+		return this.gameSize;
+	}
+	
+	/**
+	 * Sets the name of the {@link Player}.
+	 * 
+	 * @param newName String containing the new {@link Player}'s name.
 	 */
 	public void setName(String newName) {
 		this.name = newName;
 	}
 	
 	/**
-	 * Gets the matrix of the {@code Player}'s {@code Ship}s set at the beginning
+	 * Gets the matrix of the {@link Player}'s {@link Ship}s set at the beginning
 	 * of the game.
-	 * @return The boolean matrix of the {@code Player}'s set {@code Ship}s
+	 * 
+	 * @return The boolean matrix of the {@link Player}'s set {@link Ship}s.
 	 */
 	public boolean[][] getInitialShipsGrid(){
 		return this.initialShipsGrid;
 	}
 	
 	/**
-	 * Gets the matrix of the current {@code Player}'s set {@code Ship}s
-	 * @return The boolean matrix of the {@code Player}'s set {@code Ship}s
+	 * Gets the matrix of the current {@link Player}'s set {@link Ship}s.
+	 * 
+	 * @return The boolean matrix of the {@link Player}'s set {@link Ship}s.
 	 */
 	public boolean[][] getShipsGrid(){
 		return this.shipsGrid;
 	}
 	
 	/**
-	 * Gets the matrix of the {@code Player}'s received hits
-	 * @return The boolean matrix of the {@code Player}'s received hits
+	 * Gets the boolean matrix of the {@link Player}'s received hits.
+	 * 
+	 * @return The boolean matrix of the {@link Player}'s received hits.
 	 */
 	public boolean[][] getHitsGrid(){
 		return this.hitsGrid;
 	}
 	
 	/**
-	 * Gets the list of the {@code Player}'s {@code Ship}s
-	 * @return The list of the {@code Player}'s {@code Ship}s
+	 * Gets the list of the available {@link Player}'s {@link Ship}s.
+	 * 
+	 * @return The list of the available {@link Player}'s {@link Ship}s.
 	 */
 	public ArrayList<Ship> getShipList(){
 		return this.shipList;
 	}
 	
 	/**
-	 * Sets a new {@code Player}'s state
-	 * @param state The new {@code Player}'s state
+	 * Sets a new {@link Player}'s state.
+	 * 
+	 * @param state The new {@link Player}'s state.
 	 */
 	public void setState(PlayerState state) {
 		this.state = state;
@@ -212,13 +243,20 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Gets the current {@code Player}'s state
-	 * @return The current {@code Player}'s state
+	 * Gets the current {@link Player}'s state.
+	 * 
+	 * @return The current {@link Player}'s state.
 	 */
 	public PlayerState getState() {
 		return this.state;
 	}
 	
+	/**
+	 * Initializes the three boolean grids (initial, ships and hits) to the 
+	 * correct size and sets each of their cells to true.
+	 * 
+	 * @param gridSize The size of the current Battleship match.
+	 */
 	private void initGrids(int gridSize) {
 		initialShipsGrid = new boolean[gridSize][gridSize];
 		shipsGrid = new boolean[gridSize][gridSize];
@@ -232,7 +270,11 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Method mimicking an incoming hit to the {@code Player}
+	 * Method mimicking an incoming hit to the {@link Player}. It sets a cell of the
+	 * hits grid to false at the coordinates passed as parameters. It also checks if the 
+	 * coordinates match with the piece of a {@link Ship} on the ships grid and decides if 
+	 * a {@link Ship} has been hit. It sets the {@link Player}'s state accordingly.
+	 * 
 	 * @param row The row coordinate being hit
 	 * @param col The column coordinate being hit
 	 */
@@ -256,10 +298,11 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Returns the coordinates the {@code Player} wants to hit
-	 * @param row The row coordinate
-	 * @param col the column coordinate
-	 * @return An integer bidimensional array containing the two coordinates
+	 * Returns the coordinates the {@link Player} wants to hit.
+	 * 
+	 * @param row The row coordinate.
+	 * @param col the column coordinate.
+	 * @return An integer bidimensional array containing the two coordinates.
 	 */
 	public int[] hits(int row, int col){
 		int[] coordinates = new int[2];
@@ -270,11 +313,12 @@ public class Player extends Observable implements Serializable{
 	
 
 	/**
-	 * Sets a single {@code Player}'s {@code Ship} onto the {@code Player}'s game grid
-	 * @param shipIndex The index of the {@code Ship}
-	 * @param row The row coordinate the {@code Ship} is going to be set to
-	 * @param col The column coordinate the {@code Ship} is going to be set to
-	 * @param direction The vertical/horizontal direction of the {@code Ship}
+	 * Sets a single {@link Player}'s {@link Ship} onto the {@link Player}'s game grid.
+	 * 
+	 * @param shipIndex The index of the {@link Ship}.
+	 * @param row The row coordinate the {@link Ship} is going to be set.
+	 * @param col The column coordinate the {@link Ship} is going to be set.
+	 * @param direction The vertical/horizontal direction of the {@link Ship}.
 	 */
 	public void setShip(int shipIndex, int row, int col, ShipDirection direction) {
 		//se ho posizionato la nave, la rimuovo dalla lista
@@ -298,7 +342,7 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Randomly sets all {@code Player}'s {@code Ship}s
+	 * Randomly sets all {@link Player}'s {@link Ship}s.
 	 */
 	public void randomSetShips() {
 		Random rand = new Random();
@@ -310,12 +354,11 @@ public class Player extends Observable implements Serializable{
 				setShip(0, row, col, ShipDirection.HORIZONTAL);
 			else
 				setShip(0, row, col, ShipDirection.VERTICAL);
-			//notify observers in setShip
 		}
 	}
 	
 	/**
-	 * Removes all {@code Player}'s {@code Ship}s from its game grid
+	 * Removes all {@link Player}'s {@link Ship}s from its ships grid and initial ships grid.
 	 */
 	public void clearShips() {
 		while(placedShips.size() != 0) {
@@ -333,14 +376,17 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Returns the number of the non-completely-destroyed {@code Ship}s of the {@code Player}
-	 * @return An integer stating the number of "alive" {@code Ship}s
+	 * Returns the number of the non-completely-destroyed {@link Ship}s of the {@link Player}.
+	 * 
+	 * @return An integer stating the number of "alive" {@link Ship}s.
 	 */
 	public int shipsLeft() {
 		return placedShips.size();
 	}
 	
-	//svuoto la shipsGrid (tutte le celle a true)
+	/**
+	 * Sets each cell of the ships grid to true.
+	 */
 	private void resetShipsGrid() {
 		for(int i = 0; i < shipsGrid.length; ++i) {
 			for(int j = 0; j < shipsGrid.length; ++j) {
@@ -351,8 +397,8 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Set if the {@code Player}'s timer has run out.	
-	 * @param timedOut A boolean parameter: false if the player is not defeated, true otherwise
+	 * Set if the {@link Player}'s timer has run out.	
+	 * @param timedOut A boolean parameter: false if the player is not defeated, true otherwise.
 	 */
 	public void setTimedOut(boolean timedOut) {
 		this.timedOut= timedOut;
@@ -361,7 +407,7 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Say if the {@code Player}'s countdown is over or not.
+	 * Say if the {@link Player}'s countdown is over or not.
 	 * 
 	 */
 	public boolean isTimedOut() {
@@ -369,8 +415,8 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Check if the {@code Player} is defeated
-	 * @return true if {@code Player} is defeated, false otherwise
+	 * Check if the {@link Player} is defeated, i.e. if all of its {@link Ship}s have been sunk.
+	 * @return True if {@link Player} is defeated, false otherwise.
 	 */
 	public boolean isDefeated() {
 		boolean result = true;
@@ -382,11 +428,12 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Utility method for comparing two {@code Player} objects, 
-	 * mostly used for testing and debugging purposes
-	 * @param o {@code Object} to probe
-	 * @return true if {@code o} and the calling {@code Player} are the same 
-	 * object with the same attributes, false otherwise
+	 * Utility method for comparing two {@link Player} objects, 
+	 * mostly used for testing and debugging purposes.
+	 * 
+	 * @param o {@link Object} to probe.
+	 * @return true if {@link Object} o and the calling {@link Player} are the same 
+	 * {@link Object} with the same attributes, false otherwise.
 	 */
 	public boolean equals(Object o) {
 		if(o instanceof Player) {
@@ -400,7 +447,7 @@ public class Player extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Utility method for printing a {@code Player} object, mostly used for debugging purposes
+	 * Utility method for printing a {@link Player} object, mostly used for debugging purposes.
 	 */
 	public String toString() {
 		String toString = "Name: "+this.getName()+"\nShips:\n";
@@ -441,22 +488,4 @@ public class Player extends Observable implements Serializable{
 		
 		return toString;
 	}
-	
-	/*
-	public static void main(String[] args) {
-		Player p = new Player(10);
-		p.setShip(0, 0, 0, ShipDirection.HORIZONTAL);//2
-		//System.out.println(p.toString());
-		p.setShip(0, 2, 0, ShipDirection.VERTICAL);//4
-		//System.out.println(p.toString());
-		p.setShip(0, 0, 4, ShipDirection.VERTICAL);//2
-		p.setShip(0, 3, 3, ShipDirection.HORIZONTAL);//5
-		p.setShip(0, 5, 3, ShipDirection.VERTICAL);//3
-		System.out.println(p.toString());
-		p.isHit(0, 0);
-		System.out.println(p.toString());
-		p.isHit(0, 1);
-		System.out.println(p.toString());
-	}
-	*/
 }

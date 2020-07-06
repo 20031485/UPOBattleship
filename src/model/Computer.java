@@ -10,7 +10,8 @@ import utils.PlayerState;
 import utils.ShipDirection;
 
 /**
- * Class that represents the A.I. of a Battleship opponent.
+ * Class that represents the A.I. of a Battleship opponent. According to its {@link ComputerType},
+ * its hit choices can be made pseudo-wisely or pseudo-randomly.
  * @author 20027017 & 20031485
  *
  */
@@ -18,18 +19,15 @@ public class Computer extends Player implements Serializable{
 	//attributes
 	private static final long serialVersionUID = 1L;
 	private ComputerType difficulty;
-	//lista di tutte le coordinate che il computer può colpire
 	private ArrayList<Coordinates> coordinatesList;
-	//solo per computer SMART: lista delle coordinate 
-	//che vado a colpire al prossimo turno
 	private ArrayList<Coordinates> nextHits;
-	private Coordinates lastHit;//remember last hit
-	private Coordinates lastSuccessfulHit;//remember last successful hit
+	private Coordinates lastHit;
+	private Coordinates lastSuccessfulHit;
 	
 	/**
-	 * Constructor for the class {@code Computer}
-	 * @param gameSize The size of the Battleship game grid
-	 * @param difficulty The "intelligence" of the {@code Computer}
+	 * Constructor for the class {@link Computer}.
+	 * @param gameSize The size of the Battleship game grid.
+	 * @param difficulty The "intelligence" of the {@link Computer}.
 	 */
 	public Computer(int gameSize, ComputerType difficulty) {
 		super(gameSize);
@@ -41,10 +39,14 @@ public class Computer extends Player implements Serializable{
 		this.lastSuccessfulHit = null;
 	}
 
+	/**
+	 * A method that initializes the list of the coordinates a {@link Computer}
+	 * can hit during a Battleship match, according to the size of the game grid.
+	 */
 	private void initCoordinatesList() {
 		coordinatesList = new ArrayList<>();
-		for(int i = 0; i < this.gameSize; ++i) {
-			for(int j = 0; j < this.gameSize; ++j) {
+		for(int i = 0; i < this.getGameSize(); ++i) {
+			for(int j = 0; j < this.getGameSize(); ++j) {
 				Coordinates coordinates = new Coordinates(i, j);
 				coordinatesList.add(coordinates);
 			}
@@ -52,17 +54,17 @@ public class Computer extends Player implements Serializable{
 	}
 
 	/**
-	 * Returns the difficulty set for the {@code Computer}
-	 * @return The difficulty of the {@code Computer}
+	 * Returns the difficulty set for the {@link Computer}.
+	 * @return The difficulty of the {@link Computer}.
 	 */
 	public ComputerType getDifficulty() {
 		return difficulty;
 	}
 
 	/**
-	 * Returns the ArrayList of the coordinates the {@code Computer}
-	 * can hit
-	 * @return ArrayList of Coordinates
+	 * Returns the ArrayList of the coordinates the {@link Computer}.
+	 * can hit.
+	 * @return ArrayList of {@link Coordinates}.
 	 */
 	public ArrayList<Coordinates> getCoordinatesList() {
 		return coordinatesList;
@@ -70,49 +72,49 @@ public class Computer extends Player implements Serializable{
 
 	/**
 	 * Returns the ArrayList of the possible coordinates the 
-	 * {@code Computer} will hit in its next move
-	 * @return ArrayList of Coordinates
+	 * {@link Computer} will hit in its next move.
+	 * @return ArrayList of {@link Coordinates}.
 	 */
 	public ArrayList<Coordinates> getNextHits() {
 		return nextHits;
 	}
 	
 	/**
-	 * Returns the Coordinates of the last hit the {@code Computer} did
-	 * @return Coordinates of {@code Computer}'s last hit
+	 * Returns the Coordinates of the last hit the {@link Computer} fired.
+	 * @return {@link Coordinates} of {@link Computer}'s last hit.
 	 */
 	public Coordinates getLastHit() {
 		return lastHit;
 	}
 
 	/**
-	 * Utility method that prints the Coordinates 
-	 * of the last hit the {@code Computer} fired
+	 * Utility method that prints the {@link Coordinates}.
+	 * of the last hit the {@link Computer} fired.
 	 */
 	public void printLastHit() {
 		System.out.println("lastHit: ["+lastHit.getRow()+", "+lastHit.getColumn()+"]");
 	}
 	
 	/**
-	 * Returns the Coordinates of the last successful hit the
-	 * {@code Computer} did
-	 * @return Coordinates of {@code Computer}'s last successful hit
+	 * Returns the {@link Coordinates} of the last successful hit the
+	 * {@link Computer} fired.
+	 * @return Coordinates of {@link Computer}'s last successful hit.
 	 */
 	public Coordinates getLastSuccessfulHit() {
 		return lastSuccessfulHit;
 	}
 
 	/**
-	 * Utility method that prints the Coordinates 
-	 * of the last successful hit the {@code Computer} fired
+	 * Utility method that prints the {@link Coordinates}
+	 * of the last successful hit the {@link Computer} fired.
 	 */
 	public void printLastSuccessfulHit() {
 		System.out.println("lastSuccessfulHit: ["+lastSuccessfulHit.getRow()+", "+lastSuccessfulHit.getColumn()+"]");
 	}
 	
 	/**
-	 * Utility method that prints the coordinates a smart {@code Computer} is 
-	 * going to aim in its next turns
+	 * Utility method that prints the coordinates a smart {@link Computer} is 
+	 * going to aim in its next turns.
 	 * 
 	 */
 	public void printNextHits() {
@@ -124,8 +126,8 @@ public class Computer extends Player implements Serializable{
 	}
 	
 	/**
-	 * Utility method that prints the coordinates {@code Computer} still has
-	 * to hit in its next turns
+	 * Utility method that prints the coordinates {@link Computer} still has
+	 * to hit in its next turns.
 	 * 
 	 */
 	public void printCoordinatesList() {
@@ -140,15 +142,14 @@ public class Computer extends Player implements Serializable{
 	}
 	
 	/**
-	 * According to the {@code Player}'s state, the {@code Computer}
-	 * decides where to aim for its next hit. If the {@code Computer} is
+	 * According to the {@link Player}'s state, the {@link Computer}
+	 * decides where to aim for its next hit. If the {@link Computer} is
 	 * "stupid", it will aim randomly. 
-	 * @param state The current {@code Player}'s state
+	 * @param state The current {@link Player}'s state.
 	 * @return A bidimensional integer array containing the two coordinates
-	 * the {@code Computer} has chosen to hit
+	 * the {@link Computer} has chosen to hit
 	 */
 	public int[] computerHits(PlayerState state) {
-		//System.out.print("\nCOMPUTERHITS -> ");
 		//istanzio array di coordinate
 		int[] coordinates = new int[2];
 		switch(this.difficulty) {
@@ -169,14 +170,13 @@ public class Computer extends Player implements Serializable{
 				break;
 		}
 		//ritorna array bidimensionale con le coordinate estratte
-		//System.out.println("Computer hits: (" + coordinates[0] + ", " + coordinates[1] + ")");
 		return coordinates;
 	}
 	
 	/**
-	 * Randomly extract a couple of coordinates from the list of
-	 * coordinates {@code Computer} still has not hit
-	 * @return A bidimensional integer array containing the two coordinates
+	 * Randomly extract a couple of {@link Coordinates} from the list of
+	 * coordinates {@link Computer} still has not hit.
+	 * @return A bidimensional integer array containing the two coordinates.
 	 */
 	public int[] randomHit() {
 		int[] coordinates = new int[2];
@@ -200,10 +200,10 @@ public class Computer extends Player implements Serializable{
 	}
 	
 	/**
-	 * Only if the {@code Computer} is set as "smart", it chooses
-	 * a couple of coordinates more wisely
-	 * @param state The current {@code Player}'s state
-	 * @return A bidimensional integer array containing the coordinates chosen
+	 * Only if the {@link Computer} is set as "smart", it chooses
+	 * a couple of coordinates more wisely.
+	 * @param state The current {@link Player}'s state.
+	 * @return A bidimensional integer array containing the coordinates chosen.
 	 */
 	public int[] smartHit(PlayerState state) {
 		//istanzio array di due coordinate
@@ -245,11 +245,11 @@ public class Computer extends Player implements Serializable{
 	}
 	
 	/**
-	 * Given a cell's coordinates, the {@code Computer} aims to the 
+	 * Given a cell's coordinates, the {@link Computer} aims to the 
 	 * (at most) four cells vertically and horizontally surrounding 
-	 * the chosen cell
-	 * @param row The row coordinate of the chosen cell
-	 * @param col The col coordinate of the chosen cell
+	 * the chosen cell.
+	 * @param row The row coordinate of the chosen cell.
+	 * @param col The col coordinate of the chosen cell.
 	 */
 	public void crossCheck(int row, int col) {
 		int i = 0;
@@ -279,21 +279,14 @@ public class Computer extends Player implements Serializable{
 	}
 	
 	/**
-	 * Given two couples of aligned coordinates, the {@code Computer} 
+	 * Given two couples of aligned {@link Coordinates}, the {@link Computer} 
 	 * chooses at most two other cells, aligned to the parameters, to be
-	 * aimed to in its next hits
-	 * @param lastHit A {@code Coordinates} object containing the coordinates of the first cell
-	 * @param lastSuccessfulHit A {@code Coordinates} object containing the coordinates of the second cell
-	 * @param direction
+	 * aimed to in its next hits.
+	 * @param lastHit A {@link Coordinates} object containing the coordinates of the first cell.
+	 * @param lastSuccessfulHit A {@link Coordinates} object containing the coordinates of the second cell.
+	 * @param direction The alignment of the two cells.
 	 */
 	public void lineCheck(Coordinates lastHit, Coordinates lastSuccessfulHit, ShipDirection direction) {
-		//tolgo i nextHits - potrebbero esserci residui del crossCheck
-		//clearNextHits();
-		int k = 0;
-		//printLastHit();
-		//printLastSuccessfulHit();
-		//printCoordinatesList();		
-		//printNextHits();
 		switch(direction) {
 			case HORIZONTAL:
 				int i = 0;
@@ -375,8 +368,8 @@ public class Computer extends Player implements Serializable{
 	}
 	
 	/**
-	 * Empties the list of the next {@code Coordinates} the 
-	 * {@code Computer} wants to hit
+	 * Empties the list of the next {@link Coordinates} the 
+	 * {@link Computer} wants to hit.
 	 */
 	public void clearNextHits() {
 		int i = 0;
@@ -387,9 +380,9 @@ public class Computer extends Player implements Serializable{
 	}
 	
 	/**
-	 * The {@code Computer} checks if its last hit was successful or not
-	 * according to the state the {@code Player} is in
-	 * @param state The current state of the {@code Player}
+	 * The {@link Computer} checks if its last hit was successful or not.
+	 * according to the state the {@link Player} is in.
+	 * @param state The current state of the {@link Player}.
 	 */
 	public void didComputerHit(PlayerState state) {
 		//leggo lo stato del giocatore
@@ -442,33 +435,4 @@ public class Computer extends Player implements Serializable{
 				break;
 		}
 	}
-	
-	/*
-	public static void main(String[] args) {
-		int gameSize = 10;
-		Computer c = new Computer(gameSize, ComputerType.SMART);
-		c.randomSetShips();
-		System.out.println(c.toString());
-		
-		Player p = new Player(gameSize);
-		p.randomSetShips();
-		System.out.println(p.toString());
-		int moves = 0;
-
-		//meccanismo per colpire il giocatore
-		int[] hit = new int[2];
-		while(!p.isDefeated()) {
-			System.out.println();
-			hit = c.computerHits(p.getState());
-			p.isHit(hit[0], hit[1]);
-			System.out.println("PlayerState after hit: " + p.getState());
-			System.out.println();
-			if(p.getState() == PlayerState.HIT || p.getState() == PlayerState.HITANDSUNK)
-				System.out.println(p.toString());
-			moves++;
-		}
-		
-		System.out.println(p.toString()+"\n\nmoves: "+moves);
-	}
-	*/
 }

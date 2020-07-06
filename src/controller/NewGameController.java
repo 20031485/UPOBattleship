@@ -3,39 +3,59 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.AbstractButton;
+
 import model.BattleshipModel;
 import model.Computer;
 import model.Player;
 import utils.BattleshipState;
+import utils.ComputerType;
 import view.NewGamePanel;
 
-import utils.ComputerType;
-
+/**
+ * Controller for a {@link NewGamePanel}. According to the user's settings,
+ * it initializes a {@link BattleshipModel} object through its {@code newGame()} method.
+ * 
+ * @author 20027017 & 20031485
+ *
+ */
 public class NewGameController implements ActionListener{
 	//attributes
 	private BattleshipModel model;
 	private NewGamePanel newGamePanel;
 
-	
-	//constructor - newGamePanel is necessary because there is no other link possibility
+	/**
+	 * Constructor for the class {@link NewGameController} initialized with a
+	 * {@link BattleshipModel} instance and a {@link NewGamePanel}.
+	 * 
+	 * @param model A {@link BattleshipModel} instance.
+	 * @param newGamePanel A {@link NewGamePanel} instance.
+	 */
 	public NewGameController(BattleshipModel model, NewGamePanel newGamePanel){
 		this.model = model;
 		this.newGamePanel = newGamePanel;
 	}
 	
-	//methods
+
 	@Override
+	/**
+	 * When an {@link ActionEvent} is detected, according to the button
+	 * pressure which fired it, this method can initialize a {@link BattleshipModel}
+	 * object through its {@code newGame()} method. If other buttons were pressed, it 
+	 * may change the {@link BattleshipModel}'s state, triggering the {@code setVisible()}
+	 * methods of the previous and next panels in the panel sequence.
+	 * 
+	 * @param e An {@link ActionEvent} fired when a button on the 
+	 * {@link NewGamePanel} is pressed. 
+	 */
 	public void actionPerformed(ActionEvent e) {
 		//abstractButton to get both JButtons and JRadioButtons
 		AbstractButton source = (AbstractButton)e.getSource();
 		String command = source.getText();
 		switch(command) {
 			case "CONFIRM":
-				//System.out.println("confirm");
 				if(newGamePanel.p1vsp2Button.isSelected()) {
 					//feature unavailable
 					model.setState(BattleshipState.NEWGAME);
-					//System.out.println("\tP1vsP2");
 				}
 				else {
 					int gameSize = 10;
@@ -43,7 +63,6 @@ public class NewGameController implements ActionListener{
 					ComputerType computerType = ComputerType.STUPID;
 					boolean timed = false;
 					if(newGamePanel.p1vsCPUButton.isSelected()) {
-						//System.out.println("\tP1vsCPU");
 						
 						if(newGamePanel.easyModeButton.isSelected())
 							computerType = ComputerType.STUPID;
@@ -71,13 +90,9 @@ public class NewGameController implements ActionListener{
 						
 						if(newGamePanel.timed5minsButton.isSelected())
 							secs = 5*60;
-						//model = new BattleshipModel(gameSize);
-						//model.setGameSize(gameSize);
+
 						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed, secs);
-						//model.getPlayer().randomSetShips();
-						//System.out.println("model.newGame(new Player("+gameSize+"), new Computer("+gameSize+", "+computerType+"), "+gameSize+", "+timed+", "+mins+")");
-						//System.out.println("GameSize: "+model.getGameSize());
-						//System.out.println(model.getPlayer().toString());
+
 					}
 					model.setState(BattleshipState.SETSHIPS);
 				}

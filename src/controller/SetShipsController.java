@@ -2,27 +2,50 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 
 import model.BattleshipModel;
+import view.NewGamePanel;
 import view.SetShipsPanel;
 import utils.BattleshipState;
 import utils.ShipDirection;
 
+/**
+ * Controller for a {@link SetShipsPanel}. According to the user's settings,
+ * it initializes a {@link model.Player}'s ship grid by positioning its available {@link model.Ship}s.
+ * 
+ * @author 20027017 & 20031485
+ *
+ */
 public class SetShipsController implements ActionListener{
-	//attributes
+
 	private BattleshipModel model;
 	private SetShipsPanel setShipsPanel;
 	
-	//constructor
+	/**
+	 * Constructor for the class {@link SetShipsController} initialized with a
+	 * {@link BattleshipModel} instance and a {@link SetShipsPanel}.
+	 * 
+	 * @param model A {@link BattleshipModel} instance.
+	 * @param setShipsPanel A {@link SetShipsPanel} instance.
+	 */
 	public SetShipsController(BattleshipModel model, SetShipsPanel setShipsPanel) {
 		this.model = model;
 		this.setShipsPanel = setShipsPanel;
 	}
 	
-	//methods
+
 	@Override
+	/**
+	 * When an {@link ActionEvent} is detected, according to the button
+	 * pressure which fired it, this method can either set a {@link Ship}, 
+	 * set all the available {@link Ship}s randomly, clear all the {@link Ship}s
+	 * from the grid or, when all {@link Ship}s are set, enable a "PLAY" button which,
+	 * if pressed, triggers a state change in the {@link BattleshipModel}.
+	 * 
+	 * @param e An {@link ActionEvent} fired when a button on the 
+	 * {@link SetShipsPanel} is pressed.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
 		int gameSize = model.getGameSize();
@@ -30,28 +53,20 @@ public class SetShipsController implements ActionListener{
 		String command = source.getText();
 		
 		if(command.equals("RANDOM")) {
-			//System.out.println("Random Set pressed");
 			model.getPlayer().clearShips();
 			model.getPlayer().randomSetShips();
-			//System.out.println(model.getPlayer().toString());
 		}
 		
 		if(command.equals("CLEAR")) {
 			model.getPlayer().clearShips();
-			//model.getPlayer().clearShips();
-			//model.getPlayer().clearShips();
 		}
 		
 		if(command.equals("PLAY")) {
-			//System.out.println("PLAY pressed");
 			model.getComputer().randomSetShips();
 			model.setState(BattleshipState.BATTLE);
-			//System.out.println(model.getPlayer().toString());
-			//System.out.println(model.getComputer().toString());
 		}
 		
 		if(command.equals("BACK")) {
-			//model.getPlayer().clearShips();
 			model.setState(BattleshipState.NEWGAME);
 		}
 		
@@ -61,7 +76,7 @@ public class SetShipsController implements ActionListener{
 					if(source == setShipsPanel.getButtonFromButtonGrid(i, j)) {
 						row = i;
 						col = j;
-						//System.out.println("row = "+ row +", col = "+ col);
+
 						int shipIndex = setShipsPanel.getChooseShip().getSelectedIndex();
 						
 						ShipDirection direction;
@@ -77,7 +92,5 @@ public class SetShipsController implements ActionListener{
 				}
 			}
 		}
-		//model.getPlayer().printInitialShipsGrid();
-		//System.out.println(model.getPlayer().toString());
 	}
 }
