@@ -2,8 +2,11 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+//import java.beans.PropertyChangeEvent;
+//import java.beans.PropertyChangeListener;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,7 +16,7 @@ import utils.BattleshipState;
 
 //THIS IS A VIEW
 
-public class StartLoadPanel extends JPanel implements PropertyChangeListener{
+public class StartLoadPanel extends JPanel implements Observer/*, PropertyChangeListener*/{
 	private static final long serialVersionUID = 1L;
 	//attributes
 	private static final int WIDTH = 300;
@@ -24,16 +27,23 @@ public class StartLoadPanel extends JPanel implements PropertyChangeListener{
 	private JLabel label;
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
-	
 	private JButton newGameButton;
-	protected JButton loadGameButton;
+	public JButton loadGameButton;
+	
+	private boolean here = false;
 	
 	//constructors
-	StartLoadPanel(BattleshipModel model/*, StartLoadController controller*/){
+	StartLoadPanel(BattleshipModel model){
 		this.model = model;
 		this.controller =  new StartLoadController(model, this);//controller;
-		this.model.addPropertyChangeListener(this); //view listens to model
+		//this.model.addPropertyChangeListener(this); //view listens to model
+		this.here = true;
+		
+		//add Observer
+		this.model.addObserver(this);
 		System.out.println("StartLoadPanel: " + model.toString());
+		
+		
 		
 		//settings
 		this.setLayout(new BorderLayout());
@@ -74,7 +84,7 @@ public class StartLoadPanel extends JPanel implements PropertyChangeListener{
 	public String getTitle() {
 		return TITLE;
 	}
-
+/*
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
@@ -87,5 +97,23 @@ public class StartLoadPanel extends JPanel implements PropertyChangeListener{
 			else
 				this.setVisible(false);
 		}
+	}
+*/
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		if(model.getState() == BattleshipState.WELCOME) {
+			if(!here) {
+				if(BattleshipModel.savedGameExists())
+					loadGameButton.setVisible(true);
+				this.setVisible(true);
+				here = true;
+			}
+		}
+		else {
+			this.setVisible(false);
+			here = false;
+		}
+		
 	}
 }

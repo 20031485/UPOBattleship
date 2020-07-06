@@ -22,7 +22,7 @@ import javax.swing.WindowConstants;
 import controller.BattleshipController;
 import model.BattleshipModel;
 
-public class BattleshipView extends JFrame implements PropertyChangeListener{
+public class BattleshipView extends JFrame implements Observer, PropertyChangeListener{
 	//attributes
 	private static final String TITLE = "UPOBattleship";
 	private BattleshipModel model;
@@ -44,7 +44,8 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 	//constructor
 	public BattleshipView(BattleshipModel model) {
 		this.model = model;
-		this.model.addPropertyChangeListener(this);
+		//this.model.addPropertyChangeListener(this);
+		this.model.addObserver(this);
 		this.controller = new BattleshipController(model);
 		
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -112,6 +113,45 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 					break;
 			}
 		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		switch(this.model.getState()) {
+			case WELCOME:
+				setTitle("WELCOME!");
+				setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
+				//this.pack();
+				break;
+			
+			case BATTLE:
+				setTitle(BattlePanel.getTitle());
+				setSize(battlePanel.getWidth(), battlePanel.getHeight());
+				//this.pack();
+				break;
+		
+			case NEWGAME:
+				setTitle(NewGamePanel.getTitle());
+				setSize(newGamePanel.getWidth(), newGamePanel.getHeight());
+				//newGamePanel = new NewGamePanel(model/*, controller.getNewGameController()*/);
+				//add(newGamePanel);
+				//this.pack();
+				break;
+			
+			case SETSHIPS:
+				setTitle(setShipsPanel.getTitle());
+				//setShipsPanel = new SetShipsPanel(model/*, controller.getSetShipsController()*/);
+				//add(setShipsPanel);
+				setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
+				//setShipsPanel.setVisible(true);
+				//this.pack();//activated when created!
+				break;
+				
+			default:
+				break;
+	}
+		
 	}
 	
 	

@@ -2,8 +2,11 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+//import java.beans.PropertyChangeEvent;
+//import java.beans.PropertyChangeListener;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -15,7 +18,7 @@ import model.BattleshipModel;
 import utils.BattleshipState;
 
 
-public class NewGamePanel extends JPanel implements PropertyChangeListener{
+public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeListener*/{
 	private static final long serialVersionUID = 1L;
 	
 	//attributes
@@ -70,12 +73,15 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 	private ButtonGroup difficultyButtonGroup;
 	private ButtonGroup timedButtonGroup;
 	
+	private boolean here = false;
+	
 	//constructor
-	public NewGamePanel(BattleshipModel model/*, NewGameController controller*/) {
+	public NewGamePanel(BattleshipModel model) {
 		this.model = model;
 		//instance its own controller
 		this.newGameController = new NewGameController(model, this);
-		this.model.addPropertyChangeListener(this);
+		//this.model.addPropertyChangeListener(this);
+		this.model.addObserver(this);
 		System.out.println("NewGamePanel: " + model.toString());
 		
 		//settings
@@ -225,7 +231,7 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 	public static String getTitle() {
 		return TITLE;
 	}
-
+/*
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
@@ -236,5 +242,20 @@ public class NewGamePanel extends JPanel implements PropertyChangeListener{
 			else
 				this.setVisible(false);
 		}
+	}
+*/
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		if(model.getState() == BattleshipState.NEWGAME) {
+			if(!here) {
+				this.setVisible(true);
+				here = true;
+			}
+		}
+		else {
+			this.setVisible(false);
+			here = false;
+		}	
 	}
 }

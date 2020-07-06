@@ -6,8 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+//import java.beans.PropertyChangeEvent;
+//import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,7 +24,7 @@ import utils.BattleshipState;
 import utils.Utility;
 //import view.CountdownLabel;
 
-public class BattlePanel extends JPanel implements Observer, PropertyChangeListener{
+public class BattlePanel extends JPanel implements Observer/*, PropertyChangeListener*/{
 	private static final long serialVersionUID = 1L;
 
 	//attributes
@@ -33,7 +33,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	
 	private static final String TITLE = "BATTLE!";
 	private static final int WIDTH = 1000;
-	private static final int HEIGHT = 560;
+	private static final int HEIGHT = 600;
 	
 	private JPanel bothGridsPanel;
 	
@@ -50,12 +50,11 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	private JPanel allButtonsPanel;
 	
 	private JButton saveButton;
-//	private JButton pauseButton;
-	private JButton rematchButton;
+//	private JButton rematchButton;
 	
 	private CountdownPanel timerPanel;
-//	private JLabel/*CountdownLabel */ countdownLabel;
-	//private static final TitledBorder timerTitle = BorderFactory.createTitledBorder("TIMER");
+	
+	private boolean here = false;
 	
 	
 	private static final String PLAYER_STATUS = "PLAYER STATUS: ";
@@ -78,7 +77,8 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		setSize(WIDTH, HEIGHT);
 		setLayout(new BorderLayout());
 		//link changeListener
-		this.model.addPropertyChangeListener(this);
+		//this.model.addPropertyChangeListener(this);
+		this.model.addObserver(this);
 		
 		//link controller
 		this.controller = new BattleController(model, this);
@@ -453,8 +453,8 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		saveButton = new JButton("SAVE GAME");
 		saveButton.addActionListener(controller);
 		
-		rematchButton = new JButton("REMATCH");
-		rematchButton.addActionListener(controller);
+		//rematchButton = new JButton("REMATCH");
+		//rematchButton.addActionListener(controller);
 		
 		if(model.isJustSaved()) {
 			saveButton.setEnabled(false);
@@ -464,7 +464,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		}
 		
 		allButtonsPanel.add(saveButton);
-		allButtonsPanel.add(rematchButton);
+		//allButtonsPanel.add(rematchButton);
 		
 		youWinLabel.setHorizontalAlignment(JLabel.CENTER);
 		youWinLabel.setFont(new Font("Monospace", Font.PLAIN, 50));
@@ -477,7 +477,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		allButtonsPanel.add(youLoseLabel);
 		youLoseLabel.setVisible(false);
 		
-		rematchButton.setVisible(false);
+		//rematchButton.setVisible(false);
 		
 		if(model.isTimed()) {
 			/*pauseButton = new JButton("PAUSE");
@@ -495,7 +495,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	public void addRematchPanel() {
 		
 	}
-	
+/*	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
@@ -511,34 +511,58 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				this.setVisible(false);
 		}
 	}
-
+*/
 	@Override
 	public void update(Observable o, Object arg) {
-		updateAllComponents();
-		
-		//update saveButton
-		if(model.isJustSaved()) {
-			saveButton.setEnabled(false);
+		if(model.getState() == BattleshipState.BATTLE) {
+			if(!here) {
+				setAllComponents();
+				this.setVisible(true);
+				if(model.isTimed())
+					timerPanel.timerStart();
+				here = true;
+			}
+			//real update
+			updateAllComponents();
+			
+			//update saveButton
+			if(model.isJustSaved()) {
+				saveButton.setEnabled(false);
+			}
+			else {
+				saveButton.setEnabled(true);
+			}
+			
+			//check for win/lose conditions
+			if(model.getPlayer().isDefeated() || model.getComputer().isDefeated() || model.getPlayer().isTimedOut()) {
+
+				saveButton.setVisible(false);
+				//if(model.isTimed())
+					//pauseButton.setVisible(false);
+				//if computer wins
+				if(model.getPlayer().isDefeated()) {
+					youLoseLabel.setVisible(true);
+					
+					//if time runs out
+					if(model.getPlayer().isTimedOut()) {
+						if(timerPanel != null)
+							timerPanel.timerStop();
+					}
+				}
+				//if player wins
+				if(model.getComputer().isDefeated()) {
+					if(timerPanel != null)
+						timerPanel.timerStop();
+					youWinLabel.setVisible(true);
+				}
+			}
 		}
 		else {
-			saveButton.setEnabled(true);
+			//removeAllComponents();
+			this.setVisible(false);
+			here = false;
 		}
 		
-		//check for win/lose conditions
-		if(model.getPlayer().isDefeated() || model.getComputer().isDefeated() || model.getPlayer().isTimedOut()) {
-			//addRematchPanel();
-			saveButton.setVisible(false);
-			//rematchButton.setVisible(true);
-			if(model.isTimed())
-				//pauseButton.setVisible(false);
-			//if computer wins
-			if(model.getPlayer().isDefeated() || model.getPlayer().isTimedOut()) {
-				youLoseLabel.setVisible(true);
-			}
-			//if player wins
-			if(model.getComputer().isDefeated()) {
-				youWinLabel.setVisible(true);
-			}
-		}
+		
 	}
 }

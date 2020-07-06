@@ -1,7 +1,7 @@
 package model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+//import java.beans.PropertyChangeListener;
+//import java.beans.PropertyChangeSupport;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +39,7 @@ public class BattleshipModel extends Observable implements Serializable{
 	private boolean timed;//creates timer if true
 	private int mins;
 	//notify BattleshipView for every state BattleshipModel enters
-	private /*Battleship*/PropertyChangeSupport propertyChangeSupport = new /*Battleship*/PropertyChangeSupport(this);
+	//private /*Battleship*/PropertyChangeSupport propertyChangeSupport = new /*Battleship*/PropertyChangeSupport(this);
 	//name of the saved file slot
 	private static final String savedFileName = "battleship_saved_game.dat";
 	//every move will set justSaved to false, but the method saveGame will set it to true
@@ -100,9 +100,12 @@ public class BattleshipModel extends Observable implements Serializable{
 	public void setState(BattleshipState newState) {
 		BattleshipState oldState = this.getState();
 		this.state = newState;
-		this.propertyChangeSupport.firePropertyChange("setState", oldState, newState);
+		//this.propertyChangeSupport.firePropertyChange("setState", oldState, newState);
 		System.out.println("setState: " + state);
 		//state changed --> you can press "save" again
+		
+		setChanged();
+		notifyObservers();
 		this.justSaved = false;
 	}
 	
@@ -238,7 +241,7 @@ public class BattleshipModel extends Observable implements Serializable{
 		}
 		return false;
 	}
-	
+/*	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		propertyChangeSupport.addPropertyChangeListener(listener);
 	}
@@ -246,7 +249,7 @@ public class BattleshipModel extends Observable implements Serializable{
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		propertyChangeSupport.removePropertyChangeListener(listener);
 	}
-	
+*/	
 	//utility
 	public String toString() {
 		return 	"Game Size: "+ getGameSize() +
@@ -362,7 +365,7 @@ public class BattleshipModel extends Observable implements Serializable{
 		bm.print();
 		bm.saveGame();
 	}
-
+/*
 	public PropertyChangeListener[] getPropertyChangeListeners() {
 		return propertyChangeSupport.getPropertyChangeListeners();
 	}
@@ -371,5 +374,5 @@ public class BattleshipModel extends Observable implements Serializable{
 		for(int i = 0; i < listeners.length; ++i)
 			propertyChangeSupport.addPropertyChangeListener(listeners[i]);
 	}
-	
+*/	
 }
