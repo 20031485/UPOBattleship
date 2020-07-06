@@ -98,7 +98,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		
 		//if the game is timed
 		if(model.isTimed()) {
-			setTimer();
+			setTimer(model.getMins());	
 		}
 		
 		//create panel with grids
@@ -116,12 +116,12 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		//countdownPanel.countdownStart();
 	}
 	
-	public void setTimer() {
+	public void setTimer(long mins) {
 		timerPanel = new JPanel();
 		timerPanel.setLayout(new BorderLayout());
 		
 		//TODO set timerPanel content
-		countdownLabel = new CountdownLabel(1);
+		countdownLabel = new CountdownLabel(mins);
 		countdownLabel.setHorizontalAlignment(JLabel.CENTER);
 		countdownLabel.setFont(new Font("Monospace", Font.PLAIN, 20));
 		countdownLabel.setBorder(timerTitle);
@@ -205,42 +205,34 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				}
 				
 				else {
+					shipsButtonGrid[i-1][j-1] = new JButton();
+					shipsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
+					
 					//if there are no ships and no hits (true/true)
 					if(shipsGrid[i-1][j-1] && hitsGrid[i-1][j-1]) {
-						shipsButtonGrid[i-1][j-1] = new JButton();
-						shipsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
 						shipsButtonGrid[i-1][j-1].setBackground(Color.WHITE);
 						shipsButtonGrid[i-1][j-1].setEnabled(false);
 						shipsButtonGrid[i-1][j-1].addActionListener(controller);
-						shipsGridPanel.add(shipsButtonGrid[i-1][j-1]);
 					}
 					//if there are ships but no hits (false/true)
 					else if(!shipsGrid[i-1][j-1] && hitsGrid[i-1][j-1]){
-						shipsButtonGrid[i-1][j-1] = new JButton();
-						shipsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
 						shipsButtonGrid[i-1][j-1].setBackground(Color.BLACK);
 						shipsButtonGrid[i-1][j-1].setOpaque(true);
 						shipsButtonGrid[i-1][j-1].setEnabled(false);
-						shipsGridPanel.add(shipsButtonGrid[i-1][j-1]);
 					}
 					//if there are no ships but hits (true/false)
 					else if(shipsGrid[i-1][j-1] && !hitsGrid[i-1][j-1]) {
-						shipsButtonGrid[i-1][j-1] = new JButton();
-						shipsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
 						shipsButtonGrid[i-1][j-1].setBackground(Color.BLUE);
 						shipsButtonGrid[i-1][j-1].setOpaque(true);
 						shipsButtonGrid[i-1][j-1].setEnabled(false);
-						shipsGridPanel.add(shipsButtonGrid[i-1][j-1]);
 					}
 					//if there are both ships and hits (false/false)
 					else if(!shipsGrid[i-1][j-1] && !hitsGrid[i-1][j-1]) {
-						shipsButtonGrid[i-1][j-1] = new JButton();
-						shipsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
 						shipsButtonGrid[i-1][j-1].setBackground(Color.RED);
 						shipsButtonGrid[i-1][j-1].setOpaque(true);
 						shipsButtonGrid[i-1][j-1].setEnabled(false);
-						shipsGridPanel.add(shipsButtonGrid[i-1][j-1]);
 					}
+					shipsGridPanel.add(shipsButtonGrid[i-1][j-1]);
 				}
 			}
 		}
@@ -270,10 +262,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				
 				//if there are ships but no hits (false/true)
 				else if(!shipsGrid[i][j] && hitsGrid[i][j]){
-					/*
-					shipsButtonGrid[i][j].setBackground(Color.BLACK);
-					shipsButtonGrid[i][j].setOpaque(true);
-					*/
+					
 				}
 				
 				//if there are no ships but hits (true/false)
@@ -366,8 +355,32 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				else {
 					hitsButtonGrid[i-1][j-1] = new JButton();
 					hitsButtonGrid[i-1][j-1].setPreferredSize(new Dimension(dim, dim));
-					hitsButtonGrid[i-1][j-1].setBackground(Color.WHITE);
-					hitsButtonGrid[i-1][j-1].addActionListener(controller);
+					
+					//if there are no ships and no hits (true/true)
+					if(shipsGrid[i-1][j-1] && hitsGrid[i-1][j-1]) {
+						hitsButtonGrid[i-1][j-1].setBackground(Color.WHITE);
+						//hitsButtonGrid[i-1][j-1].setEnabled(false);
+						hitsButtonGrid[i-1][j-1].addActionListener(controller);
+					}
+					//if there are ships but no hits (false/true)
+					else if(!shipsGrid[i-1][j-1] && hitsGrid[i-1][j-1]){
+						hitsButtonGrid[i-1][j-1].setBackground(Color.WHITE);
+						//hitsButtonGrid[i-1][j-1].setOpaque(true);
+						//hitsButtonGrid[i-1][j-1].setEnabled(false);
+						hitsButtonGrid[i-1][j-1].addActionListener(controller);
+					}
+					//if there are no ships but hits (true/false)
+					else if(shipsGrid[i-1][j-1] && !hitsGrid[i-1][j-1]) {
+						hitsButtonGrid[i-1][j-1].setBackground(Color.BLUE);
+						hitsButtonGrid[i-1][j-1].setOpaque(true);
+						hitsButtonGrid[i-1][j-1].setEnabled(false);
+					}
+					//if there are both ships and hits (false/false)
+					else if(!shipsGrid[i-1][j-1] && !hitsGrid[i-1][j-1]) {
+						hitsButtonGrid[i-1][j-1].setBackground(Color.RED);
+						hitsButtonGrid[i-1][j-1].setOpaque(true);
+						hitsButtonGrid[i-1][j-1].setEnabled(false);
+					}
 					hitsGridPanel.add(hitsButtonGrid[i-1][j-1]);
 				}
 			}
@@ -506,7 +519,6 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
 		updateAllComponents();
 		
 		//update saveButton

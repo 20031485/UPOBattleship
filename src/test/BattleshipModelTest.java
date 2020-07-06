@@ -21,7 +21,7 @@ class BattleshipModelTest {
 		p1.randomSetShips();
 		p2.randomSetShips();
 		
-		BattleshipModel bm = new BattleshipModel(p1, p2, gameSize, false);
+		BattleshipModel bm = new BattleshipModel(p1, p2, gameSize, false, 0);
 		assert(bm != null);
 		
 		bm.saveGame();
@@ -41,7 +41,7 @@ class BattleshipModelTest {
 		
 		//newGame test
 		BattleshipModel bm3 = new BattleshipModel();
-		bm3.newGame(p1, p2, gameSize, false);
+		bm3.newGame(p1, p2, gameSize, false, 0);
 		assertEquals(bm, bm3);
 		System.out.println("\n\nbm:\n"+bm.toString());
 		System.out.println("\n\nbm2:\n"+bm2.toString());

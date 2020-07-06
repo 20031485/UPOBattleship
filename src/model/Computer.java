@@ -85,6 +85,10 @@ public class Computer extends Player implements Serializable{
 		return lastHit;
 	}
 
+	/**
+	 * Utility method that prints the Coordinates 
+	 * of the last hit the {@code Computer} fired
+	 */
 	public void printLastHit() {
 		System.out.println("lastHit: ["+lastHit.getRow()+", "+lastHit.getColumn()+"]");
 	}
@@ -98,6 +102,10 @@ public class Computer extends Player implements Serializable{
 		return lastSuccessfulHit;
 	}
 
+	/**
+	 * Utility method that prints the Coordinates 
+	 * of the last successful hit the {@code Computer} fired
+	 */
 	public void printLastSuccessfulHit() {
 		System.out.println("lastSuccessfulHit: ["+lastSuccessfulHit.getRow()+", "+lastSuccessfulHit.getColumn()+"]");
 	}
@@ -266,9 +274,8 @@ public class Computer extends Player implements Serializable{
 			}
 			++i;
 		}
-		System.out.print("after crossCheck: ");
 		//controllo di aver messo le coordinate in nextHits
-		printNextHits();
+		//printNextHits();
 	}
 	
 	/**
@@ -283,38 +290,10 @@ public class Computer extends Player implements Serializable{
 		//tolgo i nextHits - potrebbero esserci residui del crossCheck
 		//clearNextHits();
 		int k = 0;
-		printLastHit();
-		printLastSuccessfulHit();
-		printCoordinatesList();
-		System.out.print("before ");
-		/*
-		if(direction == ShipDirection.HORIZONTAL) {
-			System.out.println("horizontal linecheck");
-			while(k < nextHits.size()) {
-				if((nextHits.get(k).getRow() == lastHit.getRow() && nextHits.get(k).getRow() == lastSuccessfulHit.getRow())) {
-					coordinatesList.add(nextHits.get(k));
-					//tolgo solo quelli che non sono sulla stessa riga/colonna
-					nextHits.remove(k);
-					--k;
-				}
-				++k;
-			}
-		}
-		
-		else if(direction == ShipDirection.VERTICAL) {
-			System.out.println("vertical linecheck");
-			while(k < nextHits.size()) {
-				if((nextHits.get(k).getColumn() == lastHit.getColumn() && nextHits.get(k).getColumn() == lastSuccessfulHit.getColumn())) {
-					coordinatesList.add(nextHits.get(k));
-					//tolgo solo quelli che non sono sulla stessa riga/colonna
-					nextHits.remove(k);
-					--k;
-				}
-				++k;
-			}
-		}*/
-		
-		printNextHits();
+		//printLastHit();
+		//printLastSuccessfulHit();
+		//printCoordinatesList();		
+		//printNextHits();
 		switch(direction) {
 			case HORIZONTAL:
 				int i = 0;
@@ -392,8 +371,7 @@ public class Computer extends Player implements Serializable{
 				System.err.println("ERROR@Computer::linearCheck()");
 				break;
 		}
-		System.out.println("after linecheck");
-		printNextHits();
+		//printNextHits();
 	}
 	
 	/**

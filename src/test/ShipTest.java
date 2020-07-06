@@ -18,11 +18,11 @@ class ShipTest {
 		for(int i = 0; i<gameSize; ++i)
 			for(int j = 0; j < gameSize; ++j)
 				shipsGrid[i][j] = true;
-		Ship s = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+		Ship s = new Ship(ShipType.CARRIER, ShipLength.CARRIERLENGTH, gameSize);
 		
 		//assertions after creation
 		assert s != null;
-		assert s.getLength() == ShipLength.PORTAEREILENGTH;
+		assert s.getLength() == ShipLength.CARRIERLENGTH;
 		assert s.getLength() == 5;
 		
 		//assertions after positioning

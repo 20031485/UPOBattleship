@@ -302,24 +302,24 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 			Ship currentShip = model.getPlayer().getShipList().get(i);
 			ShipType shipType = currentShip.getShipType();
 			switch(shipType) {
-				case CACCIATORPEDINIERE:
-					stringArray[i] = "CACCIATORPEDINIERE (" + currentShip.getLength() + ")";
+				case PATROL:
+					stringArray[i] = "PATROL (" + currentShip.getLength() + ")";
 					break;
 					
-				case SOTTOMARINO:
-					stringArray[i] = "SOTTOMARINO (" + currentShip.getLength() + ")";
+				case SUBMARINE:
+					stringArray[i] = "SUBMARINE (" + currentShip.getLength() + ")";
 					break;
 				
-				case INCROCIATORE:
-					stringArray[i] = "INCROCIATORE (" + currentShip.getLength() + ")";
+				case DESTROYER:
+					stringArray[i] = "DESTROYER (" + currentShip.getLength() + ")";
 					break;
 				
-				case CORAZZATE:
-					stringArray[i] = "CORAZZATE (" + currentShip.getLength() + ")";
+				case BATTLESHIP:
+					stringArray[i] = "BATTLESHIP (" + currentShip.getLength() + ")";
 					break;
 				
-				case PORTAEREI:
-					stringArray[i] = "PORTAEREI  (" + currentShip.getLength() + ")";
+				case CARRIER:
+					stringArray[i] = "CARRIER  (" + currentShip.getLength() + ")";
 					break;
 				
 				default:

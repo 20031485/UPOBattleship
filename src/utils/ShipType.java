@@ -8,9 +8,9 @@ import java.io.Serializable;
  *
  */
 public enum ShipType implements Serializable{
-		SOTTOMARINO,
-		INCROCIATORE,
-		CACCIATORPEDINIERE,
-		CORAZZATE,
-		PORTAEREI;	
+		SUBMARINE,
+		DESTROYER,
+		PATROL,
+		BATTLESHIP,
+		CARRIER;	
 }

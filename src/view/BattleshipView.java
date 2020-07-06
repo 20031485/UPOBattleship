@@ -80,19 +80,19 @@ public class BattleshipView extends JFrame implements PropertyChangeListener{
 		if(propertyName.equals("setState")) {
 			switch(this.model.getState()) {
 				case WELCOME:
-					setTitle("WELCOME: " + startLoadPanel.getTitle());
+					setTitle("WELCOME!");
 					setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
 					//this.pack();
 					break;
 				
 				case BATTLE:
-					setTitle(battlePanel.getTitle());
+					setTitle(BattlePanel.getTitle());
 					setSize(battlePanel.getWidth(), battlePanel.getHeight());
 					//this.pack();
 					break;
 			
 				case NEWGAME:
-					setTitle(newGamePanel.getTitle());
+					setTitle(NewGamePanel.getTitle());
 					setSize(newGamePanel.getWidth(), newGamePanel.getHeight());
 					//newGamePanel = new NewGamePanel(model/*, controller.getNewGameController()*/);
 					//add(newGamePanel);

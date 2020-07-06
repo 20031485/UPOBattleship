@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import java.util.Observable;
+import java.util.Random;
 //import java.text.SimpleDateFormat;
 //import java.util.Date;
 import java.util.Scanner;
@@ -25,6 +26,10 @@ import utils.ShipDirection;
 
 //BattleshipModel
 public class BattleshipModel extends Observable implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//attributes
 	private Player player = null;
 	private Computer computer = null;
@@ -32,12 +37,14 @@ public class BattleshipModel extends Observable implements Serializable{
 	private BattleshipState state = BattleshipState.WELCOME;
 	private PlayerState playerState;//needed by Computer, to check if Player was hit or not
 	private boolean timed;//creates timer if true
+	private int mins;
 	//notify BattleshipView for every state BattleshipModel enters
 	private /*Battleship*/PropertyChangeSupport propertyChangeSupport = new /*Battleship*/PropertyChangeSupport(this);
 	//name of the saved file slot
 	private static final String savedFileName = "battleship_saved_game.dat";
 	//every move will set justSaved to false, but the method saveGame will set it to true
-	private boolean justSaved = false;
+	private boolean justSaved;
+	private boolean isDefeated;
 
 	//constructors
 	/*public BattleshipModel() {
@@ -65,31 +72,20 @@ public class BattleshipModel extends Observable implements Serializable{
 		this.timed = false;
 		this.player = new Player(gameSize);
 		this.computer = new Computer(gameSize, ComputerType.STUPID);
-		
-		if(timed) {
-			//TODO implement timer
-		}
 	}
 	
 	//ComputerType is initialized from Computer's constructor (passed as new Computer(...))
-	public BattleshipModel(Player player, Computer computer, int gameSize, boolean timed) {
+	public BattleshipModel(Player player, Computer computer, int gameSize, boolean timed, int mins) {
 		this.player = player;
 		this.computer = computer;
 		this.gameSize = gameSize;
-		this.timed = timed;
-		
-		if(timed) {
-			//TODO implement timer
-		}
+		this.isDefeated = false;
+		this.justSaved = false;
+		setTimed(timed, mins);
 	}
 	
 	
 	//methods
-	
-	public boolean isTimed() {
-		return this.timed;
-	}
-	
 	public boolean isJustSaved() {
 		return this.justSaved;
 	}
@@ -128,7 +124,7 @@ public class BattleshipModel extends Observable implements Serializable{
 	}
 	
 	//MVC VERSION
-	/*public void saveGame() {
+	public void saveGame() {
 		ObjectOutputStream outputStream = null;
 		
 		try {
@@ -141,21 +137,21 @@ public class BattleshipModel extends Observable implements Serializable{
 			setChanged();
 			notifyObservers();
 		} 
-		catch (IOException e) {
-			System.out.println("IOException");
+		catch (Exception e) {
+			System.out.println("Cannot save file!");
 			e.printStackTrace();
 		}
-	}*/
-	public void saveGame() {
+	}
+	/*public void saveGame() {
 		this.justSaved = true;
 	}
-	
+	*/
 	//MVC VERSION
-	public void newGame(Player player, Computer computer, int gameSize, boolean timed) {
+	public void newGame(Player player, Computer computer, int gameSize, boolean timed, int mins) {
 		setPlayer(player);
 		setComputer(computer);
 		setGameSize(gameSize);
-		setTimed(timed);
+		setTimed(timed, mins);
 		//game created, so you might want to save it immediately
 		this.justSaved = false;
 		setChanged();
@@ -214,8 +210,17 @@ public class BattleshipModel extends Observable implements Serializable{
 		notifyObservers();
 	}
 	
-	public void setTimed(boolean timed) {
+	public void setTimed(boolean timed, int mins) {
 		this.timed = timed;
+		this.mins = mins;
+	}
+	
+	public int getMins() {
+		return this.mins;
+	}
+	
+	public boolean isTimed() {
+		return this.timed;
 	}
 
 	public String getSavedFileName() {
@@ -245,8 +250,8 @@ public class BattleshipModel extends Observable implements Serializable{
 	//utility
 	public String toString() {
 		return 	"Game Size: "+ getGameSize() +
-				"\nPlayer1:\n\tname: " + getPlayer().toString() +
-				"\nPlayer2:\n\tname: " + getComputer().toString() + "\n\n";
+				"\nPlayer1:\n" + getPlayer().toString() +
+				"\nPlayer2:\n" + getComputer().toString() + "\n\n";
 	}
 	
 	//TERMINAL VERSION
@@ -331,11 +336,15 @@ public class BattleshipModel extends Observable implements Serializable{
 		computer.randomSetShips();
 	}
 	
+	public void print() {
+		System.out.println(this.toString());
+	}
 
 	
 	public static void main(String[] args) {
-		BattleshipModel bm = new BattleshipModel(10);
-		bm.newGame(new Player(10), new Computer(10, ComputerType.SMART), 10, false);
+		int gameSize = 15;
+		BattleshipModel bm = new BattleshipModel(gameSize);
+		bm.newGame(new Player(gameSize), new Computer(gameSize, ComputerType.SMART), gameSize, false, 0);
 		System.out.println(bm.getPlayer().toString());
 		System.out.println(bm.getComputer().toString());
 		bm.playerRandomSetShips();
@@ -343,7 +352,24 @@ public class BattleshipModel extends Observable implements Serializable{
 		System.out.println(bm.getPlayer().toString());
 		System.out.println(bm.getComputer().toString());
 		//bm.turns();
+		
+		for(int i = 0; i < gameSize; ++i) {
+			Random rand = new Random();
+			int row = rand.nextInt(gameSize);
+			int col = rand.nextInt(gameSize);
+			bm.hitAndGetHit(row, col);
+		}
+		bm.print();
 		bm.saveGame();
+	}
+
+	public PropertyChangeListener[] getPropertyChangeListeners() {
+		return propertyChangeSupport.getPropertyChangeListeners();
+	}
+	
+	public void resetPropertyChangeListeners(PropertyChangeListener[] listeners) {
+		for(int i = 0; i < listeners.length; ++i)
+			propertyChangeSupport.addPropertyChangeListener(listeners[i]);
 	}
 	
 }

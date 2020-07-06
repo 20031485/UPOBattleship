@@ -31,18 +31,19 @@ public class NewGameController implements ActionListener{
 		String command = source.getText();
 		switch(command) {
 			case "CONFIRM":
-				System.out.println("confirm");
+				//System.out.println("confirm");
 				if(newGamePanel.p1vsp2Button.isSelected()) {
 					//feature unavailable
 					model.setState(BattleshipState.NEWGAME);
-					System.out.println("\tP1vsP2");
+					//System.out.println("\tP1vsP2");
 				}
 				else {
 					int gameSize = 10;
+					int mins = 10;
 					ComputerType computerType = ComputerType.STUPID;
 					boolean timed = false;
 					if(newGamePanel.p1vsCPUButton.isSelected()) {
-						System.out.println("\tP1vsCPU");
+						//System.out.println("\tP1vsCPU");
 						
 						if(newGamePanel.easyModeButton.isSelected())
 							computerType = ComputerType.STUPID;
@@ -62,13 +63,21 @@ public class NewGameController implements ActionListener{
 						if(newGamePanel.timedCheckBox.isSelected())
 							timed = true;
 						
+						if(newGamePanel.timed5minsButton.isSelected())
+							mins = 5;
+						
+						if(newGamePanel.timed10minsButton.isSelected())
+							mins = 10;
+						
+						if(newGamePanel.timed15minsButton.isSelected())
+							mins = 15;
 						//model = new BattleshipModel(gameSize);
 						//model.setGameSize(gameSize);
-						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed);
+						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed, mins);
 						//model.getPlayer().randomSetShips();
-						System.out.println("model.newGame(new Player("+gameSize+"), new Computer("+gameSize+", "+computerType+"), "+gameSize+", "+timed+")");
-						System.out.println("GameSize: "+model.getGameSize());
-						System.out.println(model.getPlayer().toString());
+						//System.out.println("model.newGame(new Player("+gameSize+"), new Computer("+gameSize+", "+computerType+"), "+gameSize+", "+timed+", "+mins+")");
+						//System.out.println("GameSize: "+model.getGameSize());
+						//System.out.println(model.getPlayer().toString());
 					}
 					model.setState(BattleshipState.SETSHIPS);
 				}
@@ -87,7 +96,7 @@ public class NewGameController implements ActionListener{
 				newGamePanel.difficultyPanel.setVisible(true);
 				break;
 				
-			case "Timed":
+			case "TIMED":
 				if(newGamePanel.timedCheckBox.isSelected())
 					newGamePanel.timedPanel.setVisible(true);
 				else

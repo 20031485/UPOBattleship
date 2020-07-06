@@ -30,7 +30,7 @@ public class SetShipsController implements ActionListener{
 		String command = source.getText();
 		
 		if(command.equals("RANDOM")) {
-			System.out.println("Random Set pressed");
+			//System.out.println("Random Set pressed");
 			model.getPlayer().clearShips();
 			model.getPlayer().randomSetShips();
 			//System.out.println(model.getPlayer().toString());
@@ -43,15 +43,15 @@ public class SetShipsController implements ActionListener{
 		}
 		
 		if(command.equals("PLAY")) {
-			System.out.println("PLAY pressed");
+			//System.out.println("PLAY pressed");
 			model.getComputer().randomSetShips();
-			
 			model.setState(BattleshipState.BATTLE);
-			System.out.println(model.getPlayer().toString());
-			System.out.println(model.getComputer().toString());
+			//System.out.println(model.getPlayer().toString());
+			//System.out.println(model.getComputer().toString());
 		}
 		
 		if(command.equals("BACK")) {
+			//model.getPlayer().clearShips();
 			model.setState(BattleshipState.NEWGAME);
 		}
 		
@@ -61,7 +61,7 @@ public class SetShipsController implements ActionListener{
 					if(source == setShipsPanel.getButtonFromButtonGrid(i, j)) {
 						row = i;
 						col = j;
-						System.out.println("row = "+ row +", col = "+ col);
+						//System.out.println("row = "+ row +", col = "+ col);
 						int shipIndex = setShipsPanel.getChooseShip().getSelectedIndex();
 						
 						ShipDirection direction;
@@ -73,11 +73,11 @@ public class SetShipsController implements ActionListener{
 							direction = ShipDirection.HORIZONTAL;
 						
 						model.getPlayer().setShip(shipIndex, row, col, direction);
-						System.out.println("model.getPlayer().setShip("+shipIndex+", "+row+", "+col+", "+direction+")");
 					}
 				}
 			}
 		}
-		System.out.println(model.getPlayer().toString());
+		//model.getPlayer().printInitialShipsGrid();
+		//System.out.println(model.getPlayer().toString());
 	}
 }

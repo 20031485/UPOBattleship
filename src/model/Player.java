@@ -30,6 +30,7 @@ public class Player extends AbstractPlayer implements Serializable{
 	// gameSize is protected because it must be visible from Player's derivative classes
 	protected int gameSize;	
 	private PlayerState state;
+	private boolean timedOut;
 	
 	private ArrayList<Ship> shipList;
 	private ArrayList<Ship> placedShips;
@@ -52,6 +53,7 @@ public class Player extends AbstractPlayer implements Serializable{
 		this.name = "Player";
 		this.gameSize = gameSize;
 		this.state = PlayerState.WATER;
+		this.timedOut = false;
 		this.initGrids(gameSize);
 		this.initShips(gameSize);
 	}
@@ -65,71 +67,90 @@ public class Player extends AbstractPlayer implements Serializable{
 		Ship ship = null;
 		switch(gameSize) {
 			case 5:
-				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				ship = new Ship(ShipType.CARRIER, ShipLength.CARRIERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				ship = new Ship(ShipType.BATTLESHIP, ShipLength.BATTLESHIPLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				ship = new Ship(ShipType.SUBMARINE, ShipLength.SUBMARINELENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				ship = new Ship(ShipType.DESTROYER, ShipLength.DESTROYERLENGTH, gameSize);
 				shipList.add(ship);
 				break;
 				
 			case 10:
-				ship = new Ship(ShipType.CACCIATORPEDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				ship = new Ship(ShipType.PATROL, ShipLength.PATROLLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				ship = new Ship(ShipType.BATTLESHIP, ShipLength.BATTLESHIPLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				ship = new Ship(ShipType.DESTROYER, ShipLength.DESTROYERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				ship = new Ship(ShipType.CARRIER, ShipLength.CARRIERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				ship = new Ship(ShipType.SUBMARINE, ShipLength.SUBMARINELENGTH, gameSize);
 				shipList.add(ship);
 				break;
 				
 			case 15:
-				ship = new Ship(ShipType.CACCIATORPEDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				ship = new Ship(ShipType.PATROL, ShipLength.PATROLLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				ship = new Ship(ShipType.BATTLESHIP, ShipLength.BATTLESHIPLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				ship = new Ship(ShipType.DESTROYER, ShipLength.DESTROYERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				ship = new Ship(ShipType.DESTROYER, ShipLength.DESTROYERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				ship = new Ship(ShipType.CARRIER, ShipLength.CARRIERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				ship = new Ship(ShipType.SUBMARINE, ShipLength.SUBMARINELENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				ship = new Ship(ShipType.SUBMARINE, ShipLength.SUBMARINELENGTH, gameSize);
 				shipList.add(ship);
 				break;
 				
 			case 20:
-				ship = new Ship(ShipType.CACCIATORPEDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				ship = new Ship(ShipType.PATROL, ShipLength.PATROLLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				ship = new Ship(ShipType.BATTLESHIP, ShipLength.BATTLESHIPLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				ship = new Ship(ShipType.DESTROYER, ShipLength.DESTROYERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				ship = new Ship(ShipType.CARRIER, ShipLength.CARRIERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				ship = new Ship(ShipType.SUBMARINE, ShipLength.SUBMARINELENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.CACCIATORPEDINIERE, ShipLength.CACCIATORPEDINIERELENGTH, gameSize);
+				ship = new Ship(ShipType.PATROL, ShipLength.PATROLLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.CORAZZATE, ShipLength.CORAZZATALENGTH, gameSize);
+				ship = new Ship(ShipType.BATTLESHIP, ShipLength.BATTLESHIPLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.INCROCIATORE, ShipLength.INCROCIATORELENGTH, gameSize);
+				ship = new Ship(ShipType.DESTROYER, ShipLength.DESTROYERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.PORTAEREI, ShipLength.PORTAEREILENGTH, gameSize);
+				ship = new Ship(ShipType.CARRIER, ShipLength.CARRIERLENGTH, gameSize);
 				shipList.add(ship);
-				ship = new Ship(ShipType.SOTTOMARINO, ShipLength.SOTTOMARINOLENGTH, gameSize);
+				ship = new Ship(ShipType.SUBMARINE, ShipLength.SUBMARINELENGTH, gameSize);
 				shipList.add(ship);
 				break;
 		}
 	}
 	
+	public void setInitialShipsGrid(boolean[][] grid) {
+		for(int i = 0; i < gameSize; ++i) {
+			for(int j = 0; j < gameSize; ++j) {
+				initialShipsGrid[i][j] = grid[i][j];
+			}
+		}
+	}
+	
+	public void printInitialShipsGrid() {
+		for(int i = 0; i < gameSize; ++i) {
+			for(int j = 0; j < gameSize; ++j) {
+				if(!initialShipsGrid[i][j])
+					System.out.print("[x]");
+				else
+					System.out.print("[ ]" );
+			}
+			System.out.println();
+		}
+	}
 	/**
 	 * Gets the name of the {@code Player}
 	 * @return A String containing the name of the {@code Player}
@@ -320,13 +341,22 @@ public class Player extends AbstractPlayer implements Serializable{
 	
 	//svuoto la shipsGrid (tutte le celle a true)
 	private void resetShipsGrid() {
-		for(int i = 0; i < shipsGrid.length; ++i)
-			for(int j = 0; j < shipsGrid.length; ++j)
+		for(int i = 0; i < shipsGrid.length; ++i) {
+			for(int j = 0; j < shipsGrid.length; ++j) {
+				initialShipsGrid[i][j] = true;
 				shipsGrid[i][j] = true;
+			}
+		}
 	}
 	
-	//controlla se ci sono ancora (pezzi di) navi sulla griglia del giocatore
-	//se non ce ne sono, il giocatore ha perso
+	/**
+	 * Set if the player is defeated or not.	
+	 * @param isDefeated A boolean parameter: false if the player is not defeated, true otherwise
+	 */
+	public void setTimedOut(boolean timedOut) {
+		this.timedOut= timedOut;
+	}
+	
 	/**
 	 * Check if the {@code Player} is defeated
 	 * @return true if {@code Player} is defeated, false otherwise
@@ -363,6 +393,19 @@ public class Player extends AbstractPlayer implements Serializable{
 	 */
 	public String toString() {
 		String toString = "Name: "+this.getName()+"\nShips:\n";
+		
+		toString += "initialShipsGrid:\n";
+		for(int i=0; i < shipsGrid.length; ++i) {
+			for(int j=0; j < shipsGrid.length; ++j) {
+				if(!initialShipsGrid[i][j])
+					toString += "[X]";
+				else
+					toString += "[ ]";
+			}
+			toString += "\n";
+		}
+		
+		toString += "currentShipsGrid:\n";
 		for(int i=0; i < shipsGrid.length; ++i) {
 			for(int j=0; j < shipsGrid.length; ++j) {
 				if(!shipsGrid[i][j])
@@ -372,7 +415,8 @@ public class Player extends AbstractPlayer implements Serializable{
 			}
 			toString += "\n";
 		}
-		toString += "Hits:\n";
+		
+		toString += "hitsGrid:\n";
 		for(int i=0; i < hitsGrid.length; ++i) {
 			for(int j=0; j < hitsGrid.length; ++j) {
 				if(!hitsGrid[i][j])
@@ -383,6 +427,7 @@ public class Player extends AbstractPlayer implements Serializable{
 			toString += "\n";
 		}
 		toString += "Is defeated: "+isDefeated()+"\n";
+		
 		return toString;
 	}
 	

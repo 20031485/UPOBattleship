@@ -2,6 +2,8 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 
@@ -29,7 +31,17 @@ public class BattleController implements ActionListener{
 		
 		if(command.equals("SAVE GAME")) {
 			System.out.println("SAVE");
+			PropertyChangeListener[] listeners = model.getPropertyChangeListeners();
 			model.saveGame();
+			BattleshipModel bm = null;
+			try {
+				bm = BattleshipModel.loadGame();
+				bm.print();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 		}
 		
 		if(command.equals("PAUSE")) {

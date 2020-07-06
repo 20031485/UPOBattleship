@@ -8,9 +8,13 @@ import java.io.Serializable;
  *
  */
 public final class ShipLength implements Serializable{
-	public static final int INCROCIATORELENGTH = 2;
-	public static final int CACCIATORPEDINIERELENGTH = 2;
-	public static final int SOTTOMARINOLENGTH = 3;
-	public static final int CORAZZATALENGTH = 4;
-	public static final int PORTAEREILENGTH = 5;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public static final int DESTROYERLENGTH = 2;
+	public static final int PATROLLENGTH = 2;
+	public static final int SUBMARINELENGTH = 3;
+	public static final int BATTLESHIPLENGTH = 4;
+	public static final int CARRIERLENGTH = 5;
 }
