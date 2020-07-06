@@ -50,11 +50,11 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	private JPanel allButtonsPanel;
 	
 	private JButton saveButton;
-	private JButton pauseButton;
+//	private JButton pauseButton;
 	private JButton rematchButton;
 	
 	private CountdownPanel timerPanel;
-	private JLabel/*CountdownLabel */ countdownLabel;
+//	private JLabel/*CountdownLabel */ countdownLabel;
 	//private static final TitledBorder timerTitle = BorderFactory.createTitledBorder("TIMER");
 	
 	

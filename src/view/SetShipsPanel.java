@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -15,8 +14,6 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -108,13 +105,13 @@ public class SetShipsPanel extends JPanel implements Observer, PropertyChangeLis
 		
 		//fill the availableShips String array for the comboBox
 		String[] availableShips = getPlayersShipsStrings(model);
-		chooseShip = new JComboBox(availableShips);
+		chooseShip = new JComboBox<String>(availableShips);
 		chooseShip.setSelectedIndex(0);
 		chooseShip.setBorder(chooseShipTitle);
 		dropDownAndButtonsPanel.add(chooseShip);
 		
 		//comboBox for directions
-		chooseDirection = new JComboBox(direction);
+		chooseDirection = new JComboBox<String>(direction);
 		chooseDirection.setSelectedIndex(0);
 		chooseDirection.setBorder(chooseDirectionTitle);
 		dropDownAndButtonsPanel.add(chooseDirection);
