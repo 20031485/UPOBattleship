@@ -22,7 +22,7 @@ import controller.BattleController;
 import model.BattleshipModel;
 import utils.BattleshipState;
 import utils.Utility;
-import view.CountdownLabel;
+//import view.CountdownLabel;
 
 public class BattlePanel extends JPanel implements Observer, PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
@@ -53,10 +53,10 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	private JButton pauseButton;
 	private JButton rematchButton;
 	
-	private JPanel timerPanel;
-	private CountdownLabel countdownLabel;
-	private static final TitledBorder timerTitle = BorderFactory.createTitledBorder("TIMER");
-	private JLabel timerLabel;
+	private CountdownPanel timerPanel;
+	private JLabel/*CountdownLabel */ countdownLabel;
+	//private static final TitledBorder timerTitle = BorderFactory.createTitledBorder("TIMER");
+	
 	
 	private static final String PLAYER_STATUS = "PLAYER STATUS: ";
 	private static final String COMPUTER_STATUS = "COMPUTER STATUS: ";
@@ -84,7 +84,10 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		this.controller = new BattleController(model, this);
 	}
 	
-	//methods
+	/**
+	 * Returns a {@code String} containing the title of the panel.
+	 * @return A {@code String} containing the title of the panel.
+	 */
 	public static String getTitle() {
 		return TITLE;
 	}
@@ -117,18 +120,8 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 	}
 	
 	public void setTimer(long mins) {
-		timerPanel = new JPanel();
-		timerPanel.setLayout(new BorderLayout());
-		
-		//TODO set timerPanel content
-		countdownLabel = new CountdownLabel(mins);
-		countdownLabel.setHorizontalAlignment(JLabel.CENTER);
-		countdownLabel.setFont(new Font("Monospace", Font.PLAIN, 20));
-		countdownLabel.setBorder(timerTitle);
-		countdownLabel.setVisible(true);
-		timerPanel.add(countdownLabel, BorderLayout.CENTER);
+		timerPanel = new CountdownPanel(mins, model);
 		add(timerPanel, BorderLayout.NORTH);
-		countdownLabel.countdownStart();
 	}
 	
 	public void updateAllComponents() {
@@ -427,7 +420,7 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 				}
 				hitsButtonGrid[i][j].setOpaque(true);
 				
-				if(model.getPlayer().isDefeated() || model.getComputer().isDefeated()) {
+				if(model.getPlayer().isDefeated() || model.getComputer().isDefeated() || model.getPlayer().isTimedOut()) {
 					hitsButtonGrid[i][j].setEnabled(false);
 				}
 			}
@@ -487,9 +480,9 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		rematchButton.setVisible(false);
 		
 		if(model.isTimed()) {
-			pauseButton = new JButton("PAUSE");
+			/*pauseButton = new JButton("PAUSE");
 			pauseButton.addActionListener(controller);
-			allButtonsPanel.add(pauseButton);
+			allButtonsPanel.add(pauseButton);*/
 		}
 			
 		add(allButtonsPanel, BorderLayout.SOUTH);
@@ -510,6 +503,8 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 			if(model.getState() == BattleshipState.BATTLE) {
 				setAllComponents();
 				this.setVisible(true);
+				if(model.isTimed())
+					timerPanel.timerStart();
 			}
 			else
 				//removeAllComponents();
@@ -530,14 +525,14 @@ public class BattlePanel extends JPanel implements Observer, PropertyChangeListe
 		}
 		
 		//check for win/lose conditions
-		if(model.getPlayer().isDefeated() || model.getComputer().isDefeated()) {
+		if(model.getPlayer().isDefeated() || model.getComputer().isDefeated() || model.getPlayer().isTimedOut()) {
 			//addRematchPanel();
 			saveButton.setVisible(false);
 			//rematchButton.setVisible(true);
 			if(model.isTimed())
-				pauseButton.setVisible(false);
+				//pauseButton.setVisible(false);
 			//if computer wins
-			if(model.getPlayer().isDefeated()) {
+			if(model.getPlayer().isDefeated() || model.getPlayer().isTimedOut()) {
 				youLoseLabel.setVisible(true);
 			}
 			//if player wins

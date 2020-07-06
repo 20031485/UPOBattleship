@@ -350,11 +350,21 @@ public class Player extends AbstractPlayer implements Serializable{
 	}
 	
 	/**
-	 * Set if the player is defeated or not.	
-	 * @param isDefeated A boolean parameter: false if the player is not defeated, true otherwise
+	 * Set if the {@code Player}'s timer has run out.	
+	 * @param timedOut A boolean parameter: false if the player is not defeated, true otherwise
 	 */
 	public void setTimedOut(boolean timedOut) {
 		this.timedOut= timedOut;
+		setChanged();
+		notifyObservers();
+	}
+	
+	/**
+	 * Say if the {@code Player}'s countdown is over or not.
+	 * 
+	 */
+	public boolean isTimedOut() {
+		return this.timedOut;
 	}
 	
 	/**
