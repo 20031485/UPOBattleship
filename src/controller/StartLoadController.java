@@ -36,11 +36,12 @@ public class StartLoadController implements ActionListener{
 			case "Load game":
 				try {
 					BattleshipModel m = BattleshipModel.loadGame();
-					//System.out.println("Loaded: " + model.toString());
-					model.newGame(m.getPlayer(), m.getComputer(), m.getGameSize(), m.isTimed(), m.getMins());
+					
+					model.newGame(m.getPlayer(), m.getComputer(), m.getGameSize(), m.isTimed(), m.getSecs());
 					model.print();
 					System.out.println("loading saved file... ready to battle?");
 					model.setState(BattleshipState.BATTLE);
+					System.out.println("secs: "+m.getSecs());
 				} catch (FileNotFoundException e1) {
 					//e1.printStackTrace();
 					startLoadPanel.loadGameButton.setVisible(false);

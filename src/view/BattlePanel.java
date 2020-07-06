@@ -101,7 +101,7 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		
 		//if the game is timed
 		if(model.isTimed()) {
-			setTimer(model.getMins());	
+			setTimer(model.getSecs());	
 		}
 		
 		//create panel with grids
@@ -119,8 +119,8 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		//countdownPanel.countdownStart();
 	}
 	
-	public void setTimer(long mins) {
-		timerPanel = new CountdownPanel(mins, model);
+	public void setTimer(long secs) {
+		timerPanel = new CountdownPanel(secs, model);
 		add(timerPanel, BorderLayout.NORTH);
 	}
 	
@@ -493,7 +493,13 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 	}
 	
 	public void addRematchPanel() {
+	
 		
+		
+	}
+	
+	public long getSecsLeft() {
+		return timerPanel.getCurrentTime();
 	}
 /*	
 	@Override

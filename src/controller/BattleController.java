@@ -32,6 +32,8 @@ public class BattleController implements ActionListener{
 		if(command.equals("SAVE GAME")) {
 			System.out.println("SAVE");
 			//PropertyChangeListener[] listeners = model.getPropertyChangeListeners();
+			if(model.isTimed())
+				model.setSecs(battlePanel.getSecsLeft()/1000);
 			model.saveGame();
 			BattleshipModel bm = null;
 			try {

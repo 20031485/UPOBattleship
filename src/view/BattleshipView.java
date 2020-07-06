@@ -22,7 +22,11 @@ import javax.swing.WindowConstants;
 import controller.BattleshipController;
 import model.BattleshipModel;
 
-public class BattleshipView extends JFrame implements Observer, PropertyChangeListener{
+public class BattleshipView extends JFrame implements Observer{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//attributes
 	private static final String TITLE = "UPOBattleship";
 	private BattleshipModel model;
@@ -34,12 +38,6 @@ public class BattleshipView extends JFrame implements Observer, PropertyChangeLi
 	private NewGamePanel newGamePanel;
 	private SetShipsPanel setShipsPanel;
 	private BattlePanel battlePanel;
-	private JMenuBar mainframe;
-	
-	
-	
-	
-	
 	
 	//constructor
 	public BattleshipView(BattleshipModel model) {
@@ -70,10 +68,10 @@ public class BattleshipView extends JFrame implements Observer, PropertyChangeLi
 		battlePanel.setVisible(false);
 		
 		setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
-		setTitle("WELCOME: "+startLoadPanel.getTitle());
+		setTitle("WELCOME: " + startLoadPanel.getTitle());
 		setVisible(true);
 	}
-	
+	/*
 	//methods
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -95,14 +93,14 @@ public class BattleshipView extends JFrame implements Observer, PropertyChangeLi
 				case NEWGAME:
 					setTitle(NewGamePanel.getTitle());
 					setSize(newGamePanel.getWidth(), newGamePanel.getHeight());
-					//newGamePanel = new NewGamePanel(model/*, controller.getNewGameController()*/);
+					//newGamePanel = new NewGamePanel(model);
 					//add(newGamePanel);
 					//this.pack();
 					break;
 				
 				case SETSHIPS:
 					setTitle(setShipsPanel.getTitle());
-					//setShipsPanel = new SetShipsPanel(model/*, controller.getSetShipsController()*/);
+					//setShipsPanel = new SetShipsPanel(model);
 					//add(setShipsPanel);
 					setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
 					//setShipsPanel.setVisible(true);
@@ -113,45 +111,36 @@ public class BattleshipView extends JFrame implements Observer, PropertyChangeLi
 					break;
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		
 		switch(this.model.getState()) {
 			case WELCOME:
 				setTitle("WELCOME!");
 				setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
-				//this.pack();
 				break;
 			
 			case BATTLE:
 				setTitle(BattlePanel.getTitle());
 				setSize(battlePanel.getWidth(), battlePanel.getHeight());
-				//this.pack();
 				break;
 		
 			case NEWGAME:
 				setTitle(NewGamePanel.getTitle());
 				setSize(newGamePanel.getWidth(), newGamePanel.getHeight());
-				//newGamePanel = new NewGamePanel(model/*, controller.getNewGameController()*/);
-				//add(newGamePanel);
-				//this.pack();
 				break;
 			
 			case SETSHIPS:
-				setTitle(setShipsPanel.getTitle());
-				//setShipsPanel = new SetShipsPanel(model/*, controller.getSetShipsController()*/);
-				//add(setShipsPanel);
+				setTitle(setShipsPanel.getTitle());	
 				setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
-				//setShipsPanel.setVisible(true);
-				//this.pack();//activated when created!
+
 				break;
 				
 			default:
 				break;
-	}
-		
+		}
 	}
 	
 	

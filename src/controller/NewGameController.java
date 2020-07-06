@@ -39,7 +39,7 @@ public class NewGameController implements ActionListener{
 				}
 				else {
 					int gameSize = 10;
-					int mins = 10;
+					int secs = 600;
 					ComputerType computerType = ComputerType.STUPID;
 					boolean timed = false;
 					if(newGamePanel.p1vsCPUButton.isSelected()) {
@@ -64,16 +64,16 @@ public class NewGameController implements ActionListener{
 							timed = true;
 						
 						if(newGamePanel.timed5minsButton.isSelected())
-							mins = 5;
+							secs = 5*60;
 						
 						if(newGamePanel.timed10minsButton.isSelected())
-							mins = 10;
+							secs = 10*60;
 						
 						if(newGamePanel.timed15minsButton.isSelected())
-							mins = 15;
+							secs = 15*60;
 						//model = new BattleshipModel(gameSize);
 						//model.setGameSize(gameSize);
-						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed, mins);
+						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed, secs);
 						//model.getPlayer().randomSetShips();
 						//System.out.println("model.newGame(new Player("+gameSize+"), new Computer("+gameSize+", "+computerType+"), "+gameSize+", "+timed+", "+mins+")");
 						//System.out.println("GameSize: "+model.getGameSize());

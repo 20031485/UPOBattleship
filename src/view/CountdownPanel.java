@@ -29,8 +29,8 @@ public class CountdownPanel extends JPanel {
 	private BattleshipModel model;
 	
 	private CountdownController controller;
-	public CountdownPanel(long mins, BattleshipModel model){
-	    time = mins *60000;
+	public CountdownPanel(long secs, BattleshipModel model){
+	    time = secs *1000;
 	    currentTime = time;
 	    this.model = model;
 	    	    
@@ -65,6 +65,7 @@ public class CountdownPanel extends JPanel {
 
 	public void setCurrentTime(long currentTime) {
 		this.currentTime = currentTime;
+		this.model.setSecs(currentTime);
 	}
 
 	public void setTimer(ActionListener actionListener) {
