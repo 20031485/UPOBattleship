@@ -5,9 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
-//import java.beans.PropertyChangeEvent;
-//import java.beans.PropertyChangeListener;
-
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,20 +21,35 @@ import model.BattleshipModel;
 import model.Ship;
 import utils.BattleshipState;
 import utils.ShipType;
+import utils.Utility;
 
-public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeListener*/{
+/**
+ * <p>Class that represents the phase of setting ships onto the Battleship grid.
+ * A {@link SetShipsPanel} is a {@link javax.swing.JPanel} containing two {@link javax.swing.JComboBox}es
+ * and some {@link javax.swing.JButton}s, plus another {@link javax.swing.JPanel} containing a 
+ * {@link javax.swing.JButton} grid.</p>
+ * 
+ * <p>When a {@link javax.swing.JButton} from the grid is pressed, the {@link model.Ship} selected
+ * in the first {@link javax.swing.JComboBox} is positioned at the coordinates corresponding to the
+ * {@link javax.swing.JButton} pressed from the grid. The direction of the {@link model.Ship} is the
+ * {@link utils.ShipDirection} selected in the second {@link javax.swing.JComboBox}.</p>
+ * 
+ * <p>if the user is not happy with how the {@link model.Ship}s are set, he can either press "CLEAR"
+ * to remove all positioned {@link model.Ship}s from the grid an manually re-set them or press "RANDOM",
+ * so that the {@link model.Ship}s can be positioned randomly all at once.</p>
+ * 
+ * @author 20027017 & 20031485
+ *
+ */
+public class SetShipsPanel extends JPanel implements Observer{
 	private static final long serialVersionUID = 1L;
 
-	//attributes
 	private BattleshipModel model;
 	private BattleshipController controller;
 	private SetShipsController setShipsController;
 	private static final String TITLE = "SET YOUR SHIPS!";
-	private static final String[] ROWS = { " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"};
-	private static final String[] COLUMNS = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
 	private static String[] direction = { "VERTICAL", "HORIZONTAL" };
 	
-	//base dimensions
 	private int WIDTH = 700;
 	private int HEIGHT = 700;
 	
@@ -53,7 +65,6 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 	
 	private JButton play;
 	private JButton clearShips;
-	//private JButton randomSetOne;
 	private JButton randomSetAll;
 	private JButton back;
 	
@@ -62,25 +73,25 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 	
 
 	/**
-	 * Constructor for the Class {@code SetShipsPanel}. It creates a JPanel to
-	 * be shown in the main game frame
-	 * @param model A {@code BattleshipModel} object
+	 * Constructor for the Class {@link SetShipsPanel}. It creates a JPanel to
+	 * be shown in the main game frame.
+	 * @param model A {@link model.BattleshipModel} object.
 	 */
 	public SetShipsPanel(BattleshipModel model, BattleshipController controller) {
 		this.model = model;
 		this.controller = controller;
 		this.setShipsController = this.controller.giveSetShipsController(model, this);
-		//new SetShipsController(model, this);//getNewController
-		//System.out.println("SetShipsPanel: " + model.toString());
 		this.setLayout(new FlowLayout());
 		this.setSize(WIDTH, HEIGHT);
-		
-		//listen to property changes in model
-		//this.model.addPropertyChangeListener(this);
 		this.model.addObserver(this);
 	}
 	
-	
+	/**
+	 * Whenever the {@link SetShipsPanel} is accessed, all of its components are set.
+	 * They consist in two {@link javax.swing.JComboBox}es
+	 * and some {@link javax.swing.JButton}s, plus another {@link javax.swing.JPanel} containing a 
+	 * {@link javax.swing.JButton} grid.
+	 */
 	public void setAllComponents() {
 		if(model.getGameSize() == 10)
 			setSize(WIDTH, HEIGHT);
@@ -95,13 +106,16 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 		setButtonGrid();
 	}
 	
+	/**
+	 * Updates all the components of a {@link SetShipsPanel}.
+	 */
 	public void updateAllComponents() {
-		//System.out.println("updateAllComponents");
 		updateDropDownAndButtonsPanel();
 		updateButtonGrid();
 	}
 	/**
-	 * Creates and adds a panel with two dropdown menus and some buttons to the main panel
+	 * Creates and adds a panel with two {@link javax.swing.JComboBox}es
+	 * and some {@link javax.swing.JButton}s.
 	 */
 	public void setDropDownAndButtonsPanel() {
 		//if a previous version of dropDown...Panel exists, remove it
@@ -156,8 +170,13 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 		add(dropDownAndButtonsPanel);
 	}
 	
+	/**
+	 * Updates the content of the {@link javax.swing.JPanel} containing the
+	 * {@link javax.swing.JComboBoxes}. The content of the {@link javax.swing.JComboBox}es
+	 * is updated too, and the "PLAY" {@link javax.swing.JButton} is enabled only if the
+	 * user has set all the available {@link model.Ship}s.
+	 */
 	public void updateDropDownAndButtonsPanel() {
-		//System.out.println("updateDropDownEcc");
 		//ships comboBox
 		String[] availableShips = getPlayersShipsStrings(model);
 		if(chooseShip != null)
@@ -181,7 +200,7 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 	}
 	
 	/**
-	 * Creates and adds a buttonGrid as big as the game size to the main panel
+	 * Creates and adds a {@link javax.swing.JButton} grid as big as the game size to the main panel.
 	 */
 	public void setButtonGrid(){
 		int gameSize = model.getGameSize();
@@ -213,7 +232,7 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 				}
 				
 				else if(i == 0 && j != 0) {
-					JTextField t = new JTextField(COLUMNS[j]);
+					JTextField t = new JTextField(Utility.COLUMNS[j]);
 					t.setHorizontalAlignment(JTextField.CENTER);
 					t.setPreferredSize(new Dimension(dim, dim));
 					t.setEditable(false);
@@ -221,7 +240,7 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 				}
 				
 				else if(i != 0 && j == 0) {
-					JTextField t = new JTextField(ROWS[i]);
+					JTextField t = new JTextField(Utility.ROWS[i]);
 					t.setHorizontalAlignment(JTextField.CENTER);
 					t.setPreferredSize(new Dimension(dim, dim));
 					t.setEditable(false);
@@ -253,10 +272,14 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 		add(shipsPanel);
 	}
 	
+	/**
+	 * Whenever a {@link javax.swing.JButton} from the button grid is pressed, that
+	 * grid is updated. If a {@link model.Ship} was successfully set, the cells
+	 * where it lies are disabled and black-colored. On positioning errors, the clicked
+	 * {@link javax.swing.JButton} remains enabled and white.
+	 */
 	public void updateButtonGrid() {
-		//System.out.println("updateButtonGrid");
 		int gameSize = model.getGameSize();
-		
 		
 		//Player's shipsGrid
 		boolean[][] shipsGrid = new boolean[gameSize][gameSize];
@@ -283,14 +306,30 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 		}
 	}
 	
+	/**
+	 * Returns the {@link javax.swing.JButton} grid.
+	 * @return the {@link javax.swing.JButton} grid.
+	 */
 	public JButton[][] getButtonGrid() {
 		return buttonGrid;
 	}
 	
+	/**
+	 * Returns a {@link javax.swing.JButton} from the grid, according to its coordinates.
+	 * @param i The row coordinate of the {@link javax.swing.JButton} in the grid.
+	 * @param j The column coordinate of the {@link javax.swing.JButton} in the grid.
+	 * @return A {@link javax.swing.JButton} from the grid.
+	 */
 	public JButton getButtonFromButtonGrid(int i, int j) {
-		return buttonGrid[i][j];
+		if(buttonGrid != null)
+			return buttonGrid[i][j];
+		else 
+			return null;
 	}
 	
+	/**
+	 * Removes all the graphic content from the {@link SetShipsPanel}.
+	 */
 	public void removeAllComponents() {
 		dropDownAndButtonsPanel = null; //panel hosting buttons and dropdown menus
 		shipsPanel = null; //panel on which the buttonGrid will be shown
@@ -303,11 +342,12 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 		back = null;
 	}
 	
-	//methods
 	/**
-	 * Returns the String array representation of the list of Player's Ships
-	 * @param model The BattleshipModel object
-	 * @return A String array
+	 * Returns the {@link String} array representation of the list of 
+	 * {@link model.Player}'s {@link model.Ships}.
+	 * 
+	 * @param model An instance of a {@link model.BattleshipModel} object.
+	 * @return A {@link String} array.
 	 */
 	public String[] getPlayersShipsStrings(BattleshipModel model) {
 		int playerShipsNo = model.getPlayer().getShipList().size();
@@ -354,27 +394,52 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 		return stringArray;
 	}
 
+	/**
+	 * Gets the title of the current {@link SetShipsPanel}.
+	 * @return A {@link String} containing the title of the current {@link SetShipsPanel}.
+	 */
 	public String getTitle() {
 		return TITLE;
 	}
 	
+	/**
+	 * Gets the width of the current {@link SetShipsPanel}.
+	 * @return An integer containing the width of the current {@link SetShipsPanel}.
+	 */
 	public int getWidth() {
 		return WIDTH;
 	}
 	
+	/**
+	 * Gets the height of the current {@link SetShipsPanel}.
+	 * @return An integer containing the height of the current {@link SetShipsPanel}.
+	 */
 	public int getHeight() {
 		return HEIGHT;
 	}
 	
+	/**
+	 * Gets the {@link javax.swing.JComboBox} for the {@link model.Ship} choice.
+	 * @return The {@link javax.swing.JComboBox} for the {@link model.Ship} choice.
+	 */
 	public JComboBox<String> getChooseShip() {
 		return chooseShip;
 	}
 	
+	/**
+	 * Gets the {@link javax.swing.JComboBox} for the {@link utils.ShipDirection} choice.
+	 * @return The {@link javax.swing.JComboBox} for the {@link utils.ShipDirection} choice.
+	 */
 	public JComboBox<String> getChooseDirection() {
 		return chooseDirection;
 	}
 	
 	@Override
+	/**
+	 * On access or whenever a {@link model.Ship} is successfully set, this method updates
+	 * the whole {@link SetShipsPanel} according to the {@link model.Player}'s available
+	 * {@link model.Ship}s and its grids.
+	 */
 	public void update(Observable o, Object arg) {
 		if(model.getState() == BattleshipState.SETSHIPS) {
 			if(!here) {
@@ -382,18 +447,16 @@ public class SetShipsPanel extends JPanel implements Observer/*, PropertyChangeL
 				setAllComponents();
 				this.setVisible(true);
 				here = true;
+				updateAllComponents();
 			}
 			else
 				updateAllComponents();
 		}
 		else {
 			this.setVisible(false);
-			//removeAllComponents();
 			this.removeAll();
+			removeAllComponents();
 			here = false;
 		}
-		
-		//real update
-		updateAllComponents();
 	}
 }

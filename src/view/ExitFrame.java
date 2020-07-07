@@ -1,12 +1,9 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class ExitFrame extends JFrame implements ActionListener{
+	private static final long serialVersionUID = 1L;
 	//fields
 	private static final int width = 200;
 	private static final int height = 100;
@@ -23,7 +21,6 @@ public class ExitFrame extends JFrame implements ActionListener{
 	public ExitFrame() {
 		setSize(width, height);
 		setLocationRelativeTo(null);
-		//getContentPane().setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
@@ -62,11 +59,5 @@ public class ExitFrame extends JFrame implements ActionListener{
 			//this will never be displayed
 			System.out.println("ERROR CLOSING WINDOW");
 		}
-	}
-	
-	//main
-	public static void main(String[] args) {
-		ExitFrame gui = new ExitFrame();
-		gui.setVisible(true);
 	}
 }

@@ -3,7 +3,7 @@ package utils;
 import java.io.Serializable;
 
 /**
- * Utility Enum containing each Ship type
+ * Utility Enum containing each {@link model.Ship} type.
  * @author 20027017 & 20031485
  *
  */

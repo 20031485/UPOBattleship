@@ -1,48 +1,45 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.WindowConstants;
 
 import controller.BattleshipController;
 import model.BattleshipModel;
 
+/**
+ * Class that represents the {@link javax.swing.JFrame} where all panels with 
+ * their content are shown. It holds an instance of every panel it uses and
+ * both an instance of {@link model.BattleshipModel} and {@link controller.BattleshipController}.
+ * Its task is to switch from a panel to the other according to the {@link model.BattleshipModel}
+ * state.
+ * 
+ * @author 20027017 & 20031485
+ *
+ */
 public class BattleshipView extends JFrame implements Observer{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	//attributes
-	private static final String TITLE = "UPOBattleship";
+	
 	private BattleshipModel model;
 	private BattleshipController controller;
-	private JLayeredPane layers;
 	
-	//all panels to be shown
 	private StartLoadPanel startLoadPanel;
 	private NewGamePanel newGamePanel;
 	private SetShipsPanel setShipsPanel;
 	private BattlePanel battlePanel;
 	
-	//constructor
+	/**
+	 * Constructor for the class {@link BattleshipView}. It is initialized with a
+	 * {@link model.BattleshipModel} instance and initializes its 
+	 * {@link controller.BattleshipController} and all panels internally.
+	 * @param model A {@link model.BattleshipModel} instance.
+	 */
 	public BattleshipView(BattleshipModel model) {
 		this.model = model;
-		//this.model.addPropertyChangeListener(this);
 		this.model.addObserver(this);
 		this.controller = new BattleshipController(model);
 		
@@ -71,48 +68,13 @@ public class BattleshipView extends JFrame implements Observer{
 		setTitle("WELCOME: " + startLoadPanel.getTitle());
 		setVisible(true);
 	}
-	/*
-	//methods
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String propertyName = evt.getPropertyName();
-		if(propertyName.equals("setState")) {
-			switch(this.model.getState()) {
-				case WELCOME:
-					setTitle("WELCOME!");
-					setSize(startLoadPanel.getWidth(), startLoadPanel.getHeight());
-					//this.pack();
-					break;
-				
-				case BATTLE:
-					setTitle(BattlePanel.getTitle());
-					setSize(battlePanel.getWidth(), battlePanel.getHeight());
-					//this.pack();
-					break;
-			
-				case NEWGAME:
-					setTitle(NewGamePanel.getTitle());
-					setSize(newGamePanel.getWidth(), newGamePanel.getHeight());
-					//newGamePanel = new NewGamePanel(model);
-					//add(newGamePanel);
-					//this.pack();
-					break;
-				
-				case SETSHIPS:
-					setTitle(setShipsPanel.getTitle());
-					//setShipsPanel = new SetShipsPanel(model);
-					//add(setShipsPanel);
-					setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
-					//setShipsPanel.setVisible(true);
-					//this.pack();//activated when created!
-					break;
-					
-				default:
-					break;
-			}
-		}
-	}*/
 
+	/**
+	 * According to the {@link model.BattleshipModel}'s state, the 
+	 * {@link BattleshipView} is updated making the panel corresponding to the 
+	 * {@link model.BattleshipModel}'s state visible and making the other panels
+	 * invisible.
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		
@@ -134,52 +96,10 @@ public class BattleshipView extends JFrame implements Observer{
 			case SETSHIPS:
 				setTitle(setShipsPanel.getTitle());	
 				setSize(setShipsPanel.getWidth(), setShipsPanel.getHeight());
-
 				break;
 				
 			default:
 				break;
 		}
 	}
-	
-	
-	
-	
-	
-
-/*	
-	public JMenuBar createMenuBar() {
-        //Costruzione della menuBar
-        JMenuBar menuBar = new JMenuBar();
-            JMenu menuFile = new JMenu("Setup");
-                JMenuItem apri = new JMenuItem("SalvaP");
-                JMenuItem esci = new JMenuItem("Esci");
-                JMenu radioButtonMenu = new JMenu("Timer");
-                    JRadioButtonMenuItem buttonBlue = new JRadioButtonMenuItem("Si");
-                    JRadioButtonMenuItem buttonRed = new JRadioButtonMenuItem("No");
-                    ButtonGroup group = new ButtonGroup();
-                    group.add(buttonBlue);
-                    group.add(buttonRed);
-                radioButtonMenu.add(buttonBlue);
-                radioButtonMenu.add(buttonRed);
-            menuFile.add(apri);
-            menuFile.add(radioButtonMenu);//popup pull-right
-            menuFile.addSeparator();
-            menuFile.add(esci);
-            JMenu menuHelp = new JMenu("Aiuto");
-        menuBar.add(menuFile);
-        menuBar.add(menuHelp);
-        esci.addActionListener(new ExitActionListener());
-        //Listeners
-      return menuBar;
-      
-      //  menuBar.setVisible(true);
-    }
-	
-	  private class ExitActionListener implements ActionListener {
-	        public void actionPerformed(ActionEvent e) {
-	            System.exit(0);
-	        }
-	    }
-	*/
 }

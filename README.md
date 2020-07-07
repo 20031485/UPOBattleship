@@ -2,13 +2,13 @@
 Java project for the Programming Paradigms course at University of Eastern Piedmont, Vercelli (IT).
 
 # Latest additions/fixes
-The game is fully playable, with both mods easy/hard and timed.
+Uhm, it works fine, pretty much.
 
 # TODO
- - [ ] **FIX** `BattleshipModel::saveGame()` and `BattleshipModel::loadGame()`: they work in tests, but they don't communicate well with the GUI;
- - [ ] Implement `BattleshipModelTest`;
- - [ ] Check if some `Exception`s can be launched - add them if so;
- - [ ] Write JavaDOC - **ongoing**.
+ - [ ] Fix `BattleshipModelTest`;
+ - [ ] NewGamePanel's JavaDOC;
+ - [ ] StartLoadPanel's JavaDOC;
+ - [ ] WindowDestructor's JavaDOC.
 
 # Useful links
  - [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/) because Lorenzo  _always_  forgets stuff;

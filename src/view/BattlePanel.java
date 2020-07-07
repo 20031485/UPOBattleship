@@ -6,8 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-//import java.beans.PropertyChangeEvent;
-//import java.beans.PropertyChangeListener;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,12 +22,32 @@ import controller.BattleshipController;
 import model.BattleshipModel;
 import utils.BattleshipState;
 import utils.Utility;
-//import view.CountdownLabel;
 
-public class BattlePanel extends JPanel implements Observer/*, PropertyChangeListener*/{
+/**
+ * <p>Class that represent the board of the Battleship game, and shows all the moves
+ * taken both by the {@link model.Player} and the {@link model.Computer}. 
+ * A {@link BattlePanel} is a {@link javax.swing.JPanel} that holds two 
+ * {@link javax.swing.JButton} grids, one of which is clickable by the user
+ * in order to simulate the action of the {@link model.Player}. Both grids
+ * are updated at every click, so that the actions taken by {@link model.Computer}
+ * can be seen as a color change in the grid cells it chooses to hit.
+ * </p>
+ * <p>If the {@link model.BattleshipModel} is "timed", this class also initializes 
+ * a {@link javax.swing.Timer} held in {@link CountdownPanel} and adds the panel to
+ * this view.
+ * </p>
+ * <p>In this panel, the current instance of {@link model.BattleshipModel} can be 
+ * saved in a binary file, if the user somehow wants to suspend the match and continue
+ * later on. This is the view that is accessed either after setting all {@link model.Ships}
+ * on the {@link SetShipsPanel} or if an existing valid binary file is found and "Load game"
+ * is clicked on {@link StartLoadPanel}.
+ * </p>
+ * @author 20027017 & 20031485
+ *
+ */
+public class BattlePanel extends JPanel implements Observer{
 	private static final long serialVersionUID = 1L;
 
-	//attributes
 	private BattleshipModel model;
 	private BattleshipController controller;
 	private BattleController battleController;
@@ -56,7 +75,6 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 	private JPanel allButtonsPanel;
 	
 	private JButton saveButton;
-//	private JButton rematchButton;
 	
 	private CountdownPanel timerPanel;
 	
@@ -73,32 +91,36 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 	private JLabel youWinLabel = new JLabel(YOU_WIN);
 	private JLabel youLoseLabel = new JLabel(YOU_LOSE);
 	
-
-	//private BattleController controller;
-
-	//constructor
+	/**
+	 * Constructor for the class {@link BattlePanel}. It links the {@link BattleshipModel}
+	 * and the {@link BattleshipController} to private fields so that it can access their methods.
+	 * Then it initializes its dimensions and its layout and, finally, links itself to the model
+	 * as {@link java.util.Observer} to listen to changes in the {@link BattleshipModel}.
+	 * 
+	 * @param model A {@link BattleshipModel} instance.
+	 * @param controller A {@link BattleshipController} Instance.
+	 */
 	public BattlePanel(BattleshipModel model, BattleshipController controller) {
 		this.model = model;
 		this.controller = controller;
 		setSize(WIDTH, HEIGHT);
 		setLayout(new BorderLayout());
-		//link changeListener
-		//this.model.addPropertyChangeListener(this);
 		this.model.addObserver(this);
-		
-		//link controller
-		//this.controller = new BattleController(model, this);
 		this.battleController = this.controller.giveBattleController(model, this);
 	}
 	
 	/**
-	 * Returns a {@code String} containing the title of the panel.
-	 * @return A {@code String} containing the title of the panel.
+	 * Returns a {@link String} containing the title of the panel.
+	 * @return A {@link String} containing the title of the panel.
 	 */
 	public static String getTitle() {
 		return TITLE;
 	}
 	
+	/**
+	 * Utility method used to fill the {@link BattlePanel} with sub-panels and
+	 * {@link javax.swing.JButton} grids. Launched when the panel is accessed.
+	 */
 	public void setAllComponents() {
 		System.out.println("setAllComponents");
 			
@@ -124,14 +146,23 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		
 		//create panel with buttons
 		setButtonsPanel();
-		//countdownPanel.countdownStart();
 	}
 	
+	/**
+	 * Sets a {@link javax.swing.Timer} held in {@link CountdownPanel} with 
+	 * an amount of seconds.
+	 * 
+	 * @param secs The amount of seconds.
+	 */
 	public void setTimer(long secs) {
 		timerPanel = new CountdownPanel(secs, model);
 		add(timerPanel, BorderLayout.NORTH);
 	}
 	
+	/**
+	 * Updates all the components set when {@link BattlePanel} is first accessed.
+	 * Launched whenever a button is clicked or an action is taken.
+	 */
 	public void updateAllComponents() {
 		updateShipsGrid();
 		
@@ -142,16 +173,21 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		else
 			saveButton.setEnabled(true);
 	}
-	
-	public void removeAllComponents() {
-		if(timerPanel != null)
-			remove(timerPanel);
-		if(bothGridsPanel != null)
-			remove(bothGridsPanel);
-		if(allButtonsPanel != null)
-			remove(allButtonsPanel);
-	}
-	
+
+	/**
+	 * <p>
+	 * Sets all the components to create the ships grid, where the user can see its ships.
+	 * It creates a {@link javax.swing.JPanel} with GridLayout and fills its cells with 
+	 * {@link javax.swing.JButton}s. All those {@link javax.swing.JButton}s are disabled
+	 * and if the cell matches a {@link model.Ship}, it is colored in black; if it does not, 
+	 * it is colored in white. 
+	 * </p>
+	 * <p>
+	 * If the user is restoring a saved match, cells can also be blue
+	 * if the {@link model.Computer} has hit that cell but there was no {@link model.Ship}
+	 * underneath, or red if the corresponding {@link model.Computer} hit was successful.
+	 * </p>
+	 */
 	public void setShipsGrid() {
 		int gameSize = model.getGameSize();
 		int dim = 0;
@@ -245,6 +281,12 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		bothGridsPanel.add(leftPanel);
 	}
 	
+	/**
+	 * Whenever the {@link model.Computer} hits the {@link model.Player},
+	 * the {@link javax.swing.JButton} corresponding to the chosen coordinates
+	 * becomes either red if those coordinates match the position of a {@link model.Player}'s
+	 * {@link model.Ship}, or blue otherwise. An unchosen cell remains white.
+	 */
 	public void updateShipsGrid() {
 		int gameSize = model.getGameSize();
 		
@@ -270,14 +312,12 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 				else if(shipsGrid[i][j] && !hitsGrid[i][j]) {
 					shipsButtonGrid[i][j].setBackground(Color.BLUE);
 					shipsButtonGrid[i][j].setOpaque(true);
-					//statusLabel.setText("Computer missed you!");
 				}
 				
 				//if there are both ships and hits (false/false)
 				else if(!shipsGrid[i][j] && !hitsGrid[i][j]) {
 					shipsButtonGrid[i][j].setBackground(Color.RED);
 					shipsButtonGrid[i][j].setOpaque(true);
-					//statusLabel.setText("Computer hits you!");
 				}
 			}
 		}
@@ -300,6 +340,22 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		}
 	}
 	
+	/**
+	 * <p>
+	 * Sets all the components to create the hits grid, where the user can see its fired hits.
+	 * It creates a {@link javax.swing.JPanel} with GridLayout and fills its cells with 
+	 * {@link javax.swing.JButton}s. Its {@link javax.swing.JButton}s are disabled whenever they
+	 * have already been clicked, and they are enabled and white-colored if they still are not. When the user
+	 * clicks on a {@link javax.swing.JButton} from this grid, if the {@link model.Computer}
+	 * had set a {@link model.Ship} in that position, on update the cell turns red, blue if
+	 * the user missed. 
+	 * </p>
+	 * <p>
+	 * If the user is restoring a saved match, cells can also be blue
+	 * if the {@link model.Player} had hit that cell but there was no {@link model.Ship}
+	 * underneath, or red if the corresponding {@link model.Player} hit was successful.
+	 * </p>
+	 */
 	public void setHitsGrid() {
 		int gameSize = model.getGameSize();
 		int dim = 0;
@@ -383,7 +439,6 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 				}
 			}
 		}
-		//hitsGridPanel.add(computerStatusLabel);
 		hitsGridPanel.setBorder(hitsGridTitle);
 		hitsGridPanel.setVisible(true);
 		rightPanel.add(hitsGridPanel, BorderLayout.NORTH);
@@ -391,6 +446,12 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		bothGridsPanel.add(rightPanel);
 	}
 	
+	/**
+	 * Whenever an enabled {@link javax.swing.JButton} from the ships grid is pressed,
+	 * the grid is updated. That button turns disabled and changes its color:
+	 * it becomes red if the button's coordinates match those of a {@link model.Computer}'s
+	 * {@link model.Ship}, blue otherwise.
+	 */
 	public void updateHitsGrid() {
 		int gameSize = model.getGameSize();
 		
@@ -451,16 +512,25 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		
 	}
 	
+	/**
+	 * <p>
+	 * Creates and fills a {@link javax.swing.JPanel} with a 
+	 * {@link javax.swing.JButton} and two {@link javax.swing.JLabel}s for win/loss conditions.
+	 * When the {@link javax.swing.JButton} is pressed, the current instance of 
+	 * {@link model.BattleshipModel} is saved on a binary file.
+	 * </p>
+	 * <p>
+	 * The two {@link javax.swing.JLabels} are initially invisible, but on win/loss
+	 * condition the correct {@link javax.swing.JLabel} is shown.
+	 * </p>
+	 */
 	public void setButtonsPanel() {
 		allButtonsPanel = new JPanel();
 		allButtonsPanel.setLayout(new FlowLayout());
 		
 		saveButton = new JButton("SAVE GAME");
 		saveButton.addActionListener(battleController);
-		
-		//rematchButton = new JButton("REMATCH");
-		//rematchButton.addActionListener(controller);
-		
+
 		if(model.isJustSaved()) {
 			saveButton.setEnabled(false);
 		}
@@ -469,8 +539,7 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		}
 		
 		allButtonsPanel.add(saveButton);
-		//allButtonsPanel.add(rematchButton);
-		
+
 		youWinLabel.setHorizontalAlignment(JLabel.CENTER);
 		youWinLabel.setFont(new Font("Monospace", Font.PLAIN, 50));
 		allButtonsPanel.add(youWinLabel);
@@ -481,49 +550,33 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 		youLoseLabel.setFont(new Font("Monospace", Font.PLAIN, 50));
 		allButtonsPanel.add(youLoseLabel);
 		youLoseLabel.setVisible(false);
-		
-		//rematchButton.setVisible(false);
-		
-		if(model.isTimed()) {
-			/*pauseButton = new JButton("PAUSE");
-			pauseButton.addActionListener(controller);
-			allButtonsPanel.add(pauseButton);*/
-		}
 			
 		add(allButtonsPanel, BorderLayout.SOUTH);
 	}
 	
+	/**
+	 * Returns a {@link javax.swing.JButton} from the hits grid.
+	 * @param i The row coordinate of the {@link javax.swing.JButton}'s position.
+	 * @param j The column coordinate of the {@link javax.swing.JButton}'s position.
+	 * @return A {@link javax.swing.JButton} instance.
+	 */
 	public JButton getButtonFromHitsButtonGrid(int i, int j) {
 		return hitsButtonGrid[i][j];
 	}
 	
-	public void addRematchPanel() {
-	
-		
-		
-	}
-	
+	/**
+	 * Gets the remaining seconds to the end of the countdown.
+	 * @return A long representing the remaining seconds to the end of the countdown.
+	 */
 	public long getSecsLeft() {
 		return timerPanel.getCurrentTime();
 	}
-/*	
+
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String propertyName = evt.getPropertyName();
-		if(propertyName.equals("setState")) {
-			if(model.getState() == BattleshipState.BATTLE) {
-				setAllComponents();
-				this.setVisible(true);
-				if(model.isTimed())
-					timerPanel.timerStart();
-			}
-			else
-				//removeAllComponents();
-				this.setVisible(false);
-		}
-	}
-*/
-	@Override
+	/**
+	 * Called either on first access or whenever a {@link javax.swing.JButton} is pressed on this panel. 
+	 * It updates all of its components according to the data the {@link model.BattleshipModel} holds.
+	 */
 	public void update(Observable o, Object arg) {
 		if(model.getState() == BattleshipState.BATTLE) {
 			if(!here) {
@@ -573,7 +626,6 @@ public class BattlePanel extends JPanel implements Observer/*, PropertyChangeLis
 			}
 		}
 		else {
-			//removeAllComponents();
 			this.setVisible(false);
 			here = false;
 		}
