@@ -16,11 +16,31 @@ import controller.StartLoadController;
 import model.BattleshipModel;
 import utils.BattleshipState;
 
-//THIS IS A VIEW
-
-public class StartLoadPanel extends JPanel implements Observer/*, PropertyChangeListener*/{
+/**
+ * <p>This class extends a {@link javax.swing.JPanel} that is shown
+ * according to the {@link model.BattleshipModel}'s state by
+ * the {@link BattleshipView}. It contains a {@link javax.swing.JLabel}
+ * and two {@link javax.swing.JButton}s, and it is the first panel
+ * being shown by the {@link BattleshipView}. When "New game" is pressed,
+ * it triggers a {@link utils.BattleshipState} change in the 
+ * {@link model.BattleshipModel}, so that the {@link NewGamePanel} is
+ * shown. 
+ * </p>
+ * <p>If a binary saved file exists and has a certain name, the
+ * "Load game" {@link javax.swing.JButton} is made visible. If
+ * the user presses "Load game", if the file is corrupted or removed,
+ * the pressure simply makes the {@link javax.swing.JButton} disappear.
+ * It triggers a {@link utils.BattleshipState} change in the 
+ * {@link model.BattleshipModel}, so that the {@link BattlePanel} 
+ * with the loaded unfinished match is shown.
+ * </p>
+ * 
+ * @author 20027017 & 20031485
+ *
+ */
+public class StartLoadPanel extends JPanel implements Observer{
 	private static final long serialVersionUID = 1L;
-	//attributes
+	
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 100;
 	private static final String TITLE = "NEW/LOAD GAME";
@@ -35,11 +55,18 @@ public class StartLoadPanel extends JPanel implements Observer/*, PropertyChange
 	
 	private boolean here = false;
 	
-	//constructors
+	/**
+	 * Constructor for the class {@link NewGamePanel}. It initializes a
+	 * {@link javax.swing.JPanel} and fills it with graphic elements
+	 * useful for manually choosing if starting a new game or loading 
+	 * an existing unfinished match.
+	 * 
+	 * @param model
+	 * @param controller
+	 */
 	StartLoadPanel(BattleshipModel model, BattleshipController controller){
 		this.model = model;
 		this.controller = controller;
-		//this.controller = new StartLoadController(model, this);//controller;
 		this.startLoadController = this.controller.giveStartLoadController(model, this);
 		this.here = true;
 		
@@ -71,38 +98,32 @@ public class StartLoadPanel extends JPanel implements Observer/*, PropertyChange
 		loadGameButton = new JButton("Load game");
 		loadGameButton.addActionListener(startLoadController);
 		buttonPanel.add(loadGameButton);
+		
 		if(!BattleshipModel.savedGameExists())
 			loadGameButton.setVisible(false);
 		
-		
 		//add panel to frame
-		
 		mainPanel.add(buttonPanel, BorderLayout.CENTER);
 		add(mainPanel);
 		setVisible(true);
 	}
 		
+	/**
+	 * Gets the title of the {@link StartLoadPanel}.
+	 * @return A {@link String} containing the title of 
+	 * the {@link StartLoadPanel}.
+	 */
 	public String getTitle() {
 		return TITLE;
 	}
-/*
+
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String propertyName = evt.getPropertyName();
-		if(propertyName.equals("setState")) {
-			if(model.getState() == BattleshipState.WELCOME) {
-				if(BattleshipModel.savedGameExists())
-					loadGameButton.setVisible(true);
-				this.setVisible(true);
-			}
-			else
-				this.setVisible(false);
-		}
-	}
-*/
-	@Override
+	/**
+	 * If the {@link model.BattleshipModel} is in a certain 
+	 * {@link utils.BattleshipState}, this panel is made visible.
+	 * It is made invisible otherwise.
+	 */
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		if(model.getState() == BattleshipState.WELCOME) {
 			if(!here) {
 				if(BattleshipModel.savedGameExists())
@@ -115,6 +136,5 @@ public class StartLoadPanel extends JPanel implements Observer/*, PropertyChange
 			this.setVisible(false);
 			here = false;
 		}
-		
 	}
 }

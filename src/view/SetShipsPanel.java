@@ -172,7 +172,7 @@ public class SetShipsPanel extends JPanel implements Observer{
 	
 	/**
 	 * Updates the content of the {@link javax.swing.JPanel} containing the
-	 * {@link javax.swing.JComboBoxes}. The content of the {@link javax.swing.JComboBox}es
+	 * {@link javax.swing.JComboBox}es. The content of the {@link javax.swing.JComboBox}es
 	 * is updated too, and the "PLAY" {@link javax.swing.JButton} is enabled only if the
 	 * user has set all the available {@link model.Ship}s.
 	 */
@@ -344,7 +344,7 @@ public class SetShipsPanel extends JPanel implements Observer{
 	
 	/**
 	 * Returns the {@link String} array representation of the list of 
-	 * {@link model.Player}'s {@link model.Ships}.
+	 * {@link model.Player}'s {@link model.Ship}s.
 	 * 
 	 * @param model An instance of a {@link model.BattleshipModel} object.
 	 * @return A {@link String} array.

@@ -38,7 +38,7 @@ import utils.Utility;
  * </p>
  * <p>In this panel, the current instance of {@link model.BattleshipModel} can be 
  * saved in a binary file, if the user somehow wants to suspend the match and continue
- * later on. This is the view that is accessed either after setting all {@link model.Ships}
+ * later on. This is the view that is accessed either after setting all {@link model.Ship}s
  * on the {@link SetShipsPanel} or if an existing valid binary file is found and "Load game"
  * is clicked on {@link StartLoadPanel}.
  * </p>
@@ -520,7 +520,7 @@ public class BattlePanel extends JPanel implements Observer{
 	 * {@link model.BattleshipModel} is saved on a binary file.
 	 * </p>
 	 * <p>
-	 * The two {@link javax.swing.JLabels} are initially invisible, but on win/loss
+	 * The two {@link javax.swing.JLabel}s are initially invisible, but on win/loss
 	 * condition the correct {@link javax.swing.JLabel} is shown.
 	 * </p>
 	 */

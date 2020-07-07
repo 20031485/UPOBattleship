@@ -2,8 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-//import java.beans.PropertyChangeEvent;
-//import java.beans.PropertyChangeListener;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -19,13 +18,24 @@ import controller.NewGameController;
 import model.BattleshipModel;
 import utils.BattleshipState;
 
-
-public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeListener*/{
+/**
+ * This class extends a {@link javax.swing.JPanel} that is shown
+ * according to the {@link model.BattleshipModel}'s state by
+ * the {@link BattleshipView}. This graphic element contains various
+ * {@link javax.swing.JPanel}s, {@link javax.swing.JButton}s and
+ * {@link javax.swing.JRadioButton}s, so that the user can easily
+ * choose the settings for its Battleship match, such as grid size, 
+ * {@link utils.ComputerType} and difficulty and timer.
+ * 
+ * @author 20027017 & 20031485
+ *
+ */
+public class NewGamePanel extends JPanel implements Observer{
 	private static final long serialVersionUID = 1L;
 	
 	//attributes
-	private static final int WIDTH = 350;//400
-	private static final int HEIGHT = 250;//225
+	private static final int WIDTH = 350;
+	private static final int HEIGHT = 250;
 	private static final String TITLE = "NEW GAME SETTINGS";
 
 	//model
@@ -76,12 +86,18 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 	
 	private boolean here = false;
 	
-	//constructor
+	/**
+	 * Constructor for the class {@link NewGamePanel}. It initializes a
+	 * {@link javax.swing.JPanel} and fills it with graphic elements
+	 * useful for manually choosing the desired Battleship settings.
+	 * 
+	 * @param model A {@link model.BattleshipModel} instance.
+	 * @param controller A {@link controller.BattleshipController} instance.
+	 */
 	public NewGamePanel(BattleshipModel model, BattleshipController controller) {
 		this.model = model;
-		//instance its own controller
 		this.controller = controller;
-		this.newGameController = this.controller.giveNewGameController(model, this);//new NewGameController(model, this);
+		this.newGameController = this.controller.giveNewGameController(model, this);
 		
 		this.model.addObserver(this);
 		
@@ -131,9 +147,7 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 		timed1minsButton.setSelected(true);
 		timed2minsButton = new JRadioButton("2mins");
 		timed5minsButton = new JRadioButton("5mins");
-		
-		
-		
+				
 		//all buttonGroups		
 		radioButtonModeGroup = new ButtonGroup();
 		radioButtonModeGroup.add(p1vsp2Button);
@@ -154,7 +168,6 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 		timedButtonGroup.add(timed2minsButton);
 		timedButtonGroup.add(timed5minsButton);
 		
-		
 		//all panels
 		difficultyPanel = new JPanel();
 		difficultyPanel.setLayout(new BorderLayout());
@@ -162,14 +175,11 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 		gameModePanel = new JPanel();
 		gameModePanel.setLayout(new BorderLayout());
 		
-			
 		confirmBackButtonPanel = new JPanel();
 		confirmBackButtonPanel.setLayout(new FlowLayout());
 		
-		
 		radioButtonSizePanel = new JPanel();
-		radioButtonSizePanel.setLayout(new BorderLayout());
-		
+		radioButtonSizePanel.setLayout(new BorderLayout());		
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
@@ -179,7 +189,6 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 		
 		timedPanel = new JPanel();
 		timedPanel.setLayout(new BorderLayout());
-		//timedPanel.setBackground(Color.BLUE);
 	
 		gameModePanel.add(gameModeLabel, BorderLayout.NORTH);
 		gameModePanel.add(p1vsp2Button, BorderLayout.CENTER);
@@ -194,14 +203,10 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 				
 		buttonPanel.add(chooseGameModePanel);
 		
-		//sizeButtonsPanel = new JPanel();
-		//sizeButtonsPanel.setLayout(new FlowLayout());
-		
 		radioButtonSizePanel.add(gridSizeLabel, BorderLayout.NORTH);
 		radioButtonSizePanel.add(sizeMButton, BorderLayout.WEST);
 		radioButtonSizePanel.add(sizeLButton, BorderLayout.CENTER);
 		radioButtonSizePanel.add(sizeXLButton, BorderLayout.EAST);
-		//radioButtonSizePanel.add(sizeButtonsPanel, BorderLayout.SOUTH);
 		
 		
 		buttonPanel.add(radioButtonSizePanel);
@@ -211,41 +216,31 @@ public class NewGamePanel extends JPanel implements Observer/*, PropertyChangeLi
 		timedPanel.add(timed2minsButton, BorderLayout.CENTER);
 		timedPanel.add(timed5minsButton, BorderLayout.EAST);
 		
-		
-		//buttonPanel.add(timedCheckBox);
 		buttonPanel.add(timedPanel);
-		//buttonPanel.add(confirmButton);
-		//buttonPanel.add(backButton);
-		//buttonPanel.setBackground(Color.BLUE);
 		
 		confirmBackButtonPanel.add(confirmButton);
 		confirmBackButtonPanel.add(backButton);
 
-		//confirmBackButtonPanel.setBackground(Color.RED);
 		buttonPanel.add(confirmBackButtonPanel);
 		//NewGamePanel
 		this.add(buttonPanel, BorderLayout.CENTER);
-		//this.add(confirmBackButtonPanel, BorderLayout.PAGE_END);
 	}
 	
-	//methods
+	/**
+	 * Gets the title of the {@link NewGamePanel}.
+	 * @return A {@link String} containing the title of 
+	 * the {@link NewGamePanel}.
+	 */
 	public static String getTitle() {
 		return TITLE;
 	}
-/*
+
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String propertyName = evt.getPropertyName();
-		if(propertyName.equals("setState")) {
-			if(model.getState() == BattleshipState.NEWGAME) {
-				this.setVisible(true);
-			}
-			else
-				this.setVisible(false);
-		}
-	}
-*/
-	@Override
+	/**
+	 * If the {@link model.BattleshipModel} is in a certain 
+	 * {@link utils.BattleshipState}, this panel is made visible.
+	 * It is made invisible otherwise.
+	 */
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		if(model.getState() == BattleshipState.NEWGAME) {

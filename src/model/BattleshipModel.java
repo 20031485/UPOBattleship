@@ -217,7 +217,7 @@ public class BattleshipModel extends Observable implements Serializable{
 
 	/**
 	 * Sets the {@link Player} of the {@link BattleshipModel} object.
-	 * @param A {@link Player} instance.
+	 * @param player A {@link Player} instance.
 	 */
 	public void setPlayer(Player player) {
 		this.player = player;
@@ -233,7 +233,7 @@ public class BattleshipModel extends Observable implements Serializable{
 
 	/**
 	 * Sets the {@link Computer} of the {@link BattleshipModel} object.
-	 * @param A {@link Computer} instance.
+	 * @param computer A {@link Computer} instance.
 	 */
 	public void setComputer(Computer computer) {
 		this.computer = computer;
@@ -249,7 +249,7 @@ public class BattleshipModel extends Observable implements Serializable{
 
 	/**
 	 * Sets the game size of the current Battleship match.
-	 * @param An integer representing the new game size of the current Battleship match.
+	 * @param gameSize An integer representing the new game size of the current Battleship match.
 	 */
 	public void setGameSize(int gameSize) {
 		this.gameSize = gameSize;
@@ -399,7 +399,7 @@ public class BattleshipModel extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Place one of the available {@link Player}'s {@link Ships} on its ships grid.
+	 * Place one of the available {@link Player}'s {@link Ship}s on its ships grid.
 	 * 
 	 * @param shipIndex The index of the {@link Ship} in the {@link Player}'s ships list.
 	 * @param row The row coordinate where the {@link Player} wants to place its {@link Ship}.
