@@ -2,13 +2,11 @@
 Java project for the Programming Paradigms course at University of Eastern Piedmont, Vercelli (IT).
 
 # Latest additions/fixes
-Uhm, it works fine, pretty much.
+Uhm, it works fine, pretty much. Check the PDF in "doc" (if you are Italian) or the JavaDOC for documentation.
 
 # TODO
- - [ ] Fix `BattleshipModelTest`;
- - [ ] NewGamePanel's JavaDOC;
- - [ ] StartLoadPanel's JavaDOC;
- - [ ] WindowDestructor's JavaDOC.
+ - [ ] Implement a new `PlayerState` for the start of the game (WATER triggers an unwanted label in `BattlePanel`);
+ - [ ] Implement P1vsP2.
 
 # Useful links
  - [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/) because Lorenzo  _always_  forgets stuff;
