@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import model.BattleshipModel;
-import view.NewGamePanel;
 import view.SetShipsPanel;
 import utils.BattleshipState;
 import utils.ShipDirection;

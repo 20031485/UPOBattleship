@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import java.util.Observable;
-import java.util.Random;
 import java.util.Scanner;
 
 import utils.BattleshipState;

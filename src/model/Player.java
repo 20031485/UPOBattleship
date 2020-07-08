@@ -322,21 +322,14 @@ public class Player extends Observable implements Serializable{
 	 */
 	public void setShip(int shipIndex, int row, int col, ShipDirection direction) {
 		//se ho posizionato la nave, la rimuovo dalla lista
-		try{
-			if(this.shipList.get(shipIndex).setShip(row, col, direction, this.shipsGrid)) {
-				//metto la nave anche sulla griglia iniziale
-				this.shipList.get(shipIndex).setShip(row, col, direction, this.initialShipsGrid);
-				//tolgo una nave dalla lista delle navi disponibili e la aggiungo alla lista delle navi piazzate
-				this.placedShips.add(this.shipList.get(shipIndex));
-				this.shipList.remove(shipIndex);
-			}
-			else
-				System.err.println("No room for this ship!");
+		if(this.shipList.get(shipIndex).setShip(row, col, direction, this.shipsGrid)) {
+			//metto la nave anche sulla griglia iniziale
+			this.shipList.get(shipIndex).setShip(row, col, direction, this.initialShipsGrid);
+			//tolgo una nave dalla lista delle navi disponibili e la aggiungo alla lista delle navi piazzate
+			this.placedShips.add(this.shipList.get(shipIndex));
+			this.shipList.remove(shipIndex);
 		}
-		catch(IndexOutOfBoundsException e) {
-			System.err.println("No more ships for this player!");
-		}
-		//update the view anyway
+		//update the view
 		setChanged();
 		notifyObservers();
 	}
