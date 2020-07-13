@@ -19,9 +19,13 @@ public class Computer extends Player implements Serializable{
 	//attributes
 	private static final long serialVersionUID = 1L;
 	private ComputerType difficulty;
+	//lista di tutte le coordinate che il Computer può colpire
 	private ArrayList<Coordinates> coordinatesList;
+	//lista delle prossime coordinate che il Computer colpirà
 	private ArrayList<Coordinates> nextHits;
+	//coordinate dell'ultimo colpo effettuato
 	private Coordinates lastHit;
+	//coordinate dell'ultimo colpo andato a segno
 	private Coordinates lastSuccessfulHit;
 	
 	/**
@@ -158,8 +162,10 @@ public class Computer extends Player implements Serializable{
 				coordinates = randomHit();
 				break;
 				
-			//estrae intelligentemente due coordinate
+			//estrae intelligentemente due coordinate in funzione dello stato del giocatore
 			case SMART:
+				//se il giocatore è stato mancato o se una sua nave è stata affondata, miro a caso
+				//se il giocatore è stato colpito, miro vicino alla cella colpita
 				coordinates = smartHit(state);
 				lastHit = new Coordinates(coordinates[0], coordinates[1]);
 				break;
@@ -210,6 +216,8 @@ public class Computer extends Player implements Serializable{
 		int[] coordinates = new int[2];
 		
 		//controllo se il computer aveva colpito allo scorso tiro
+		//questo metodo permette di mettere delle coordinate in nextHits, così
+		//che il Computer le possa colpire ai prossimi turni
 		didComputerHit(state);
 		
 		//stampo quello che ho in nextHits

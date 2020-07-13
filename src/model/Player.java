@@ -25,10 +25,13 @@ public class Player extends Observable implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String name;
 	//griglia che contiene tutte le navi posizionate e non cambia una volta che è stata definita
+	//inizializzata a true
 	private boolean[][] initialShipsGrid;
 	//griglia su cui vado a posizionare le navi --> da questa griglia ottengo initialShipsGrid
+	//inizializzata a true
 	private boolean[][] shipsGrid;
-	//griglia su cui salvo i colpi effettuati
+	//griglia su cui salvo i colpi ricvevuti
+	//inizializzata a true
 	private boolean[][] hitsGrid;
 	private int gameSize;	
 	//può essere WATER (mancato), HIT (colpito) o HITANDSUNK (colpito e affondato) - inizia a WATER
@@ -370,6 +373,7 @@ public class Player extends Observable implements Serializable{
 			//rimuovo la nave dalla lista delle navi posizionate
 			placedShips.remove(0);
 		}
+		//re-imposto tutte le griglie a true
 		resetShipsGrid();
 		
 		setChanged();
