@@ -16,7 +16,7 @@ public class Ship implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private ShipType shipType;
 	private int length;
-	private boolean[][] absolutePosition;
+	private boolean[][] absolutePosition;//serve per vedere se la nave è stata completamente affondata o no
 	@SuppressWarnings("unused")
 	private ShipDirection shipDirection;
 	private int gameSize;
@@ -122,6 +122,7 @@ public class Ship implements Serializable{
 		}
 		//metodo per modificare shipsGrid
 		this.shipDirection = direction;
+		//posizionamento della nave sulla griglia del giocatore
 		this.setShipOnShipsGrid(shipsGrid);
 		return result;
 	}

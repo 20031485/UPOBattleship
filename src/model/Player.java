@@ -24,14 +24,22 @@ import utils.ShipType;
 public class Player extends Observable implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String name;
+	//griglia che contiene tutte le navi posizionate e non cambia una volta che è stata definita
 	private boolean[][] initialShipsGrid;
+	//griglia su cui vado a posizionare le navi --> da questa griglia ottengo initialShipsGrid
 	private boolean[][] shipsGrid;
+	//griglia su cui salvo i colpi effettuati
 	private boolean[][] hitsGrid;
 	private int gameSize;	
+	//può essere WATER (mancato), HIT (colpito) o HITANDSUNK (colpito e affondato) - inizia a WATER
 	private PlayerState state;
+	//mi dice se il tempo della partita è scaduto
 	private boolean timedOut;
+	//lista delle navi disponibili
 	private ArrayList<Ship> shipList;
+	//lista delle navi posizionate (che prima erano in shipList)
 	private ArrayList<Ship> placedShips;
+	//lista delle navi completamente distrutte
 	private ArrayList<Ship> deadShips;
 	
 	/**
