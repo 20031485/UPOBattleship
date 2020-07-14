@@ -90,7 +90,8 @@ public class NewGameController implements ActionListener{
 						
 						if(newGamePanel.timed5minsButton.isSelected())
 							secs = 5*60;
-
+						
+						//una volta che ho impostato i parametri, chiamo newGame con tutti i parametri impostati
 						model.newGame(new Player(gameSize), new Computer(gameSize, computerType), gameSize, timed, secs);
 
 					}

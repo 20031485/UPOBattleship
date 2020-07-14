@@ -52,7 +52,9 @@ public class SetShipsController implements ActionListener{
 		String command = source.getText();
 		
 		if(command.equals("RANDOM")) {
+			//tolgo tutte le navi già posizionate
 			model.getPlayer().clearShips();
+			//riposiziono tutte le navi casualmente
 			model.getPlayer().randomSetShips();
 		}
 		
@@ -61,7 +63,9 @@ public class SetShipsController implements ActionListener{
 		}
 		
 		if(command.equals("PLAY")) {
+			//posiziona casualmente le navi del computer
 			model.getComputer().randomSetShips();
+			//passa allo stato BATTLE
 			model.setState(BattleshipState.BATTLE);
 		}
 		

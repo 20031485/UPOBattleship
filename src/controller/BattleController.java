@@ -46,6 +46,10 @@ public class BattleController implements ActionListener{
 		//if user clicked "SAVE GAME"
 		if(command.equals("SAVE GAME")) {
 			if(model.isTimed())
+				//se il modello è a tempo, ottengo il tempo mancante al termine della partita
+				//dal battlePanel (che contiene CountdownPanel). CountdownPanel lavora
+				//con i millisecondi, quindi devo trasformare millisecondi-->secondi facendo /1000
+				//imposto quindi il tempo mancante al termine nel modello
 				model.setSecs(battlePanel.getSecsLeft()/1000);
 			model.saveGame();
 			BattleshipModel bm = null;

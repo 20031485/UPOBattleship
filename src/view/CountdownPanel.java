@@ -32,7 +32,9 @@ public class CountdownPanel extends JPanel {
 	private CountdownController controller;
 	
 	private Timer timer;
+	//tempo totale a disposizione
 	private long time;
+	//tempo mancante
 	private long currentTime;
 	private final JLabel timerLabel;
 	private static final TitledBorder timerTitle = BorderFactory.createTitledBorder("TIMER");
@@ -45,7 +47,8 @@ public class CountdownPanel extends JPanel {
 	 * @param model A {@link model.BattleshipModel} instance.
 	 */
 	public CountdownPanel(long secs, BattleshipModel model){
-	    time = secs *1000;
+	    //devo trasformare il tempo in millisecondi
+		time = secs *1000;
 	    currentTime = time;
 	    this.model = model;
 	    timerLabel = new JLabel(dateFormat.format(new Date(time)),JLabel.CENTER);

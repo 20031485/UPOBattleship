@@ -29,6 +29,7 @@ public class BattleshipModel extends Observable implements Serializable{
 	private Player player = null;
 	private Computer computer = null;
 	private int gameSize;//5, 10, 15 where 5 means 5x5 and so on
+	//stato della partita: serve a visualizzare il pannello corretto nella vista
 	private BattleshipState state = BattleshipState.WELCOME;
 	private PlayerState playerState;//needed by Computer, to check if Player was hit or not
 	private boolean timed;//creates timer if true
@@ -356,6 +357,8 @@ public class BattleshipModel extends Observable implements Serializable{
 	public void hitAndGetHit(int row, int col) {
 		int[] coordinates = new int[2];
 		coordinates = player.hits(row, col);
+		//una volta che ho scelto le coordinate da colpire (passate come argomenti)
+		//colpisco il computer a quelle coordinate
 		computer.isHit(coordinates[0], coordinates[1]);
 		
 		//tell GUI there has been a move

@@ -55,6 +55,7 @@ public class StartLoadController implements ActionListener{
 		switch(command) {
 			case "New game":
 				System.out.println("new game");
+				//il modello viene messo in stato NEWGAME e il NewGamePanel si rende visibile
 				model.setState(BattleshipState.NEWGAME);
 				break;
 				
